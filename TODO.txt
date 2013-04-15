@@ -1,0 +1,28 @@
+TODO
+====== 
+integrate pure data in android 
+website 
+server 
+	install nodejs 
+	poner un hook con github
+	install cherrypy 
+	install apache 
+	
+
+Adjust socket.io messages 
+Merge game + server 
+Store points buildings 
+Integrate walkie talkie 
+
+
+
+Otros 
+===== 
+Mail Alcatel 
+mi web
+
+
+
+DONE 
+=====
+Simple Pure data module for testing 

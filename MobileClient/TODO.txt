@@ -1,0 +1,8 @@
+TODO
+=====
+
+Big Cleanup 
+set screen on and off programatically 
+change volume programatically 
+connect to server 
+

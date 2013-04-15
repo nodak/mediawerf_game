@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical"
+    tools:context=".Settings" >
+
+    <TextView
+        android:id="@+id/Server_IP_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server IP:"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/Server_IP_textbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:background="#1F1F1F"
+        android:ems="10"
+        android:hint="Typ the server address."
+        android:inputType="text"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/Server_Port_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server Port:"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/Server_Port_textbox"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:background="#1F1F1F"
+        android:ems="10"
+        android:hint="Typ the server port."
+        android:inputType="number"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/Phone_ID_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone ID:"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/Phone_ID_textbox"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#1F1F1F"
+        android:ems="10"
+        android:hint="Typ device name."
+        android:inputType="text"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/Settings_save_bt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Save"
+        android:textColor="#FFF"
+        android:textSize="30sp"
+        android:color="#000" />
+
+</LinearLayout>

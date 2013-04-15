@@ -1,0 +1,178 @@
+/*less css values to make it easier to change multiple values at once*/
+
+@mainBgColor: black;
+@mainFontColor: white;
+
+/* Makes sure the countdown is in the middle of the screen */
+#countdown{
+	position:relative;
+	background-color: @mainBgColor;
+	width: 100%;
+	height: 100%;
+	font-family: arial;
+	font-size: 200px;
+	text-align:center;
+}
+
+/* Part of the countdown */
+#show-time{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 50%;
+    height: 27%;
+    margin: auto;
+	}
+
+#wrapper {
+	
+	iframe {
+		float: left;
+		position: absolute;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+		margin-left: 25px
+	}
+
+	#content {
+		float: left;
+		width: 100%;
+		position: absolute;
+		top: 0px;
+		z-index: 2;
+	
+	} 
+	
+	#hideup {
+		width: 100%;
+		height: 70px;
+		position: absolute;
+		top: 0px;
+		background: rgba(0, 0, 0, 1);
+		z-index: 5;
+	}
+	
+	#hidedown {
+		width: 100%;
+		height: 78px;
+		position: absolute;
+		bottom: 0px;
+		background: rgba(0, 0, 0, 1);
+		z-index: 5;
+	}
+	
+}
+
+body{
+	background-color: @mainBgColor;	
+	color: @mainFontColor;
+}
+
+#header{
+	font-family: arial;
+	width:100%;
+	height:12%;
+	background-color: #bbb;
+	padding-top: 20px;
+	display: block;
+}
+
+
+/* Set properties for the left team*/
+#playerList {
+	float: right;
+	width: 425px;
+	padding-left: 12px;
+	opacity: 1;
+	background-color: rgba(0, 0, 0, 0.55);
+	margin-top: 35px;
+	
+	* {
+		float: left;
+	} 
+	
+	ul {
+		list-style-type: none;
+	} 
+	
+	h1 {
+ 	 font-size: 3.8em;
+ 	 font-family: Helvetica-light;
+ 	 font-weight: lighter;
+ 	 margin-top: 0.2em;
+ 	 text-transform: lowercase;
+ 	 color: rgb(68, 68, 68);
+ 	 padding-bottom: 1em;
+ 	 text-align: center;
+ 	 width: 100%;
+	}
+	
+	/* colour the group icon */
+	.icon-group{
+	}
+	
+	.player {
+		width: 100%;	
+		border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+		margin-bottom: 15px;
+		padding: 22px; 
+		font-family: helvetica;
+		font-weight: lighter;
+		text-transform: lowercase;
+		display: none;
+	
+		i {
+			color: #888;
+		}
+	
+		.playerName {
+			font-size: 3em;
+			font-weight: 200;
+			margin-left: 1em;
+			margin-right: 1em;
+			width: 150px;
+			text-transform: uppercase;
+			font-weight: 800;
+			margin-top: 10px;
+		}
+		
+		.points {
+			font-size: 1.5em;
+			font-weight: 800;			
+			float: right;
+			margin-left: 1em;
+			right: 0px;
+			width: 150px;
+		}
+	}
+	
+
+}
+
+
+/* Footer which also displays the game time */
+#footer{
+
+	float:right;
+	height:10%;
+	text-align:right;
+	padding-top: 10px;
+	width:100%;
+	font-size:50px;
+	position: absolute;
+	bottom: 0px;
+	
+	/* Clock text opacity*/
+	.clock{
+		opacity:0.5;
+	}
+	
+	/* Clock icon opacity*/
+	.icon-time{
+		opacity:0.5;
+	}	
+}
+

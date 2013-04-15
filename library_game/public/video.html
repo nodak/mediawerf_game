@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8" />
+    <title> video </title>
+    <link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+    <!--[if lte IE 6]>
+    <style>
+    body
+        {
+        width:960px;
+        margin:0 auto;
+        }
+    </style>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+    <style>
+
+		@keyframes slidein {
+		  from {
+		    margin-left: 100%;
+		    width: 300%
+		  }
+
+		  to {
+		    margin-left: 0%;
+		    width: 100%;
+		  }
+		}
+		
+		
+    #container {
+        width:500px;
+				height: 500px;
+        margin:0 0;
+				position: relative;
+				background-color: green;			
+				-webkit-transition: background-color  1s ease-in 0s; 
+    }
+
+		#container:hover {
+			
+			background-color: blue;
+		}
+
+		#videoframe {
+			position: relative;
+			padding: 5px;
+			background-color: white;
+			border-radius: 5px;
+			-webkit-transition: -webkit-transform  0s ease-in 0s; 
+			-webkit-transform: rotate3d(0, 0, 1, 28deg);
+		}
+		
+		#videoframe:hover {
+			/* top: 125px; */
+			-webkit-transform: rotate3d(0, 0, 1,0deg);
+		}
+		
+		#videoframe img {
+			width: 25px; 
+			height: 25px;
+			background-color: blue;
+		}
+		
+    </style>
+
+
+ <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script> -->
+ <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+ <!-- 
+	<script src="js/jquery.animate-enhanced.min.js" type="text/javascript" charset="utf-8"></script>
+	--> 
+	<script src="js/dat.gui.min.js" type="text/javascript" charset="utf-8"></script>
+	
+
+	<!-- functions -->
+	<script>
+
+			function showOverlay(viz) {
+				if (viz) {
+					$("#overlay").show();
+					$("#overlay").animate({opacity : 1.0}, 200);			
+				} else {
+					$("#overlay").animate({opacity : 0.0}, 200); 
+				
+				} 
+			}
+			
+			
+			var Video = function() {
+				this.x = 0;
+				this.y = 0;
+				this.deg = 0;
+				
+				this.updatePosition = function() {
+					this.update(this.x, this.y, this.deg);
+				}; 
+				
+				this.update = function(x, y, deg) { 
+					$("#videoframe").css("-webkit-transform", "rotate3d(0, 0, 1, "+deg+"deg) translate(" + x +"px, " + y + "px)")
+													.css("-webkit-transform-origin", x + "px, " + y +"px, " + 0 + "px");
+					//$("videoframe").css({top:y+"px", left:x+"px"});
+			
+				}; 
+				
+				
+				console.log("Hola");
+				
+				
+			} 
+			
+			
+			function initDebug() {
+				var c = new Video(); 
+				//c.watch("x", function() { console.log("hola"); });
+				
+				var gui = new dat.GUI();
+				gui.add(c, 'x', 0, 500).onChange(function(value) {
+					c.updatePosition();
+				});
+				
+				gui.add(c, 'y', 0, 500).onChange(function(value) {
+					c.updatePosition();
+				});
+				
+				gui.add(c, 'deg', 0, 360).onChange(function(value) {
+					c.updatePosition();
+				});
+				
+			}
+		
+		
+       
+       $(document).ready(function() { 
+				initDebug();
+
+			}); 
+
+ </script>
+</head>
+<body>
+	
+	<div id = "container">
+		<div id ="videoframe">
+		<video autoplay poster="./videos/camera/camera.png"> 
+  		<source src ="./videos/camera/output.mov" type='video/mov; '>
+  		<source src ="./videos/camera/output.webm" type='video/webm; '>
+  		<source src ="./videos/camera/output.ogv" type='video/ogg; '>
+  		<source src ="./videos/camera/output.mp4" type='video/mp4; '>
+ 		</video>
+		<img src =""></img>
+		</div>
+
+	</div> 
+
+
+	<div id = "text_wrapper"><h1 id="text"> </h1></div>
+
+	<!-- 
+	<div id = "overlay"> 
+		<div id = "wait">
+			<img src="images/connecting_cities_logo.png" width="313" height="160" alt="Connecting Cities Logo">
+			<p> Connecting Cities </p>
+		</div>
+	</div> 
+	--> 
+	
+	
+</body>
+</html>
