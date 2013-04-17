@@ -9,9 +9,9 @@ OK - integrate google maps
 MM - loop audio
 MM - back button close the app 
 OK - connect to the server 
+OK - convert everything into fragments 
 - override volume and switch off buttons 
 
-- convert everything into fragments 
 - debug fragment for sending messages to the server 
 - gps and orientation
 - indicator GPS 
@@ -30,7 +30,11 @@ intro logo
 
 
 - Hablar con Alcatel
-- Decirle a Martin lo de V2 
+
+
+HTML5 audio 
+victor@outside:/var/www$ ffmpeg -y -i q.amr -acodec libvorbis -aq 50 q.ogg
+
 
 Big Cleanup 
 document billboards with several interactions 
