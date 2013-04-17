@@ -1,8 +1,38 @@
 TODO
 =====
 
+OK - phone not going to sleep 
+OK - change brightness programatically
+OK - change volume programatically 
+OK - set screen on and off programatically 
+OK - integrate google maps 
+MM - loop audio
+MM - back button close the app 
+OK - connect to the server 
+- override volume and switch off buttons 
+
+- convert everything into fragments 
+- debug fragment for sending messages to the server 
+- gps and orientation
+- indicator GPS 
+
+- Servidor merge 
+- servidor online
+
+- a–adir canvas con plot para cada usuario 
+ 
+
+
+- fragment showing who is connected
+- change settings from outside 
+walkie talkie 
+intro logo 
+
+
+- Hablar con Alcatel
+- Decirle a Martin lo de V2 
+
 Big Cleanup 
-set screen on and off programatically 
-change volume programatically 
-connect to server 
+document billboards with several interactions 
+
 

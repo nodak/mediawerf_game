@@ -29,6 +29,8 @@ public class AudioService {
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			pdService = ((PdService.PdBinder) service).getService();
 
+			Log.d("qq", "service connected");
+			
 			try {
 				initPd();
 				//loadPatchFromResources();

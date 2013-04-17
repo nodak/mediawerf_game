@@ -28,6 +28,10 @@ public class SocketIOClient {
 
         public void onDisconnect(int code, String reason);
 
+        public void onJSON(JSONObject json);
+
+        public void onMessage(String message);
+
         public void onError(Exception error);
     }
 
@@ -47,9 +51,6 @@ public class SocketIOClient {
 
     private static String downloadUriAsString(final HttpUriRequest req) throws IOException {
         AndroidHttpClient client = AndroidHttpClient.newInstance("android-websockets");
-        //TIME OUT VERANDERD
-        client.getParams().setParameter("http.connection.timeout", 500);
-        
         try {
             HttpResponse res = client.execute(req);
             return readToEnd(res.getEntity().getContent());
@@ -78,21 +79,36 @@ public class SocketIOClient {
     android.os.Handler mSendHandler;
     Looper mSendLooper;
 
-    public void emit(String name, JSONArray args) {
+    public void emit(String name, JSONArray args) throws JSONException {
         final JSONObject event = new JSONObject();
-        try {
-			event.put("name", name);
-			event.put("args", args);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
+        event.put("name", name);
+        event.put("args", args);
         Log.d(TAG, "Emitting event: " + event.toString());
         mSendHandler.post(new Runnable() {
             @Override
             public void run() {
                 mClient.send(String.format("5:::%s", event.toString()));
+            }
+        });
+    }
+    
+    public void emit(final String message) {
+        mSendHandler.post(new Runnable() {
+            
+            @Override
+            public void run() {
+                mClient.send(String.format("3:::%s", message));
+            }
+        });
+    }
+    
+    public void emit(final JSONObject jsonMessage) {
+        
+        mSendHandler.post(new Runnable() {
+            
+            @Override
+            public void run() {
+                mClient.send(String.format("4:::%s", jsonMessage.toString()));
             }
         });
     }
@@ -113,18 +129,54 @@ public class SocketIOClient {
                     int code = Integer.parseInt(parts[0]);
                     switch (code) {
                     case 1:
-                        onConnect();
+                        // connect
+                        mHandler.onConnect();
                         break;
                     case 2:
                         // heartbeat
                         mClient.send("2::");
                         break;
-                    case 3:
+                    case 3: {
                         // message
-                    	
-                    case 4:
-                        // json message
-                        throw new Exception("message type not supported");
+                        final String messageId = parts[1];
+                        final String dataString = parts[3];
+                        
+                        if(!"".equals(messageId)) {
+                            mSendHandler.post(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                    mClient.send(String.format("6:::%s", messageId));
+                                }
+                            });
+                        }
+                        mHandler.onMessage(dataString);
+                        break;
+                    }
+                    case 4: {
+                        //json message
+                        final String messageId = parts[1];
+                        final String dataString = parts[3];
+                        
+                        JSONObject jsonMessage = null;
+                        
+                        try {
+                            jsonMessage = new JSONObject(dataString);
+                        } catch(JSONException e) {
+                            jsonMessage = new JSONObject();
+                        }
+                        if(!"".equals(messageId)) {
+                            mSendHandler.post(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                    mClient.send(String.format("6:::%s", messageId));
+                                }
+                            });
+                        }
+                        mHandler.onJSON(jsonMessage);
+                        break;
+                    }
                     case 5: {
                         final String messageId = parts[1];
                         final String dataString = parts[3];
@@ -168,14 +220,8 @@ public class SocketIOClient {
 
             @Override
             public void onError(Exception error) {
-            	try{
-	                cleanup();
-	                mHandler.onError(error);
-            	}
-            	catch(Exception ex)
-            	{
-            		
-            	}
+                cleanup();
+                mHandler.onError(error);
             }
 
             @Override
@@ -194,7 +240,6 @@ public class SocketIOClient {
                         mClient.send("2:::");
                     }
                 }, mHeartbeat);
-                mHandler.onConnect();
             }
         }, null);
         mClient.connect();
@@ -205,15 +250,12 @@ public class SocketIOClient {
     }
 
     private void cleanup() {
-    	try
-    	{
-    	mSendLooper.quit();
-        mSendLooper = null;
-        mSendHandler = null;
-    	
         mClient.disconnect();
         mClient = null;
-    	}catch(Exception e){}
+       
+        mSendLooper.quit();
+        mSendLooper = null;
+        mSendHandler = null;
     }
 
     public void connect() {
@@ -234,10 +276,13 @@ public class SocketIOClient {
                     HashSet<String> set = new HashSet<String>(Arrays.asList(transports));
                     if (!set.contains("websocket"))
                         throw new Exception("websocket not supported");
+
                     Looper.prepare();
                     mSendLooper = Looper.myLooper();
                     mSendHandler = new android.os.Handler();
+
                     connectSession();
+
                     Looper.loop();
                 }
                 catch (Exception e) {

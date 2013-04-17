@@ -1,14 +1,8 @@
 package net.patchingzone.ru4real.base;
 
-import java.io.IOException;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +14,8 @@ import android.view.WindowManager;
 
 @SuppressLint("NewApi")
 public class BaseActivity extends FragmentActivity {
+
+	private static final String TAG = "BaseActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +38,16 @@ public class BaseActivity extends FragmentActivity {
 		}
 
 		setVolume(100);
-		//Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
-		//playSound("http://outside.mediawerf.net/music.ogg");
+		setBrightness(1f);
+		// Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
+		// playSound("http://outside.mediawerf.net/music.ogg");
 
+	}
+
+	private void setBrightness(float f) {
+		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+		layoutParams.screenBrightness = f;
+		getWindow().setAttributes(layoutParams);
 	}
 
 	public void setVolume(int value) {
@@ -55,8 +58,6 @@ public class BaseActivity extends FragmentActivity {
 		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 
 	}
-
-	
 
 	public void setWakeLock(boolean b) {
 
@@ -82,13 +83,21 @@ public class BaseActivity extends FragmentActivity {
 
 	// override volume buttons
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		Log.d(TAG, "" + keyCode);
+
 		if (AppSettings.overrideVolumeButtons
 				&& (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
 
 			return true;
-		} else {
-			return super.onKeyDown(keyCode, event);
 		}
+
+		if (keyCode == KeyEvent.KEYCODE_BACK && AppSettings.closeWithBack) {
+			finish();
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

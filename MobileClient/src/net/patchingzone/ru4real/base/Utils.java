@@ -11,13 +11,16 @@ import android.util.Log;
 
 public class Utils {
 
+	private static final String TAG = "AudioPlayer";
+
 	public static MediaPlayer playSound(String url, int volume) {
 		final MediaPlayer mMediaPlayer = new MediaPlayer();
+		mMediaPlayer.setLooping(true);
 		mMediaPlayer.setOnPreparedListener(new OnPreparedListener() {
 
 			@Override
 			public void onPrepared(MediaPlayer mp) {
-				Log.d("qq", "prepared");
+				Log.d(TAG, "prepared");
 				mMediaPlayer.start();
 
 			}
@@ -27,7 +30,7 @@ public class Utils {
 
 			@Override
 			public void onBufferingUpdate(MediaPlayer mp, int percent) {
-				Log.d("qq", "" + percent);
+				Log.d(TAG, "" + percent);
 			}
 		});
 
@@ -35,9 +38,11 @@ public class Utils {
 
 			@Override
 			public void onCompletion(MediaPlayer mp) {
-				Log.d("qq", "completed");
+				Log.d(TAG, "completed");
 			}
 		});
+		
+
 
 		// mMediaPlayer.reset();
 		try {
@@ -62,7 +67,7 @@ public class Utils {
 
 	public static void setVolume(MediaPlayer mMediaPlayer, int value) {
 		float volume = (float) (value) / 100;
-		Log.d("qq2", "" + volume);
+		Log.d(TAG, "" + volume);
 		mMediaPlayer.setVolume(volume, volume);
 
 	}

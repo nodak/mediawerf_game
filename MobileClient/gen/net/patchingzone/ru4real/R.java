@@ -31,74 +31,78 @@ public final class R {
         public static final int mainbutton=0x7f020004;
     }
     public static final class id {
-        public static final int Count=0x7f0b0014;
-        public static final int Cred=0x7f0b0025;
-        public static final int Disconnect=0x7f0b0027;
-        public static final int Exit=0x7f0b0028;
-        public static final int LinearLayout1=0x7f0b0018;
-        public static final int Options=0x7f0b0026;
-        public static final int Phone_ID_text=0x7f0b001d;
-        public static final int Phone_ID_textbox=0x7f0b001e;
-        public static final int Server_IP_text=0x7f0b0019;
-        public static final int Server_IP_textbox=0x7f0b001a;
-        public static final int Server_Port_text=0x7f0b001b;
-        public static final int Server_Port_textbox=0x7f0b001c;
-        public static final int Settings_save_bt=0x7f0b001f;
+        public static final int CameraView=0x7f0b001c;
+        public static final int Cred=0x7f0b0024;
+        public static final int Disconnect=0x7f0b0026;
+        public static final int Exit=0x7f0b0027;
+        public static final int LinearLayout1=0x7f0b0014;
+        public static final int Options=0x7f0b0025;
+        public static final int Phone_ID_text=0x7f0b0019;
+        public static final int Phone_ID_textbox=0x7f0b001a;
+        public static final int Server_IP_text=0x7f0b0015;
+        public static final int Server_IP_textbox=0x7f0b0016;
+        public static final int Server_Port_text=0x7f0b0017;
+        public static final int Server_Port_textbox=0x7f0b0018;
+        public static final int Settings_save_bt=0x7f0b001b;
         public static final int a=0x7f0b0004;
         public static final int b=0x7f0b0008;
         public static final int body=0x7f0b0012;
         public static final int body1=0x7f0b0011;
-        public static final int button1=0x7f0b0016;
+        public static final int button1=0x7f0b0013;
         public static final int buttonslayout=0x7f0b000a;
         public static final int d=0x7f0b0005;
         public static final int e=0x7f0b0003;
         public static final int ee=0x7f0b0009;
-        public static final int f1=0x7f0b0021;
-        public static final int fragmentProcessing=0x7f0b0022;
+        public static final int f1=0x7f0b0020;
+        public static final int fragmentProcessing=0x7f0b0021;
         public static final int g=0x7f0b0007;
-        public static final int gameBackground=0x7f0b0020;
-        public static final int linearLayout1=0x7f0b0013;
+        public static final int gameBackground=0x7f0b001e;
         public static final int logWindow=0x7f0b000d;
-        public static final int opt1=0x7f0b0029;
+        public static final int map=0x7f0b001f;
+        public static final int opt1=0x7f0b0028;
         public static final int pdName=0x7f0b000e;
         public static final int pdSend=0x7f0b0010;
         public static final int pdValue=0x7f0b000f;
         public static final int scrollView1=0x7f0b000b;
         public static final int seekBar1=0x7f0b0001;
         public static final int sendInput=0x7f0b000c;
+        public static final int surface_view=0x7f0b001d;
         public static final int tableRow2=0x7f0b0002;
         public static final int tableRow3=0x7f0b0006;
         public static final int tablelayout=0x7f0b0000;
-        public static final int textView1=0x7f0b0017;
-        public static final int textView2=0x7f0b0015;
-        public static final int webView1=0x7f0b0023;
-        public static final int webview=0x7f0b0024;
+        public static final int webView1=0x7f0b0022;
+        public static final int webview=0x7f0b0023;
     }
     public static final class layout {
         public static final int activity_debug_sound=0x7f030000;
         public static final int activity_debug_sound_2=0x7f030001;
         public static final int activity_main=0x7f030002;
         public static final int activity_settings=0x7f030003;
-        public static final int game=0x7f030004;
-        public static final int mainforfragments=0x7f030005;
-        public static final int view_textview_receive=0x7f030006;
-        public static final int view_textview_send=0x7f030007;
-        public static final int webview=0x7f030008;
-        public static final int webviewmanual=0x7f030009;
+        public static final int camera=0x7f030004;
+        public static final int emptylayout=0x7f030005;
+        public static final int fragment_debug=0x7f030006;
+        public static final int fragment_videoplayer=0x7f030007;
+        public static final int game=0x7f030008;
+        public static final int mainforfragments=0x7f030009;
+        public static final int view_textview_receive=0x7f03000a;
+        public static final int view_textview_send=0x7f03000b;
+        public static final int webview=0x7f03000c;
+        public static final int webviewmanual=0x7f03000d;
     }
     public static final class menu {
         public static final int activity_main=0x7f0a0000;
         public static final int creditmenu=0x7f0a0001;
     }
     public static final class raw {
-        public static final int extra_abs=0x7f060000;
-        public static final int extra_ext=0x7f060001;
-        public static final int extra_ext_v7a=0x7f060002;
-        public static final int laser=0x7f060003;
-        public static final int silence=0x7f060004;
-        public static final int sound1=0x7f060005;
-        public static final int sound2=0x7f060006;
-        public static final int tuner=0x7f060007;
+        public static final int cityfireflies=0x7f060000;
+        public static final int extra_abs=0x7f060001;
+        public static final int extra_ext=0x7f060002;
+        public static final int extra_ext_v7a=0x7f060003;
+        public static final int laser=0x7f060004;
+        public static final int silence=0x7f060005;
+        public static final int sound1=0x7f060006;
+        public static final int sound2=0x7f060007;
+        public static final int tuner=0x7f060008;
     }
     public static final class string {
         public static final int BT_Home=0x7f080011;

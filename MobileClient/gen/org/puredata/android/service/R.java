@@ -8,10 +8,10 @@ package org.puredata.android.service;
 
 public final class R {
 	public static final class raw {
-		public static final int silence = 0x7f060004;
-		public static final int extra_ext_v7a = 0x7f060002;
-		public static final int extra_ext = 0x7f060001;
-		public static final int extra_abs = 0x7f060000;
+		public static final int silence = 0x7f060005;
+		public static final int extra_ext_v7a = 0x7f060003;
+		public static final int extra_ext = 0x7f060002;
+		public static final int extra_abs = 0x7f060001;
 	}
 	public static final class style {
 		public static final int DisableSoundEffects = 0x7f090000;
