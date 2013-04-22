@@ -1,32 +1,44 @@
 package net.patchingzone.ru4real.sensors;
 
+import java.util.Vector;
+
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-public class OrientationManager {
+public class OrientationManager extends CustomSensorManager {
 
-	SensorManager sm;
-	SensorEventListener orientation;
+	SensorManager sensormanager;
+	SensorEventListener orientationListener;
+	Vector<OrientationListener> listeners;
+	private Context c;
+	Sensor orientation;
+	private boolean orientationSupported;
 
-	public OrientationManager() {
 
-	}
+	public OrientationManager(Context c) {
+		this.c = c;
+		listeners = new Vector<OrientationListener>();
+		// register
+		sensormanager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
+		orientation = sensormanager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
-	public void start() {
-
-		orientation = new SensorEventListener() {
+		orientationListener = new SensorEventListener() {
 
 			@Override
 			public void onSensorChanged(SensorEvent event) {
 
-				Log.d("qq", event.values[0] + " " + event.values[1] + " " + event.values[2]);
+				//Log.d("qq", event.values[0] + " " + event.values[1] + " " + event.values[2]);
 
-				// listener.onOrientationChange(event.values[2],
-				// event.values[1], event.values[0]);
+				for (OrientationListener l : listeners) {
+					l.onOrientation(event.values[0], event.values[1], event.values[2]);
 
+					// listener.onOrientationChange(event.values[2],
+					// event.values[1], event.values[0]);
+				}
 			}
 
 			@Override
@@ -34,21 +46,22 @@ public class OrientationManager {
 
 			}
 		};
-	} 
-	
+	}
+
+	public void start() {
+		orientationSupported = sensormanager.registerListener(orientationListener, orientation, SensorManager.SENSOR_DELAY_GAME);
+	}
+
 	public void stop() {
-		
-	} 
-	
-	
-	public void addListener() {
-		
-	
-	} 
-	
-	public void removeListener() {
-		
-		
-	} 
-	
+		sensormanager.unregisterListener(orientationListener);
+	}
+
+	public void addListener(OrientationListener orientationListener) {
+		listeners.add(orientationListener);
+	}
+
+	public void removeListener(OrientationListener orientationListener) {
+		listeners.remove(orientationListener);
+	}
+
 }

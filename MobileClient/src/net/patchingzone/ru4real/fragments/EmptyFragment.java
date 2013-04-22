@@ -10,17 +10,11 @@ import android.view.ViewGroup;
 
 public class EmptyFragment extends Fragment {
 
-	private View v;
 
-	/**
-	 * Called when the activity is first created.
-	 * 
-	 * @return
-	 */
+	private View v;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		v = inflater.inflate(R.layout.emptylayout, container, false);
@@ -30,8 +24,6 @@ public class EmptyFragment extends Fragment {
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-
 
 	}
 

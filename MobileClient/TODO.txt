@@ -6,31 +6,56 @@ OK - change brightness programatically
 OK - change volume programatically 
 OK - set screen on and off programatically 
 OK - integrate google maps 
-MM - loop audio
-MM - back button close the app 
 OK - connect to the server 
 OK - convert everything into fragments 
+OK - gps and orientation
+OK - accelerometer
+OK - Hablar con Alcatel
+OK - 30mins -  Map lock 
+
+MM - loop audio
+MM - back button close the app 
+MM - start a different activity when tablet + different layout
+MM - Log overlay 
+MM - 20 mins - indicator GPS 
+
+
+HOY
+===== 
+2 hours - integrar walkie talkie 
+1 hour - debug fragment for sending messages to the server 
+1 hour - servidor online
+
+- fragment showing who is connected
+- pasar todo a activity 
+
+
+- events 
+
+
+
 - override volume and switch off buttons 
 
-- debug fragment for sending messages to the server 
-- gps and orientation
-- indicator GPS 
+- hablar con estudiantes sobre el proyecto 
+- change settings from outside 
+- intro logo 
 
-- Servidor merge 
-- servidor online
 
 - a–adir canvas con plot para cada usuario 
+
  
 
 
-- fragment showing who is connected
-- change settings from outside 
-walkie talkie 
-intro logo 
 
 
-- Hablar con Alcatel
 
+
+TODO URGENT 
+
+- anyadir drexler 
+- anyadir pared 
+- anyadir resultados reshape your phone 
+- enviar mail a lo de motorola 
 
 HTML5 audio 
 victor@outside:/var/www$ ffmpeg -y -i q.amr -acodec libvorbis -aq 50 q.ogg

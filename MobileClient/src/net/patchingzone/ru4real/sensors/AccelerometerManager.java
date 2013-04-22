@@ -1,13 +1,14 @@
 package net.patchingzone.ru4real.sensors;
 
+import java.util.Vector;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
-public class AccelerometerManager {
+public class AccelerometerManager extends CustomSensorManager {
 
 	private final static String TAG = "Accel";
 
@@ -15,9 +16,10 @@ public class AccelerometerManager {
 	private static Boolean supported;
 	/** indicates whether or not Accelerometer Sensor is running */
 	private static boolean running = false;
+	
+	Vector<AccelerometerListener> listeners; 
 
-	private AccelerometerListener listener = null; 
-
+	
 	private float currentValueX;
 	private float previousValueX;
 	private float currentValueY;
@@ -32,7 +34,8 @@ public class AccelerometerManager {
 
 	Sensor accelerometer;
 
-	public AccelerometerManager(Context c) { 
+	public AccelerometerManager(Context c) {
+		listeners = new Vector<AccelerometerListener>();
 
 		// register
 		sensormanager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
@@ -40,23 +43,13 @@ public class AccelerometerManager {
 
 		accelListener = new SensorEventListener() {
 
-			public void onSensorChanged(SensorEvent event) {
-
-				switch (event.sensor.getType()) {
-				case Sensor.TYPE_ACCELEROMETER:
-
-					listener.onAccelerometerChanged(event.values[0], event.values[1],
-							event.values[2]);
-
-					break;
-
-
-				default:
-					break;
+			public void onSensorChanged(SensorEvent event) { 
+				//listener
+				for (AccelerometerListener l : listeners) {
+					l.onAccelerometerChanged(event.values[0], event.values[1], event.values[2]);
 				}
-
+				
 			}
-
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
 				switch (accuracy) {
@@ -100,28 +93,30 @@ public class AccelerometerManager {
 
 	public float diffZ() {
 		return Math.abs(currentValueZ - previousValueZ);
-	} 
-	
-    public void setListener(Object listener) { 
-    	this.listener = (AccelerometerListener) listener; 
-    	
-    }
-
+	}
 
 	public boolean isListening() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public void startListening() {
+	public void start() {
 		running = true;
-		accelSupported = sensormanager.registerListener(accelListener, accelerometer,
-				SensorManager.SENSOR_DELAY_GAME); 
+		accelSupported = sensormanager.registerListener(accelListener, accelerometer, SensorManager.SENSOR_DELAY_GAME);
 	}
 
-	public void stopListening() {
+	public void stop() {
 		running = false;
 		sensormanager.unregisterListener(accelListener);
 	}
+
+	public void addListener(AccelerometerListener accelerometerListener) {
+		listeners.add(accelerometerListener);
+	}
+
+	public void removeListener(AccelerometerListener accelerometerListener) {
+		listeners.remove(accelerometerListener);
+	}
+
 
 }
