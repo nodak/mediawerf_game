@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="92dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:padding="0dp"
+        android:text="noname" >
+    </TextView>
+
+    <SeekBar
+        android:id="@+id/SeekBar"
+        style="@style/HocusPocusSlider"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.08" >
+    </SeekBar>
+
+    <TextView
+        android:id="@+id/TextView2"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.01"
+        android:gravity="center|right"
+        android:padding="0dp"
+        android:text="100" >
+
+    </TextView>
+
+</LinearLayout>

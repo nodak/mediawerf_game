@@ -1,0 +1,390 @@
+/*
+ * The Patching Zone, 2013
+ * www.patchingzone.net
+ */
+
+{
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 200;
+	color: #eee;
+	text-shadow: 0 4px 0 #000;
+	background-image: url("../img/subtle_carbon.png");
+
+	background-color: #111;
+
+	background-repeat: repeat;
+	background-color: black;
+}
+
+a {
+	color: #ddd;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+p {
+	margin: 10px 0;
+}
+
+.float-right {
+	float: right;
+}
+
+.no-display {
+	display: none;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+#container {
+	margin: 0 auto;
+	padding-bottom: 60px;
+	width: 920px;
+    background-color: rgba(0, 0, 0, 1);
+    background-image: url("../img/blackorchid.png");
+	
+	border-left: 1px solid #282828;
+	border-right: 1px solid #282828;
+}
+
+header {
+	text-align: center;
+	padding-top: 0px;
+}
+
+header #language {
+    float: right;
+    background-color: rgb(37, 37, 37);
+    padding: 5px;
+    border-radius: 2px;
+    margin-right: 12px;
+    
+}
+
+h1 {
+	margin: 0 auto 20px auto;
+	width: 251px;
+	height: 70px;
+
+	font-size: 72px;
+	line-height: 1;
+
+	background-image: url("../img/title.png");
+	background-size: 251px 70px;
+}
+
+h1 span {
+	display: block;
+}
+
+header p {
+	margin: 20px 0 30px 0;
+	font-size: 20px;
+	
+	color: #bbb;
+}
+
+#app-store img {
+	display: inline-block;
+	vertical-align: top;
+}
+
+#app-store p {
+	margin: 10px;
+	height: 45px;
+	
+	display: inline-block;
+	font-size: 18px;
+	vertical-align: middle;
+}
+
+#video-footer {
+	width: 700px;
+	height: 65px;
+	margin: 20px auto;
+	
+	text-align: left;
+}
+
+#video-footer #social-links {
+	float: right;
+	width: 220px;
+	height: 65px;
+}
+
+#video-footer #social-links p {
+	margin: 5px 0 10px 0;
+	font-size: 18px;
+}
+
+#video-footer #social-links .fb-like {
+	width: 105px;
+	top: -3px;
+}
+
+hr {
+	margin: 40px auto 0 auto;
+	
+	width: 820px;
+	height: 14px;
+	border: 0;
+
+	background-image: url("../img/hr.png");
+	background-size: 820px 14px;
+}
+
+#features-video {
+	width: 600px;
+	margin: 40px auto 0 auto;
+	padding-top: 40px;
+
+	text-align: center;
+	
+	border-top: 1px solid #222;
+}
+
+#features-video img {
+	border: 1px solid rgba(100,100,100,0.5);
+	box-shadow: 0px 0px 20px #000;
+}
+
+#features-video p {
+	font-size: 18px;
+}
+
+
+h2 {
+	margin: 20px 0;
+	font-size: 42px;
+	font-weight: normal;
+	line-height: 1;
+	text-align: center;
+}
+
+section {
+	padding-top: 40px;
+	background-image: url("../img/bg_light.jpg");
+	background-size: 720px 440px;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+section p {
+	font-size: 17px;
+	line-height: 1.4;
+	
+	color: #bbb;
+}
+
+section .subtitle {
+	text-align: center;
+
+	margin: 0 auto;
+	width: 680px;
+}
+
+section .subtext {
+	width: 640px;
+	margin: 10px auto;
+	
+	font-size: 15px;
+}
+
+section img {
+	display: block;
+	margin: 20px auto 0 auto;
+}
+
+
+footer {
+	padding-bottom: 80px;
+	background: rgba(30,30,30,0.5);
+	border-top: 1px solid #222;
+	
+	color: #888;
+	text-shadow: none;
+}
+
+#footer-links {
+	margin: 0 auto 40px auto;
+	padding: 40px 0;
+	text-align: center;
+	border-bottom: 1px solid #222;	
+}
+
+#footer-links a {
+	text-transform: uppercase;
+	margin: 0 45px;
+	color: #666;
+}
+
+#footer-container {
+	margin: 0 auto;
+	width: 920px;
+}
+
+
+/*
+ * Images
+ */
+
+#ipad-one {
+	display: block;
+	margin: 20px auto 0 auto;
+
+	width: 640px;
+	height: 500px;
+
+	background-image: url("../img/samplr_ipad1.jpg");
+	background-size: 640px 500px;
+}
+
+#ipad-two {
+	display: block;
+	margin: 20px auto 0 auto;
+
+	width: 640px;
+	height: 500px;
+
+	background-image: url("../img/samplr_ipad2.jpg");
+	background-size: 640px 500px;
+}
+
+
+/*
+ * Play modes
+ */
+
+#mode-images {
+	width: 700px;
+	height: 263px;
+	
+	margin: 20px auto;
+}
+
+.mode-image {
+	position: absolute;
+	display: none;
+	margin: 0;
+
+	width: 700px;
+	height: 263px;
+	z-index: 0;
+
+	background-image: url("../img/mode_0.jpg");
+	background-size: 700px 263px;
+	background-repeat: no-repeat;
+}
+
+.mode-0 { background-image: url("../img/mode_0.jpg"); }
+.mode-1 { background-image: url("../img/mode_1.jpg"); }
+.mode-2 { background-image: url("../img/mode_2.jpg"); }
+.mode-3 { background-image: url("../img/mode_3.jpg"); }
+.mode-4 { background-image: url("../img/mode_4.jpg"); }
+.mode-5 { background-image: url("../img/mode_5.jpg"); }
+.mode-6 { background-image: url("../img/mode_6.jpg"); }
+
+#mode-infos {
+	margin: 20px auto;
+	width: 800px;
+	
+	text-align: center;
+}
+
+#modes {
+	margin: 0 auto;
+	width: 800px;
+	
+	text-align: center;
+}
+
+#modes .mode {
+	display: inline-block;
+
+	margin: 0;
+	padding: 0;
+	width: 102px;
+	vertical-align: top;
+	
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 18px;
+	font-weight: bold;
+	text-shadow: none;
+}
+
+#modes .selected {
+	color: #ddd;
+}
+
+#modes a {
+	color: #888;
+}
+
+#modes a:hover {
+	text-decoration: none;
+	opacity: 0.8;
+}
+
+.mode-button {
+	display: block;
+	margin: 0 auto 10px auto;
+	width: 64px;
+	height: 64px;
+
+	background-image: url("../img/mode_buttons.png");
+	background-size: 448px 128px;
+	background-repeat: no-repeat;
+	background-position: 0px 64px;
+}
+
+/*
+ * retina images
+ */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+	only screen and (-o-min-device-pixel-ratio: 3/2),
+	only screen and (min--moz-device-pixel-ratio: 1.5),
+	only screen and (min-device-pixel-ratio: 1.5)
+{
+	
+	body {
+		background-image: url("../img/bg_light.png"), url("../img/bg@2x.png");
+	}
+
+	h1 {
+		background-image: url("../img/title@2x.png");
+	}
+
+	#ipad-one {
+		background-image: url("../img/samplr_ipad1@2x.jpg");
+	}
+	
+	#ipad-two {
+		background-image: url("../img/samplr_ipad2@2x.jpg");
+	}
+
+	.mode-0 { background-image: url("../img/mode_0@2x.jpg"); }
+	.mode-1 { background-image: url("../img/mode_1@2x.jpg"); }
+	.mode-2 { background-image: url("../img/mode_2@2x.jpg"); }
+	.mode-3 { background-image: url("../img/mode_3@2x.jpg"); }
+	.mode-4 { background-image: url("../img/mode_4@2x.jpg"); }
+	.mode-5 { background-image: url("../img/mode_5@2x.jpg"); }
+	.mode-6 { background-image: url("../img/mode_6@2x.jpg"); }
+}
