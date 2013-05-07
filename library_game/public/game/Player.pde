@@ -110,7 +110,7 @@ class Player {
   } 
 
   void setOrientation(float orientation) { 
-    this.orientation = orientation;
+    this.orientation = radians(orientation);
   }
 
   float getPositionX() {
