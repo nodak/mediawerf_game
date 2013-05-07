@@ -69,7 +69,7 @@ public class MainActivityPhone extends BaseActivity {
 	private boolean toggle = false;
 	private ProcessingSketch processingSketch;
 	private VideoPlayerFragment videoPlayer;
-	private Network network;
+	public Network network;
 
 	private GPSManager gpsManager;
 	private OrientationManager orientationManager;

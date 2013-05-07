@@ -66,7 +66,7 @@ websocket_server.sockets.on('connection', function (socket) {
 
   
   socket.on('updateAnswer', function (data) {
-    console.log(data.force);
+    console.log(data);
     socket.broadcast.emit('answer', data);
   });
 

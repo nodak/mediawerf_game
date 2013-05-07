@@ -1,5 +1,7 @@
 package net.patchingzone.ru4real.processing;
 
+import net.patchingzone.ru4real.MainActivityPhone;
+import net.patchingzone.ru4real.audio.MainActivity;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -139,6 +141,12 @@ public class ProcessingSketch extends PApplet {
 		q = map(mouseX, 0, width, 0, 10);
 		q2 = map(mouseY, 0, height, 0, 10);
 
+		MainActivityPhone activityPhone = (MainActivityPhone) getActivity();
+		if (mouseY < height / 2) {
+			activityPhone.network.sendAnswer(true);
+		} else {
+			activityPhone.network.sendAnswer(false);
+		}
 	}
 
 	public void gpsLock(boolean b) {

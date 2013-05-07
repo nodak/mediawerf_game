@@ -385,7 +385,8 @@ public class Network {
 	}
 
 	
-	public void sendAnswe(boolean b) {
+	public void sendAnswer(boolean b) {
+		L.d(TAG, "the answer is " + b);
 		if (libraryWebSocketConnected) {
 			
 			// send new location
