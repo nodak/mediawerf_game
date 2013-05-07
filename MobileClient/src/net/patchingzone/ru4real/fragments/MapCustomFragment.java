@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import net.patchingzone.ru4real.L;
+import net.patchingzone.ru4real.MainActivityPhone;
 import net.patchingzone.ru4real.Network;
 import net.patchingzone.ru4real.NetworkListener;
 import net.patchingzone.ru4real.R;
@@ -98,12 +99,13 @@ public class MapCustomFragment extends SupportMapFragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				L.d("qq", "" + isChecked);
 				settings.setAllGesturesEnabled(isChecked);
-
+				 ((MainActivityPhone) getActivity()).gpsOn = isChecked;
+				
 			}
 		});
 
-		network = new Network();
-		network.connectGame();
+		network = ((MainActivityPhone) getActivity()).network;
+
 		network.addGameListener(new NetworkListener() {
 
 			@Override
@@ -245,36 +247,8 @@ public class MapCustomFragment extends SupportMapFragment {
 		 * ).tilt(30).build()), 2000, null);
 		 */
 
-		GPSManager gpsManager = new GPSManager(getActivity());
-		gpsManager.addListener(new GPSListener() {
-
-			@Override
-			public void onSpeedChanged(float speed) {
-			}
-
-			@Override
-			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) {
-				L.d(TAG, " " + lat + " " + lon + " " + alt);
-				// Date df = new java.util.Date(location.getTime());
-				// String vv = new
-				// SimpleDateFormat("dd-MM-yyyy , HH:mm:ss").format(df);
-
-				JSONObject gpsData = new JSONObject();
-				JSONArray arguments = new JSONArray();
-
-				try {
-					gpsData.put("lat", lat);
-					gpsData.put("Long", lon);
-					gpsData.put("Alt", alt);
-					gpsData.put("Acc", speed);
-					gpsData.put("Acc", accuracy);
-					// gpsData.put("Time", vv);
-					// gpsData.put("TimeStamp", location.getTime());
-					// gpsData.put("Head", location.getBearing());
-					arguments.put(gpsData);
-					network.sendLocation(lat, lon);
-					// currentPosition.setPosition(new LatLng(lat, lon));
-
+	
+/*
 					final Interpolator interpolator = new LinearInterpolator();
 					handler.post(new Runnable() {
 						@Override
@@ -292,53 +266,9 @@ public class MapCustomFragment extends SupportMapFragment {
 							}
 						}
 					});
+	*/
 
-					L.d(TAG, arguments.toString());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				currentPosition.setPosition(new LatLng(lat, lon));
-			}
-
-			@Override
-			public void onGPSSignalGood() {
-			}
-
-			@Override
-			public void onGPSSignalBad() {
-			}
-
-			@Override
-			public void onGPSStatus(boolean isGPSFix) {
-			}
-		});
-		gpsManager.start();
-
-		OrientationManager orientationManager = new OrientationManager(getActivity());
-		orientationManager.addListener(new OrientationListener() {
-
-			@Override
-			public void onOrientation(float pitch, float roll, float z) {
-				L.d(TAG, "orientation " + pitch + " " + roll + " " + z);
-			}
-		});
-		// orientationManager.start();
-
-		AccelerometerManager accelerationManager = new AccelerometerManager(getActivity());
-		accelerationManager.addListener(new AccelerometerListener() {
-
-			@Override
-			public void onShake(double force) {
-				L.d(TAG, "acc " + force);
-			}
-
-			@Override
-			public void onAccelerometerChanged(float x, float y, float z) {
-				L.d(TAG, "acc " + x + " " + y + " " + z);
-			}
-		});
-		// accelerationManager.start();
-
+	
 		// map.add
 		return mTouchView;
 

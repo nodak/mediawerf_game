@@ -25,7 +25,7 @@ public class OrientationManager extends CustomSensorManager {
 		// register
 		sensormanager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
 		orientation = sensormanager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-
+		
 		orientationListener = new SensorEventListener() {
 
 			@Override
@@ -49,7 +49,7 @@ public class OrientationManager extends CustomSensorManager {
 	}
 
 	public void start() {
-		orientationSupported = sensormanager.registerListener(orientationListener, orientation, SensorManager.SENSOR_DELAY_GAME);
+		orientationSupported = sensormanager.registerListener(orientationListener, orientation, SensorManager.SENSOR_DELAY_UI);
 	}
 
 	public void stop() {

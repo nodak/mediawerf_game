@@ -12,8 +12,8 @@ public final class R {
 		public static final int extra_abs = 0x7f060001;
 	}
 	public static final class id {
-		public static final int paired_devices = 0x7f0e0030;
-		public static final int title_paired_devices = 0x7f0e002f;
+		public static final int paired_devices = 0x7f0a0035;
+		public static final int title_paired_devices = 0x7f0a0034;
 	}
 	public static final class style {
 		public static final int DisableSoundEffects = 0x7f090000;

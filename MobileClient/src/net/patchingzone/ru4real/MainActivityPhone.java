@@ -14,6 +14,7 @@ import net.patchingzone.ru4real.fragments.MapCustomFragment;
 import net.patchingzone.ru4real.fragments.Utils;
 import net.patchingzone.ru4real.fragments.VideoListener;
 import net.patchingzone.ru4real.fragments.VideoPlayerFragment;
+import net.patchingzone.ru4real.fragments.YesNoFragment;
 import net.patchingzone.ru4real.game.Player;
 import net.patchingzone.ru4real.processing.ProcessingSketch;
 import net.patchingzone.ru4real.sensors.AccelerometerListener;
@@ -25,7 +26,6 @@ import net.patchingzone.ru4real.sensors.OrientationManager;
 import net.patchingzone.ru4real.walkietalkie.WalkieTalkieFragment;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -37,7 +37,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 /*
  * STATES 
@@ -62,7 +61,7 @@ public class MainActivityPhone extends BaseActivity {
 	private static final int MENU_PD = 6;
 	private static final int MENU_VIDEO = 7;
 	private static final int MENU_WEBVIEW_CREDITS = 8;
-	private static final int MENU_TOGGLE_PROCESSING = 9;
+	private static final int MENU_TOGGLE_MAP = 9;
 	private static final int MENU_APP_FINISH = 10;
 	private static final int MENU_TOGGLE_LOGGER = 11;
 
@@ -72,6 +71,7 @@ public class MainActivityPhone extends BaseActivity {
 	public Network network;
 
 	private GPSManager gpsManager;
+	public boolean gpsOn = true;
 	private OrientationManager orientationManager;
 	private AccelerometerManager accelerationManager;
 
@@ -85,13 +85,14 @@ public class MainActivityPhone extends BaseActivity {
 		c = this;
 		// addProcessingSketch(new ProcessingSketch(), R.id.f1);
 		// addProcessingSketch(cameraFragment, R.id.f1);
-		// addProcessingSketch(new MapCustomFragment(), R.id.f1);
+		addProcessingSketch(new MapCustomFragment(), R.id.f2);
 		// addProcessingSketch(new WalkieTalkieFragment(), R.id.f2);
 		// addProcessingSketch(new DebugSoundFragment(), R.id.f1);
 		// addProcessingSketch(new MainFragment(), R.id.f1);
 		// addProcessingSketch(new GameWebViewFragment(), R.id.f1);
 
 		videoPlayer = new VideoPlayerFragment();
+		/*
 		addProcessingSketch(videoPlayer, R.id.f1);
 		videoPlayer.addListener(new VideoListener() {
 
@@ -104,9 +105,11 @@ public class MainActivityPhone extends BaseActivity {
 			public void onFinish(boolean finished) {
 			}
 		});
+		*/
 
-		processingSketch = new ProcessingSketch();
-		addProcessingSketch(processingSketch, R.id.fragmentProcessing);
+		//processingSketch = new ProcessingSketch();
+		//addProcessingSketch(processingSketch, R.id.fragmentProcessing);
+		addProcessingSketch(new YesNoFragment(), R.id.f1);
 
 		OverlayLogger ol = new OverlayLogger();
 		L.addLoggerWindow(ol);
@@ -204,9 +207,11 @@ public class MainActivityPhone extends BaseActivity {
 			}
 
 			@Override
-			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) {
-
-				network.sendLocation(lat, lon);
+			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) { 
+				if (gpsOn) {
+					network.sendLocation(lat, lon);
+					L.d("GPS", "gps");
+				}
 				gpsReady();
 				// currentPosition.setPosition(new LatLng(lat, lon));
 			}
@@ -231,9 +236,10 @@ public class MainActivityPhone extends BaseActivity {
 			@Override
 			public void onOrientation(float pitch, float roll, float z) {
 				L.d(TAG, "orientation " + pitch + " " + roll + " " + z);
+				network.sendOrientation(pitch, roll, z);
 			}
 		});
-		// orientationManager.start();
+		orientationManager.start();
 
 		accelerationManager = new AccelerometerManager(this);
 		accelerationManager.addListener(new AccelerometerListener() {
@@ -255,7 +261,8 @@ public class MainActivityPhone extends BaseActivity {
 
 	protected void gpsReady() {
 		if (!ready) {
-			processingSketch.gpsLock(true);
+			L.d("GPS", "ready");
+			//processingSketch.gpsLock(true);
 			SoundUtils.speak(c, "GPS Ready", Locale.ENGLISH);
 			ready = true;
 
@@ -269,6 +276,7 @@ public class MainActivityPhone extends BaseActivity {
 			}, 5000);
 		}
 	}
+	
 
 	protected void connectToTheWorld() {
 		SoundUtils.speak(c, "Connecting to the world", Locale.ENGLISH);
@@ -278,6 +286,7 @@ public class MainActivityPhone extends BaseActivity {
 	HashMap<String, MediaPlayer> sounds = new HashMap<String, MediaPlayer>();
 
 	private int TOGGLE_LOGGER;
+
 
 	public void updateSound(String url, int volume) {
 		// getResources().get
@@ -323,7 +332,7 @@ public class MainActivityPhone extends BaseActivity {
 		menu.add(0, MENU_WALKIE_TALKIE, 0, "Walkie Talkie");
 		menu.add(0, MENU_MAP, 0, "Map");
 		// menu.add(0, MENU_PROCESSING, 0, "Processing");
-		// menu.add(0, TOGGLE_PROCESSING, 0, "Toggle Processing");
+		menu.add(0, MENU_TOGGLE_MAP, 0, "Toggle Map");
 		menu.add(0, MENU_TOGGLE_LOGGER, 0, "Toggle Logger");
 		// menu.add(0, MENU_MAIN, 0, "Main");
 		menu.add(0, MENU_PD, 0, "PD");
@@ -374,18 +383,12 @@ public class MainActivityPhone extends BaseActivity {
 
 			return true;
 
-		case MENU_TOGGLE_PROCESSING:
+		case MENU_TOGGLE_MAP:
 			if (toggle) {
-				View view = findViewById(R.id.fragmentProcessing);
-				view.setVisibility(View.INVISIBLE);
-
-				view = findViewById(R.id.f1);
+				View view = findViewById(R.id.f2);
 				view.setVisibility(View.VISIBLE);
 			} else {
-				View view = findViewById(R.id.fragmentProcessing);
-				view.setVisibility(View.VISIBLE);
-
-				view = findViewById(R.id.f1);
+				View view = findViewById(R.id.f2);
 				view.setVisibility(View.INVISIBLE);
 
 			}

@@ -8,8 +8,8 @@ package com.noisepages.nettoyeur.midi;
 
 public final class R {
 	public static final class id {
-		public static final int paired_devices = 0x7f0e0030;
-		public static final int title_paired_devices = 0x7f0e002f;
+		public static final int paired_devices = 0x7f0a0035;
+		public static final int title_paired_devices = 0x7f0a0034;
 	}
 	public static final class string {
 		public static final int title_select_usb_midi_output = 0x7f070007;

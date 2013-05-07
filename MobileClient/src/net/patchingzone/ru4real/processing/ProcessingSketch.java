@@ -141,6 +141,7 @@ public class ProcessingSketch extends PApplet {
 		q = map(mouseX, 0, width, 0, 10);
 		q2 = map(mouseY, 0, height, 0, 10);
 
+		net.patchingzone.ru4real.fragments.Utils.vibrate(getActivity(), 200);
 		MainActivityPhone activityPhone = (MainActivityPhone) getActivity();
 		if (mouseY < height / 2) {
 			activityPhone.network.sendAnswer(true);

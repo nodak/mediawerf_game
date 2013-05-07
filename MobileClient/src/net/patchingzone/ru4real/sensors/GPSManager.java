@@ -35,7 +35,13 @@ public class GPSManager extends CustomSensorManager {
 	public void start() {
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setBearingAccuracy(Criteria.ACCURACY_FINE);
+		//criteria.setBearingAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(true);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setPowerRequirement(Criteria.POWER_HIGH);
+        criteria.setSpeedRequired(false);
+        
 		// criteria.setSpeedRequired(true);
 		gps = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
 		String provider;

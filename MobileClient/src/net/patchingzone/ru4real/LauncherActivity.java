@@ -31,6 +31,7 @@ public class LauncherActivity extends BaseActivity {
 
 		}
 		startActivity(intent);
+		finish();
 
 	}
 

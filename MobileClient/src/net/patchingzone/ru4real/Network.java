@@ -44,12 +44,12 @@ public class Network {
 	}
 
 	public void connectGame() {
-		L.d(TAG, "not yet");
+		//L.d(TAG, "not yet");
 		gameWebSocket = new SocketIOClient(URI.create(AppSettings.SERVER_ADDRESS), new SocketIOClient.Handler() {
 
 			@Override
 			public void onConnect() {
-				// L.d(TAG, "connected");
+				L.d(TAG, "game connected");
 				Long tsLong = System.currentTimeMillis() / 1000;
 				String ts = "AndroidMobileClient" + tsLong.toString();
 				gameWebSocketConnected = true; 
@@ -404,7 +404,32 @@ public class Network {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		}
+		} 
+		
+	}
+
+	public void sendOrientation(float pitch, float roll, float z) {
+		if (libraryWebSocketConnected) {
+			
+			// send new location
+			JSONObject or = new JSONObject();
+			JSONArray arguments = new JSONArray();
+			try {
+				or.put("pitch", pitch);
+				or.put("roll", roll);
+				or.put("z", z);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			arguments.put(or);
+			
+			try {
+				libraryWebSocket.emit("updateOrientation", arguments);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} 
+			
 		
 	}
 	

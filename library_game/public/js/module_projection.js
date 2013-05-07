@@ -224,6 +224,12 @@ $(document).ready(function() {
 	});
 
 
+	socket.on('orientation', function(data) {
+		console.log("orientation " + data.pitch);  
+
+	});
+
+
 
 	//maps 
 	gmap = new Gmap();

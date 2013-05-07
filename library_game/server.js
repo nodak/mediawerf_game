@@ -70,6 +70,11 @@ websocket_server.sockets.on('connection', function (socket) {
     socket.broadcast.emit('answer', data);
   });
 
+  socket.on('updateOrientation', function (data) {
+    console.log(data);
+    socket.broadcast.emit('orientation', data);
+  });
+
   
 
 
