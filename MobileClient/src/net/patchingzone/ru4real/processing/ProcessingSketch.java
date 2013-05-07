@@ -2,6 +2,7 @@ package net.patchingzone.ru4real.processing;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -14,21 +15,24 @@ public class ProcessingSketch extends PApplet {
 	}
 
 	PFont t;
+	PImage image;
 
 	float count1 = 0;
 	float count2 = 1;
 	float count3 = 2;
 	float count4 = 3;
-	float count5 = 4; 
-	
-	float speed1 = 0.001f; 
-	float speed2 = 0.001f; 
-	float speed3 = 0.001f; 
-	float speed4 = 0.001f; 
-	float speed5 = 0.001f; 
+	float count5 = 4;
+
+	float speed1 = 0.001f;
+	float speed2 = 0.001f;
+	float speed3 = 0.001f;
+	float speed4 = 0.001f;
+	float speed5 = 0.001f;
 
 	float q = 0.0f;
 	float q2 = 0.0f;
+
+	private int cStatus = color(0, 0, 0);
 
 	public void setup() {
 		frameRate(28);
@@ -43,23 +47,39 @@ public class ProcessingSketch extends PApplet {
 			Looper.prepare();
 		}
 
-		background(0);
+		background(0, 10);
 		// q = map(mouseX, 0, width, 0, 10);
 
+		colorMode(RGB);
+		fill(100 + 155 * abs(sin((float) (frameCount * 0.02))), 10);
+		ellipse(width / 2, 260, 450, 450);
+
+		// fill(255 * sin((float)(frameCount * 0.01)), 255, 255);
+		fill(cStatus);
+		ellipse(width / 2, 650, 270, 270);
+
+		colorMode(RGB);
+		pushMatrix();
+		scale(1.2f);
+		translate(-40, -180);
+
 		textFont(t, 30);
-		fill(221, 41, 224, 225);
+		// fill(221, 41, 224, 225);
+		// text("Are you \nfor Real?", width / 2 - 50 + random(q), height / 2 -
+		// 20 + random(q2));
 
-		text("Are you \nfor Real?", width / 2 - 50 + random(q), height / 2 - 20 + random(q2));
-		fill(41, 210, 224, 225);
-
-		text("Are you \nfor Real?", width / 2 - 50 + random(q), height / 2 - 20 + random(q2));
+		// fill(41, 210, 224, 225);
+		// text("Are you \nfor Real?", width / 2 - 50 + random(q), height / 2 -
+		// 20 + random(q2));
 
 		noStroke();
-		fill(41, 210, 224);
+		// fill(41, 210, 224);
+		fill(0);
 		pushMatrix();
 		translate(width / 2, height / 2);
 		rotate(count1);
-		Utils.corona(this, (float) (80 + 20 * Math.sin(frameCount * 0.1)), (float) (90 + 20 * Math.sin(frameCount * 0.1 + 5)), 0, 100, 100);
+		Utils.corona(this, (float) (80 + 20 * Math.sin(frameCount * 0.1)),
+				(float) (90 + 20 * Math.sin(frameCount * 0.1 + 5)), 0, 100, 100);
 		popMatrix();
 
 		pushMatrix();
@@ -87,12 +107,17 @@ public class ProcessingSketch extends PApplet {
 		Utils.corona(this, 160, 170, 0, 100, 100);
 		popMatrix();
 
+		popMatrix();
 		count1 += speed1;
 		count2 += speed2;
 		count3 += speed3;
 		count4 += speed4;
 		count5 += speed5;
 
+		if (image != null) {
+			image(image, 0, 0);
+			
+		}
 	}
 
 	/*
@@ -114,6 +139,17 @@ public class ProcessingSketch extends PApplet {
 		q = map(mouseX, 0, width, 0, 10);
 		q2 = map(mouseY, 0, height, 0, 10);
 
+	}
+
+	public void gpsLock(boolean b) {
+		if (b)
+			cStatus = color(255, 0, 0);
+		else
+			cStatus = color(0, 0, 0);
+	}
+
+	public void changeImage(String string) {
+		image = loadImage(string);
 	}
 
 }

@@ -4477,14 +4477,14 @@ public class PGraphics extends PImage implements PConstants {
    * See notes about alpha in background(x, y, z, a).
    */
   public void background(float gray, float alpha) {
-    if (format == RGB) {
-      background(gray);  // ignore alpha for main drawing surface
+    //if (format == RGB) {
+     // background(gray);  // ignore alpha for main drawing surface
 
-    } else {
+    //} else {
       colorCalc(gray, alpha);
       backgroundFromCalc();
 //      backgroundImpl();
-    }
+   // }
   }
 
 

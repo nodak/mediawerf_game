@@ -1,5 +1,6 @@
 package net.patchingzone.ru4real.base;
 
+import java.io.File;
 import java.util.HashMap;
 
 import net.patchingzone.ru4real.R;
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class BaseWebview extends Fragment {
@@ -107,15 +110,37 @@ public class BaseWebview extends Fragment {
 
 		@JavascriptInterface
 		public void updateSound(String url, int volume) {
+			//getResources().get
+	
+
 			if (sounds.containsKey(url) == false) {
-				sounds.put(url, Utils.playSound(url, volume));
+				//check if file is stored 
+				String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
+				String fileURL = Environment.getExternalStorageDirectory() + "/mediawerf/mp3/" + fileName;
+				File f = new File(fileURL);
+								
+				Log.d("mm", " " + fileURL + " " + f.exists());
+
+				String cURL = "";
+				if (f.exists()) {
+					cURL = fileURL;
+					Toast.makeText(getActivity(), "SD", Toast.LENGTH_SHORT).show();
+					Log.d("mm", " SD ");
+				} else {
+					Toast.makeText(getActivity(), "URL", Toast.LENGTH_SHORT).show();
+					cURL = url;
+					Log.d("mm", " URL ");
+				}
+				
+				
+				sounds.put(url, SoundUtils.playSound(cURL, volume));
 				// sounds.put(url, null);
 
 				Log.d("qq2", "play " + url + " " + volume);
 
 			} else {
 				Log.d("qq2", "volume " + url + " " + volume);
-				Utils.setVolume((MediaPlayer) (sounds.get(url)), volume);
+				SoundUtils.setVolume((MediaPlayer) (sounds.get(url)), volume);
 
 			}
 

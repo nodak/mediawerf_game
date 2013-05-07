@@ -13,10 +13,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Vibrator;
 import android.view.View;
 
 public class Utils {
+	
+	public static void vibrate(Context c, int duration) { 
+		
+		Vibrator mVibrator; 
+
+		mVibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+		mVibrator.vibrate(duration); 
+
+	} 
+	
 
 	static public int getAge(int _year, int _month, int _day) {
 

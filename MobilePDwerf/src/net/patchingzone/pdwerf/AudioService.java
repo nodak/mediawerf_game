@@ -49,7 +49,7 @@ public class AudioService {
 
 		// configure audio glue
 		int sampleRate = AudioParameters.suggestSampleRate();
-		pdService.initAudio(sampleRate, 1, 2, 10.0f);
+		pdService.initAudio( sampleRate, 1, 2, 8f);
 		start();
 
 		// create and install the dispatcher

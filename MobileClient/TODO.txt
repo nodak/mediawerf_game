@@ -12,25 +12,52 @@ OK - gps and orientation
 OK - accelerometer
 OK - Hablar con Alcatel
 OK - 30mins -  Map lock 
+OK - 2 hours - integrar walkie talkie 
+OK - fixing pd in app 
+OK - loop audio
+OK - start a different activity when tablet + different layout
+OK - take picture and store it locally
+OK - theme holo  
 
-MM - loop audio
 MM - back button close the app 
-MM - start a different activity when tablet + different layout
 MM - Log overlay 
 MM - 20 mins - indicator GPS 
+MM - menu show / not show logger  menu show / not show processing 
+OK - fix pd engine 
+OK - load from filesystem 
+
 
 
 HOY
 ===== 
-2 hours - integrar walkie talkie 
-1 hour - debug fragment for sending messages to the server 
-1 hour - servidor online
+- website 
+- server 
+- damm native version 
+- load sounds using pd 
+-  
 
-- fragment showing who is connected
+
+MM - layout for tablet - map / log / sound 
+- gson 
+- fragment showing who is connected in list 
+
+
+- theme landscape 
+1 hour - debug fragment for sending messages to the server 
+
+
+- filter log by TAG
+- upload picture to the server 
+- Send position to the server from web 
+
+
+- walkie talkie is not working with pd (uses same resources) 
+- 1 hour - servidor online
 - pasar todo a activity 
 
-
+- show players list in map
 - events 
+
 
 
 

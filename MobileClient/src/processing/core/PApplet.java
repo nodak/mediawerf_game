@@ -548,11 +548,13 @@ public class PApplet extends Fragment implements PConstants, Runnable {
 			// you
 			// can keep your "talentless hack" comments to yourself. Ahem.)
 			RelativeLayout overallLayout = new RelativeLayout(this.getActivity());
+			overallLayout.setBackgroundColor(0x00000000);
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
 			lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 
 			LinearLayout layout = new LinearLayout(this.getActivity());
+			layout.setBackgroundColor(0x00000000);
 			layout.addView(surfaceView, sketchWidth(), sketchHeight());
 			overallLayout.addView(layout, lp);
 			// window.setContentView(overallLayout); no para fragments

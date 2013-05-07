@@ -2,6 +2,7 @@ package net.patchingzone.ru4real.fragments;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -10,8 +11,11 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.PictureCallback;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -218,7 +222,47 @@ public class CameraFragment extends Fragment {
 		mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 
 		// TOFIX
-		// camera.takePicture(null, null, this);
+		camera.takePicture(null, null, new PictureCallback() {
+
+			@Override
+			public void onPictureTaken(byte[] data, Camera camera) {
+				Bitmap bitmapPicture = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+				// SoundPool soundPool = new SoundPool(1,
+				// AudioManager.STREAM_NOTIFICATION, 0);
+				// int shutterSound = soundPool.load(this,
+				// R.raw.camera_click, 0);
+
+				// soundPool.play(shutterSound, 1f, 1f, 0, 0, 1);
+
+				FileOutputStream outStream = null;
+				try {
+					// write to local sandbox file system
+					// outStream =
+					// CameraDemo.this.openFileOutput(String.format("%d.jpg",
+					// System.currentTimeMillis()), 0);
+					// Or write to sdcard
+
+					File q1 = new File("/sdcard/dcim/qq/");
+					q1.mkdirs();
+					File q2 = new File("/sdcard/dcim/qq/" + System.currentTimeMillis() + ".jpg");
+					outStream = new FileOutputStream(q2);
+					outStream.write(data);
+					outStream.flush();
+					outStream.close();
+					Log.d("qq", "onPictureTaken - wrote bytes: " + data.length);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+				}
+
+				Log.d("qq", "onPictureTaken - jpeg");
+
+				camera.startPreview();
+			}
+		});
 
 	}
 

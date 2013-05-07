@@ -1,10 +1,11 @@
 package net.patchingzone.ru4real.fragments;
 
+import java.util.Vector;
+
 import net.patchingzone.ru4real.R;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 
@@ -19,6 +21,9 @@ public class VideoPlayerFragment extends Fragment {
 
 	private View v;
 	private VideoView mVideoView;
+	Vector<VideoListener> listeners = new Vector<VideoListener>();
+ 
+
 
 	/**
 	 * Called when the activity is first created.
@@ -32,6 +37,9 @@ public class VideoPlayerFragment extends Fragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		v = inflater.inflate(R.layout.fragment_videoplayer, container, false); 
+		mVideoView = (VideoView) v.findViewById(R.id.surface_view);
+		Log.d("mm", "onCreateView");
+
 		
 		return v;
 		
@@ -39,28 +47,34 @@ public class VideoPlayerFragment extends Fragment {
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		Log.d("mm", "onActivityCreated");
 
-		initVideo();
+		for (VideoListener l : listeners) {
+			l.onReady(true);
+		}
+		
+
 
 	}
 
-	public void initVideo() {
+	public void initVideo(String videoFile) {
+		Log.d("mm", "initVideo");
 
-		mVideoView = (VideoView) v.findViewById(R.id.surface_view);
 
 		//TODO: load file from sdcard 
-		String path = "android.resource://" + getActivity().getPackageName() + "/raw/cityfireflies"; 
+		String path = "android.resource://" + getActivity().getPackageName() + videoFile; 
 		//String path = Environment.getExternalStorageDirectory() + "/arprototype/video"; 
-		Log.d("qq", path); 
+		//Log.d("qq", path); 
 		
 		/*
 		 * Alternatively,for streaming media you can use
 		 * mVideoView.setVideoURI(Uri.parse(URLstring));
 		 */
 		mVideoView.setVideoPath(path);
-		// MediaController mediaController = new MediaController(this);
+		//MediaController mediaController = new MediaController(this);
 		// mediaController.setAnchorView(mVideoView);
-		// mVideoView.setMediaController(mediaController);
+		//mVideoView.setMediaController(mediaController);
+		
 		mVideoView.requestFocus();
 		mVideoView.setKeepScreenOn(true);
 
@@ -78,15 +92,22 @@ public class VideoPlayerFragment extends Fragment {
 
 			public void onCompletion(MediaPlayer mp) {
 
-				finish();
+				//finish();
+				for (VideoListener l : listeners) {
+					l.onFinish(true);
+				}
+				
 
 			}
 		});
 
 	}
 
-	public void finish() {
+	public void setVolume(float volume) {
+		
+		
 	}
+	
 	public void close() {
 
 		mVideoView.stopPlayback();
@@ -99,6 +120,15 @@ public class VideoPlayerFragment extends Fragment {
 		}
 		return true;
 	}
+	
+	public void addListener(VideoListener videoListener) {
+		listeners.add(videoListener);
+	}
+
+	public void removeListener(VideoListener videoListener) {
+		listeners.remove(videoListener);
+	}
+
 
 	
 }

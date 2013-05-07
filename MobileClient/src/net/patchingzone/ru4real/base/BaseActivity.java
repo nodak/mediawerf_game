@@ -5,7 +5,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,7 +33,7 @@ public class BaseActivity extends FragmentActivity {
 		}
 
 		if (AppSettings.hideHomeBar) {
-			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		}
 
 		if (AppSettings.screenAlwaysOn) {
@@ -42,7 +45,24 @@ public class BaseActivity extends FragmentActivity {
 		// Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
 		// playSound("http://outside.mediawerf.net/music.ogg");
 
+	} 
+	
+	public void changeFragment(int id, Fragment fragment) {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+		fragmentTransaction.replace(id, fragment);
+		fragmentTransaction.commit();
 	}
+
+	public void addProcessingSketch(Fragment processingSketch, int fragmentPosition) {
+
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.add(fragmentPosition, processingSketch);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+
+	} 
 
 	private void setBrightness(float f) {
 		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
