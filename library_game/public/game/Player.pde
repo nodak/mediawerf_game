@@ -107,6 +107,10 @@ class Player {
     this.x = x;
     this.y = y;
 		positions.push(new PVector(x, y));
+  } 
+
+  void setPosition(float orientation) { 
+    this.orientation = orientation;
   }
 
   float getPositionX() {
@@ -114,7 +118,7 @@ class Player {
   }
   float getPositionY() {
     return this.y;
-  }
+  } 
   float getPlayerSize() {
     return this.playerSize;
   }

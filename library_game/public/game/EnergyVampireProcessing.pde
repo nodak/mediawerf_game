@@ -175,6 +175,19 @@ public void setPositionXY(String id, int x, int y) {
 } 
 
 
+public void setOrientation(String id, float orientation) {
+
+    for (int i = 0; i < players.size(); i++) {
+    Player p = players.get(i);
+    
+    //if(p.id == id) {
+    //  debug(p.id); 
+      p.setOrientation(orientation);
+    //}
+    
+  }
+}
+
 
 //just a little helper function
 //aparently processing.js shows a console that we might not want

@@ -227,6 +227,8 @@ $(document).ready(function() {
 	socket.on('orientation', function(data) {
 		console.log("orientation " + data.pitch);  
 
+		var p = Processing.getInstanceById('game');
+		p.setOrientation(1, data.pitch);
 	});
 
 
