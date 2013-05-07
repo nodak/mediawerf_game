@@ -60,7 +60,7 @@ websocket_server.sockets.on('connection', function (socket) {
 
   socket.on('updateForce', function (data) {
     console.log(data.force);
-    websocket_server.sockets.emit('force', data);
+    socket.broadcast.emit('force', data);
 
   });
 

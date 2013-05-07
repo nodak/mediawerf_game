@@ -207,7 +207,8 @@ $(document).ready(function() {
 		movePlayerXY("888", data[1], data[2]);
 	});
 
-	socket.on('force', function(data){
+	socket.on('force', function(data) {
+		console.log("force");
 	    trigger("#acc");
 	});
 
