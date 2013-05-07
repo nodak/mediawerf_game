@@ -212,6 +212,18 @@ $(document).ready(function() {
 	    trigger("#acc");
 	});
 
+	socket.on('answer', function(data) {
+		console.log("answer");  
+
+		if (answer == true) { 
+	    	trigger("#yes");
+	    } else {
+	  		trigger("#no");
+  	
+	    }
+	});
+
+
 
 	//maps 
 	gmap = new Gmap();

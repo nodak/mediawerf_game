@@ -65,6 +65,13 @@ websocket_server.sockets.on('connection', function (socket) {
   });
 
   
+  socket.on('updateAnswer', function (data) {
+    console.log(data.force);
+    socket.broadcast.emit('answer', data);
+  });
+
+  
+
 
 
   socket.on('disconnect', function () {

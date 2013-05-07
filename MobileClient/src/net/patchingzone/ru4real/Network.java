@@ -384,4 +384,28 @@ public class Network {
 
 	}
 
+	
+	public void sendAnswe(boolean b) {
+		if (libraryWebSocketConnected) {
+			
+			// send new location
+			JSONObject acc = new JSONObject();
+			JSONArray arguments = new JSONArray();
+			try {
+				acc.put("answer", b);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			arguments.put(acc);
+			
+			try {
+				libraryWebSocket.emit("updateAnswer", arguments);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+
 }
