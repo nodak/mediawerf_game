@@ -109,7 +109,7 @@ class Player {
 		positions.push(new PVector(x, y));
   } 
 
-  void setPosition(float orientation) { 
+  void setOrientation(float orientation) { 
     this.orientation = orientation;
   }
 
