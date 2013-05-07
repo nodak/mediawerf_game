@@ -71,7 +71,7 @@ websocket_server.sockets.on('connection', function (socket) {
   });
 
   socket.on('updateOrientation', function (data) {
-    console.log(data);
+    //console.log(data);
     socket.broadcast.emit('orientation', data);
   });
 
