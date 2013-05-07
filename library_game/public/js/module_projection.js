@@ -207,6 +207,10 @@ $(document).ready(function() {
 		movePlayerXY("888", data[1], data[2]);
 	});
 
+	socket.on('force', function(data){
+	    trigger("#acc");
+	});
+
 
 	//maps 
 	gmap = new Gmap();
@@ -298,7 +302,6 @@ $(document).ready(function() {
       $("#poke").click(function() {
         console.log("poke");
         game.sendMessage(game.players[0], "/poke::");
-        trigger("#acc");
 
     });
     

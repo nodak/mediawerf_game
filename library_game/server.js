@@ -58,9 +58,10 @@ websocket_server.sockets.on('connection', function (socket) {
   });
 
 
-  socket.on('updateForce', function () {
-    console.log("force" + data);
-    //socket.emit('number', {number: 500});
+  socket.on('updateForce', function (data) {
+    console.log(data.force);
+    websocket_server.sockets.emit('force', data);
+
   });
 
   
