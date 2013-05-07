@@ -2,6 +2,8 @@ package net.patchingzone.ru4real.sensors;
 
 import java.util.Vector;
 
+import net.patchingzone.ru4real.L;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -47,8 +49,18 @@ public class AccelerometerManager extends CustomSensorManager {
 				//listener
 				for (AccelerometerListener l : listeners) {
 					l.onAccelerometerChanged(event.values[0], event.values[1], event.values[2]);
-				}
+				} 
 				
+				double force = Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2]);
+				
+				if (force > 25) {
+					//L.d(TAG, "" + force);
+					
+					//listener
+					for (AccelerometerListener l : listeners) {
+						l.onShake(force);
+					} 
+				}
 			}
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {

@@ -13,6 +13,8 @@ Module projection
 		<script src="./socket.io/socket.io.js"></script>
 		<script src="./js/less.js" type="text/javascript"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 		<script src="js/dat.gui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src ="js/module_projection.js" type = "text/javascript" charset="utf-8"></script>
 		<script src="./game/processing.js" type="text/javascript"></script>
@@ -54,6 +56,30 @@ Module projection
 		</div>
 		-->
 		
+
+		<div id = "panel"> 
+  		  <select name="selCombo" size=1 onChange="javascript:alert('prueba');"> 
+	    	<option value="link pagina 1">player 1</option>
+		    <option value="link pagina 2">player 2</option>
+		    <option value="link pagina 3">player 3</option>
+		    <option value="link pagina 4">player 4</option> 
+		    </select> 
+		    <hr />
+		    <button id ="left">Left</button>    
+		    <button id ="right">Right</button>    
+		    <button id ="straight">Go Straight</button>    
+		    <button id ="turn">Turn around</button>    
+		    <button id ="poke">Poke</button>    
+		    <hr />
+		    <input id = "msg"></input>
+		    <button id = "send">Send</button>    
+		    <hr />
+		    <p id ="acc">Accelerometer Shake</p>
+		    <p id ="yes">Yes</p>
+		    <p id ="no">No</p>
+		</div>
+
+
 	</div>
 
 </body>

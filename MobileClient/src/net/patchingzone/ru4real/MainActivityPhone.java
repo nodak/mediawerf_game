@@ -115,6 +115,7 @@ public class MainActivityPhone extends BaseActivity {
 
 		network = new Network();
 		network.connectGame();
+		network.connectLibrary();
 		network.addGameListener(new NetworkListener() {
 
 			@Override
@@ -177,7 +178,7 @@ public class MainActivityPhone extends BaseActivity {
 			@Override
 			public void onTextMessage(String text) {
 				String cmd[] = text.split("::");
-				
+
 				if (cmd[0].contains("/poke")) {
 					Utils.vibrate(c, 500);
 				} else if (cmd[0].contains("/say")) {
@@ -204,32 +205,8 @@ public class MainActivityPhone extends BaseActivity {
 
 			@Override
 			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) {
-				// L.d(TAG, " " + lat + " " + lon + " " + alt);
-				// Date df = new java.util.Date(location.getTime());
-				// String vv = new
-				// SimpleDateFormat("dd-MM-yyyy , HH:mm:ss").format(df);
 
-				JSONObject gpsData = new JSONObject();
-				JSONArray arguments = new JSONArray();
-
-				try {
-					gpsData.put("lat", lat);
-					gpsData.put("Long", lon);
-					gpsData.put("Alt", alt);
-					gpsData.put("Acc", speed);
-					gpsData.put("Acc", accuracy);
-					// gpsData.put("Time", vv);
-					// gpsData.put("TimeStamp", location.getTime());
-					// gpsData.put("Head", location.getBearing());
-					arguments.put(gpsData);
-					network.sendLocation(lat, lon);
-					// currentPosition.setPosition(new LatLng(lat, lon));
-
-					// L.d(TAG, arguments.toString());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+				network.sendLocation(lat, lon);
 				gpsReady();
 				// currentPosition.setPosition(new LatLng(lat, lon));
 			}
@@ -262,16 +239,17 @@ public class MainActivityPhone extends BaseActivity {
 		accelerationManager.addListener(new AccelerometerListener() {
 
 			@Override
-			public void onShake(float force) {
+			public void onShake(double force) {
 				L.d(TAG, "acc " + force);
+				network.sendShake(force);
 			}
 
 			@Override
 			public void onAccelerometerChanged(float x, float y, float z) {
-				L.d(TAG, "acc " + x + " " + y + " " + z);
+				// L.d(TAG, "acc " + x + " " + y + " " + z);
 			}
 		});
-		// accelerationManager.start();
+		accelerationManager.start();
 
 	}
 

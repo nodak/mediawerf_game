@@ -57,6 +57,15 @@ websocket_server.sockets.on('connection', function (socket) {
     socket.emit('number', {number: 500});
   });
 
+
+  socket.on('updateForce', function () {
+    console.log("force" + data);
+    //socket.emit('number', {number: 500});
+  });
+
+  
+
+
   socket.on('disconnect', function () {
     //socket.emit('news', { hello: i });
     //socket.emit('news', { hello: 'world21515' });

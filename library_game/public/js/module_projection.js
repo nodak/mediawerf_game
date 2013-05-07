@@ -270,5 +270,53 @@ $(document).ready(function() {
 	
 
     initDebug();
-	
+
+    /* panel */ 
+    $("#panel").draggable();
+  	console.log("ready!"); 
+    $("#left").click(function() {
+        console.log("left");
+        game.sendMessage(game.players[0], "/say::Go Left");
+
+    });
+    
+      $("#right").click(function() {
+        console.log("right");
+        game.sendMessage(game.players[0], "/say::Go Right");
+    });
+    
+      $("#straight").click(function() {
+        console.log("straight");
+        game.sendMessage(game.players[0], "/say::Go Straight");
+    });
+    
+      $("#turn").click(function() {
+        console.log("turn");
+        game.sendMessage(game.players[0], "/say::Turn around");
+    });
+    
+      $("#poke").click(function() {
+        console.log("poke");
+        game.sendMessage(game.players[0], "/poke::");
+        trigger("#acc");
+
+    });
+    
+      $("#send").click(function() {
+        var val = $("#msg").val();
+        console.log("send " + val); 
+        game.sendMessage(game.players[0], "/say::"+val);
+    });
+    
+    function trigger(id) {
+       $(id).css("background-color", "red"); 
+        
+        setTimeout(function() {
+            $(id).css("background-color", ""); 
+   
+        }, 500);
+    }
+    
+
+
 });

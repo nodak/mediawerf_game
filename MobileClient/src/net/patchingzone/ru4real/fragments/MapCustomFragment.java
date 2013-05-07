@@ -328,7 +328,7 @@ public class MapCustomFragment extends SupportMapFragment {
 		accelerationManager.addListener(new AccelerometerListener() {
 
 			@Override
-			public void onShake(float force) {
+			public void onShake(double force) {
 				L.d(TAG, "acc " + force);
 			}
 
