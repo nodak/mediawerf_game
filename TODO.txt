@@ -1,28 +1,28 @@
 TODO
-====== 
-integrate pure data in android 
-website 
-server 
-	install nodejs 
-	poner un hook con github
-	install cherrypy 
-	install apache 
-	
-
-Adjust socket.io messages 
-Merge game + server 
-Store points buildings 
-Integrate walkie talkie 
+======
+Mail to Martin 
+Unique identifier for each player 
+Launcher 
+PD sound 
+Service that kill the app and restart 
+Library game 
+Laser cut overlays 
 
 
+ffmpeg -y -i q.amr -acodec vorbis -aq 50 output.ogg
+ffmpeg -i foo.mp3 -acodec pcm_s16le bar.wav
 
-Otros 
-===== 
-Mail Alcatel 
-mi web
-
-
-
-DONE 
-=====
-Simple Pure data module for testing 
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/hal_9000.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/entitled_2_answer.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enough_info.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/radar.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/feel_much_better.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/mind_is_going.ogg
+http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enjoyable_game.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/koud_clean1.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/drone.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/Doom2.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/brightonmystery.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/sweepymysterie.ogg
+http://mediawerf.dyndns.org/GameLoops/SingleLoops/evilsidbass.ogg
+http://mediawerf.dyndns.org/GameLoops/Layeredloops/party.ogg

@@ -1,7 +1,5 @@
 package net.patchingzone.ru4real.fragments;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import net.patchingzone.ru4real.L;
@@ -10,15 +8,8 @@ import net.patchingzone.ru4real.Network;
 import net.patchingzone.ru4real.NetworkListener;
 import net.patchingzone.ru4real.R;
 import net.patchingzone.ru4real.game.Player;
-import net.patchingzone.ru4real.sensors.AccelerometerListener;
-import net.patchingzone.ru4real.sensors.AccelerometerManager;
-import net.patchingzone.ru4real.sensors.GPSListener;
-import net.patchingzone.ru4real.sensors.GPSManager;
-import net.patchingzone.ru4real.sensors.OrientationListener;
-import net.patchingzone.ru4real.sensors.OrientationManager;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
@@ -99,8 +88,8 @@ public class MapCustomFragment extends SupportMapFragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				L.d("qq", "" + isChecked);
 				settings.setAllGesturesEnabled(isChecked);
-				 ((MainActivityPhone) getActivity()).gpsOn = isChecked;
-				
+				((MainActivityPhone) getActivity()).gpsOn = isChecked;
+
 			}
 		});
 
@@ -112,7 +101,6 @@ public class MapCustomFragment extends SupportMapFragment {
 			public void onUpdatedLocation(String event, JSONArray arguments) {
 			}
 
-
 			@Override
 			public void onPlayerJoined(final Player player) {
 				getActivity().runOnUiThread(new Runnable() {
@@ -122,8 +110,9 @@ public class MapCustomFragment extends SupportMapFragment {
 						if (player == null) {
 							Log.d("qq", player.nickname + " " + player.latLng.latitude + " " + player.latLng.longitude);
 						} else {
-							Log.d("qq", "not null ---> " + player.nickname + " " + player.latLng.latitude + " " + player.latLng.longitude);
-							
+							Log.d("qq", "not null ---> " + player.nickname + " " + player.latLng.latitude + " "
+									+ player.latLng.longitude);
+
 						}
 						Marker marker = map.addMarker(new MarkerOptions().position(player.latLng)
 								.title(player.nickname).snippet("connected users")
@@ -167,25 +156,24 @@ public class MapCustomFragment extends SupportMapFragment {
 				});
 			}
 
-
-
-
 			@Override
-			public void onTargetInRange(double latitude, double longitude, String value, float distance) {
+			public void onTargetInRange(double latitude, double longitude, String value, float distance, int range) {
 			}
-
-
-
 
 			@Override
 			public void onTextMessage(String text) {
 			}
 
-
-
-
 			@Override
 			public void onPoke() {
+			}
+
+			@Override
+			public void onPlayerInRange(String nickname, String sound, float distance) {
+			}
+
+			@Override
+			public void onRefresh() {
 			}
 		});
 
@@ -247,28 +235,19 @@ public class MapCustomFragment extends SupportMapFragment {
 		 * ).tilt(30).build()), 2000, null);
 		 */
 
-	
-/*
-					final Interpolator interpolator = new LinearInterpolator();
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							long elapsed = SystemClock.uptimeMillis() - start;
-							float t = interpolator.getInterpolation((float) elapsed / duration);
-							double lng_ = t * lon + (1 - t) * lon;
-							double lat_ = t * lat + (1 - t) * lat;
-							currentPosition.setPosition(new LatLng(lat_, lng_));
-							if (t < 1.0) {
-								// Post again 10ms later.
-								handler.postDelayed(this, 10);
-							} else {
-								// animation ended
-							}
-						}
-					});
-	*/
+		/*
+		 * final Interpolator interpolator = new LinearInterpolator();
+		 * handler.post(new Runnable() {
+		 * 
+		 * @Override public void run() { long elapsed =
+		 * SystemClock.uptimeMillis() - start; float t =
+		 * interpolator.getInterpolation((float) elapsed / duration); double
+		 * lng_ = t * lon + (1 - t) * lon; double lat_ = t * lat + (1 - t) *
+		 * lat; currentPosition.setPosition(new LatLng(lat_, lng_)); if (t <
+		 * 1.0) { // Post again 10ms later. handler.postDelayed(this, 10); }
+		 * else { // animation ended } } });
+		 */
 
-	
 		// map.add
 		return mTouchView;
 
@@ -276,7 +255,7 @@ public class MapCustomFragment extends SupportMapFragment {
 
 	public void setTouch(LatLng latLng) {
 		touchPosition.setPosition(latLng);
-		network.sendLocation(latLng.latitude, latLng.longitude);
+		network.sendLocation(latLng.latitude, latLng.longitude, 0);
 	}
 
 	@Override

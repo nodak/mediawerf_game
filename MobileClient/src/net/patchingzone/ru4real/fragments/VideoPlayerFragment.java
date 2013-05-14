@@ -5,6 +5,7 @@ import java.util.Vector;
 import net.patchingzone.ru4real.R;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 
@@ -22,6 +22,7 @@ public class VideoPlayerFragment extends Fragment {
 	private View v;
 	private VideoView mVideoView;
 	Vector<VideoListener> listeners = new Vector<VideoListener>();
+	private MediaPlayer mp_;
  
 
 
@@ -88,6 +89,16 @@ public class VideoPlayerFragment extends Fragment {
 			}
 		});
 
+		mVideoView.setOnPreparedListener(new OnPreparedListener() {
+			
+
+			@Override
+			public void onPrepared(MediaPlayer mp) { 
+				mp_ = mp; 
+			}
+		});
+		
+		
 		mVideoView.setOnCompletionListener(new OnCompletionListener() {
 
 			public void onCompletion(MediaPlayer mp) {
@@ -104,7 +115,10 @@ public class VideoPlayerFragment extends Fragment {
 	}
 
 	public void setVolume(float volume) {
-		
+		if (mp_ != null) {
+			mp_.setVolume(volume, volume);
+			
+		}
 		
 	}
 	

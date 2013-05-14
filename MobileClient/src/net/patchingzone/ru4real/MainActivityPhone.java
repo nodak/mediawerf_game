@@ -1,20 +1,27 @@
 package net.patchingzone.ru4real;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 import net.patchingzone.ru4real.audio.DebugSoundFragment;
+import net.patchingzone.ru4real.base.AppSettings;
 import net.patchingzone.ru4real.base.BaseActivity;
 import net.patchingzone.ru4real.base.SoundUtils;
 import net.patchingzone.ru4real.fragments.CameraFragment;
+import net.patchingzone.ru4real.fragments.FragmentDistances;
 import net.patchingzone.ru4real.fragments.GameWebViewFragment;
 import net.patchingzone.ru4real.fragments.MainFragment;
 import net.patchingzone.ru4real.fragments.MapCustomFragment;
+import net.patchingzone.ru4real.fragments.TextFragment;
 import net.patchingzone.ru4real.fragments.Utils;
-import net.patchingzone.ru4real.fragments.VideoListener;
 import net.patchingzone.ru4real.fragments.VideoPlayerFragment;
-import net.patchingzone.ru4real.fragments.YesNoFragment;
 import net.patchingzone.ru4real.game.Player;
 import net.patchingzone.ru4real.processing.ProcessingSketch;
 import net.patchingzone.ru4real.sensors.AccelerometerListener;
@@ -26,10 +33,17 @@ import net.patchingzone.ru4real.sensors.OrientationManager;
 import net.patchingzone.ru4real.walkietalkie.WalkieTalkieFragment;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -65,6 +79,8 @@ public class MainActivityPhone extends BaseActivity {
 	private static final int MENU_APP_FINISH = 10;
 	private static final int MENU_TOGGLE_LOGGER = 11;
 
+	private float orientationPitch;
+
 	private boolean toggle = false;
 	private ProcessingSketch processingSketch;
 	private VideoPlayerFragment videoPlayer;
@@ -77,48 +93,72 @@ public class MainActivityPhone extends BaseActivity {
 
 	private boolean ready = false;
 
+	private FragmentDistances fragmentDistances;
+	private TextFragment textFragment;
+
+	public LocalSettings localSettings;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_forfragments_phone_2);
+
+		// check if tablet
+		if (isTablet(this) == false) {
+			Log.d("tablet", "no es un tablet");
+			// This is not a tablet - start a new activity
+			setContentView(R.layout.activity_forfragments_phone_2);
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+		} else {
+			Log.d("tablet", "es un tablet");
+			setContentView(R.layout.activity_forfragments_tablet);
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+		}
 		c = this;
+
+		localSettings = getSettings();
 		// addProcessingSketch(new ProcessingSketch(), R.id.f1);
 		// addProcessingSketch(cameraFragment, R.id.f1);
-		addProcessingSketch(new MapCustomFragment(), R.id.f2);
 		// addProcessingSketch(new WalkieTalkieFragment(), R.id.f2);
-		// addProcessingSketch(new DebugSoundFragment(), R.id.f1);
 		// addProcessingSketch(new MainFragment(), R.id.f1);
 		// addProcessingSketch(new GameWebViewFragment(), R.id.f1);
 
-		videoPlayer = new VideoPlayerFragment();
+		// videoPlayer = new VideoPlayerFragment();
 		/*
-		addProcessingSketch(videoPlayer, R.id.f1);
-		videoPlayer.addListener(new VideoListener() {
+		 * addProcessingSketch(videoPlayer, R.id.f1);
+		 * videoPlayer.addListener(new VideoListener() {
+		 * 
+		 * @Override public void onReady(boolean ready) { //
+		 * videoPlayer.initVideo("/raw/cityfireflies"); }
+		 * 
+		 * @Override public void onFinish(boolean finished) { } });
+		 */
 
-			@Override
-			public void onReady(boolean ready) {
-				// videoPlayer.initVideo("/raw/cityfireflies");
-			}
-
-			@Override
-			public void onFinish(boolean finished) {
-			}
-		});
-		*/
-
-		//processingSketch = new ProcessingSketch();
-		//addProcessingSketch(processingSketch, R.id.fragmentProcessing);
-		addProcessingSketch(new YesNoFragment(), R.id.f1);
+		// processingSketch = new ProcessingSketch();
+		// addProcessingSketch(processingSketch, R.id.fragmentProcessing);
+		// addProcessingSketch(new YesNoFragment(), R.id.f1);
+		// addProcessingSketch(new DebugSoundFragment(), R.id.fragmentSound);
+		// addProcessingSketch(new DebugSoundFragment(), R.id.f2);
 
 		OverlayLogger ol = new OverlayLogger();
 		L.addLoggerWindow(ol);
 		// L.filterByTag("NETWORK");
-		addProcessingSketch(ol, R.id.fragmentLogOverlay);
+		//addProcessingSketch(ol, R.id.fragmentLogOverlay);
 
-		network = new Network();
-		network.connectGame();
-		network.connectLibrary();
+		fragmentDistances = new FragmentDistances();
+		addProcessingSketch(fragmentDistances, R.id.f2);
+
+		textFragment = new TextFragment();
+		addProcessingSketch(textFragment, R.id.f1);
+		
+		if (isTablet(this)) {
+			addProcessingSketch(new MapCustomFragment(), R.id.map);
+		} 
+		
+		network = new Network(this);
+		network.connect();
 		network.addGameListener(new NetworkListener() {
 
 			@Override
@@ -126,19 +166,21 @@ public class MainActivityPhone extends BaseActivity {
 			}
 
 			@Override
-			public void onTargetInRange(double latitude, double longitude, String value, float distance) {
-				L.d(TAG, "" + latitude + " " + longitude + " " + value + " " + distance);
+			public void onTargetInRange(double latitude, double longitude, String value, float distance, int range) {
+				// L.d(TAG, "" + latitude + " " + longitude + " " + value + " "
+				// + distance);
 
 				int dist = Math.round(distance);
 				int volume = 0;
-				int active_range = 40;
-				if (dist < active_range) {
-					volume = (int) (100 - dist * (100 / active_range));
+				if (dist < range) {
+					volume = (int) (100 - dist * (100 / range));
 				}
-				L.d("volume", "" + volume);
+				// L.d("volume", "" + volume);
 
 				// SoundUtils.playSound(value, volume);
 				updateSound(value, volume);
+				fragmentDistances.addItem(value, "" + distance, "" + volume);
+
 			}
 
 			@Override
@@ -153,6 +195,8 @@ public class MainActivityPhone extends BaseActivity {
 			@Override
 			public void onMessageReceived(final String event, final JSONArray arguments) {
 				// L.d(TAG, "" + event + " " + arguments);
+				// fragmentDistances.addItem("qq", "5", "2");
+
 			}
 
 			@Override
@@ -197,6 +241,30 @@ public class MainActivityPhone extends BaseActivity {
 			public void onPoke() {
 			}
 
+			@Override
+			public void onPlayerInRange(String nickname, String sound, float distance) {
+				if (sound.isEmpty() == false) {
+					L.d("PLAYER", "" + distance);
+
+					int dist = Math.round(distance);
+					int volume = 0;
+					int range = 30;
+					if (dist < range) {
+						volume = (int) (100 - dist * (100 / range));
+					}
+					// L.d("volume", "" + volume);
+					L.d("PLAYERINRANGE", sound + " " + distance); 
+
+					updateSound(sound, volume);
+					fragmentDistances.addItem(nickname, "" + distance, "" + volume);
+				}
+			}
+
+			@Override
+			public void onRefresh() {
+				superMegaForceKill();
+			}
+
 		});
 
 		gpsManager = new GPSManager(this);
@@ -207,10 +275,10 @@ public class MainActivityPhone extends BaseActivity {
 			}
 
 			@Override
-			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) { 
+			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) {
 				if (gpsOn) {
-					network.sendLocation(lat, lon);
-					L.d("GPS", "gps");
+					network.sendLocation(lat, lon, orientationPitch);
+					// L.d("GPS", "gps");
 				}
 				gpsReady();
 				// currentPosition.setPosition(new LatLng(lat, lon));
@@ -235,8 +303,10 @@ public class MainActivityPhone extends BaseActivity {
 
 			@Override
 			public void onOrientation(float pitch, float roll, float z) {
-				L.d(TAG, "orientation " + pitch + " " + roll + " " + z);
-				network.sendOrientation(pitch, roll, z);
+				// L.d(TAG, "orientation " + pitch + " " + roll + " " + z);
+
+				orientationPitch = pitch;
+				// network.sendOrientation(pitch, roll, z);
 			}
 		});
 		orientationManager.start();
@@ -257,14 +327,109 @@ public class MainActivityPhone extends BaseActivity {
 		});
 		accelerationManager.start();
 
+		BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+			int scale = -1;
+			int level = -1;
+			int voltage = -1;
+			int temp = -1;
+			boolean isConnected = false;
+			private int status;
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+				scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+				temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
+				voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
+				// isCharging =
+				// intent.getBooleanExtra(BatteryManager.EXTRA_PLUGGED, false);
+				// status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+				status = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+
+				if (status == BatteryManager.BATTERY_PLUGGED_AC) {
+					isConnected = true;
+				} else if (status == BatteryManager.BATTERY_PLUGGED_USB) {
+					isConnected = true;
+				} else {
+					isConnected = false;
+				}
+
+				if (isConnected == true && AppSettings.debug != true) {
+					superMegaForceKill();
+				}
+
+				L.d("BATTERY", "level is " + level + " is connected " + isConnected);
+
+				network.sendBattery(level);
+			}
+		};
+
+		IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		registerReceiver(batteryReceiver, filter);
+	}
+
+	private LocalSettings getSettings() {
+		final LocalSettings localSettings = new LocalSettings();
+
+		Thread t = new Thread(new Runnable() {
+			String fileURI = Environment.getExternalStorageDirectory() + File.separator + "areyouforreal"
+					+ File.separator + "settings.txt";
+
+			@Override
+			public void run() {
+
+				File file = new File(fileURI);
+				StringBuffer contents = new StringBuffer();
+				BufferedReader reader = null;
+
+				try {
+					String text = null;
+					reader = new BufferedReader(new FileReader(file));
+
+					// repeat until all lines is read
+					while ((text = reader.readLine()) != null) {
+						contents.append(text).append(System.getProperty("line.separator"));
+						Log.d("FILE", "" + fileURI);
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						if (reader != null) {
+							reader.close();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				JSONObject jsonObject;
+				try {
+					Log.d("FILE", contents.toString());
+					jsonObject = new JSONObject(contents.toString());
+					localSettings.playerID = (String) jsonObject.get("playerNickname");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		t.start();
+
+		return localSettings;
+
 	}
 
 	protected void gpsReady() {
 		if (!ready) {
 			L.d("GPS", "ready");
-			//processingSketch.gpsLock(true);
+			// processingSketch.gpsLock(true);
+			textFragment.changeColor();
 			SoundUtils.speak(c, "GPS Ready", Locale.ENGLISH);
 			ready = true;
+			network.sendGPSStatus(true);
 
 			Handler handler = new Handler();
 			handler.postDelayed(new Runnable() {
@@ -276,7 +441,6 @@ public class MainActivityPhone extends BaseActivity {
 			}, 5000);
 		}
 	}
-	
 
 	protected void connectToTheWorld() {
 		SoundUtils.speak(c, "Connecting to the world", Locale.ENGLISH);
@@ -286,7 +450,6 @@ public class MainActivityPhone extends BaseActivity {
 	HashMap<String, MediaPlayer> sounds = new HashMap<String, MediaPlayer>();
 
 	private int TOGGLE_LOGGER;
-
 
 	public void updateSound(String url, int volume) {
 		// getResources().get
@@ -327,16 +490,16 @@ public class MainActivityPhone extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(0, MENU_WEBVIEW, 0, "Webview");
+		// menu.add(0, MENU_WEBVIEW, 0, "Webview");
 		// menu.add(0, MENU_CAMERA, 0, "Camera");
-		menu.add(0, MENU_WALKIE_TALKIE, 0, "Walkie Talkie");
-		menu.add(0, MENU_MAP, 0, "Map");
+		// menu.add(0, MENU_WALKIE_TALKIE, 0, "Walkie Talkie");
+		// menu.add(0, MENU_MAP, 0, "Map");
 		// menu.add(0, MENU_PROCESSING, 0, "Processing");
-		menu.add(0, MENU_TOGGLE_MAP, 0, "Toggle Map");
-		menu.add(0, MENU_TOGGLE_LOGGER, 0, "Toggle Logger");
+		// menu.add(0, MENU_TOGGLE_MAP, 0, "Toggle Map");
+		// menu.add(0, MENU_TOGGLE_LOGGER, 0, "Toggle Logger");
 		// menu.add(0, MENU_MAIN, 0, "Main");
-		menu.add(0, MENU_PD, 0, "PD");
-		menu.add(0, MENU_WEBVIEW_CREDITS, 0, "Webview Credits");
+		// menu.add(0, MENU_PD, 0, "PD");
+		// menu.add(0, MENU_WEBVIEW_CREDITS, 0, "Webview Credits");
 		menu.add(0, MENU_APP_FINISH, 0, "Finish");
 
 		return true;
@@ -433,6 +596,13 @@ public class MainActivityPhone extends BaseActivity {
 		}
 	}
 
+	public void superMegaForceKill() {
+
+		int pid = android.os.Process.myPid();
+		android.os.Process.killProcess(pid);
+
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -440,6 +610,32 @@ public class MainActivityPhone extends BaseActivity {
 		gpsManager.stop();
 		orientationManager.stop();
 		accelerationManager.stop();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		gpsManager.start();
+		// orientationManager.start();
+		// accelerationManager.start();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		network.disconnect();
+		Iterator it = sounds.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			// System.out.println(pairs.getKey() + " = " + pairs.getValue());
+			MediaPlayer mp = (MediaPlayer) pairs.getValue();
+			mp.stop();
+			it.remove(); // avoids a ConcurrentModificationException
+		}
+
+		superMegaForceKill();
 	}
 
 }

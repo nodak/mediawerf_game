@@ -1,0 +1,50 @@
+#N canvas 442 444 1118 385 10;
+#X obj 46 325 dac~;
+#X obj 55 185 delay~ 100;
+#X text 913 22 list with all the pd sounds load different sound instances
+;
+#X obj 123 182 delay~ 2000;
+#X obj 114 233 line;
+#X obj 46 266 *~ 1;
+#X msg 274 203 0 10000;
+#X msg 201 203 1 10000;
+#X obj 199 16 r fadeInMic;
+#X obj 274 16 r fadeOutMic;
+#X obj 93 17 r toggleMic;
+#N canvas 564 60 450 300 playsounds 0;
+#X msg 106 103 ./qq/2.wav;
+#X obj 55 104 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 55 149 playsound;
+#X obj 30 10 inlet;
+#X obj 96 10 inlet;
+#X obj 175 12 inlet;
+#X connect 0 0 2 1;
+#X connect 1 0 2 0;
+#X connect 3 0 1 0;
+#X restore 507 120 pd playsounds;
+#X obj 508 18 r playSound;
+#X obj 508 53 unpack s s s;
+#X obj 557 234 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 93 81 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 46 135 *~ 1;
+#X obj 305 137 loadbang;
+#X obj 510 88 r fadeInMic2;
+#X obj 561 269 s fadeInMic2;
+#X obj 46 80 adc~;
+#X connect 4 0 5 1;
+#X connect 5 0 0 0;
+#X connect 5 0 0 1;
+#X connect 6 0 4 0;
+#X connect 7 0 4 0;
+#X connect 8 0 7 0;
+#X connect 9 0 6 0;
+#X connect 10 0 15 0;
+#X connect 12 0 13 0;
+#X connect 14 0 19 0;
+#X connect 16 0 5 0;
+#X connect 17 0 6 0;
+#X connect 18 0 11 0;
+#X connect 20 0 16 0;

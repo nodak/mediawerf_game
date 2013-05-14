@@ -1,5 +1,5 @@
 TODO
-=====
+===== 
 
 OK - phone not going to sleep 
 OK - change brightness programatically
@@ -19,25 +19,52 @@ OK - start a different activity when tablet + different layout
 OK - take picture and store it locally
 OK - theme holo  
 
-MM - back button close the app 
-MM - Log overlay 
+OK - back button close the app 
+OK - Log overlay 
 MM - 20 mins - indicator GPS 
 MM - menu show / not show logger  menu show / not show processing 
 OK - fix pd engine 
 OK - load from filesystem 
+OK - damm native version 
+OK - fragment distances 
+OK - fragment video 
 
 
 
 HOY
 ===== 
+OK - unique IDs 
+OK - battery status 
+OK - gps on 
+OK - Orientation 
+OK - resilient connection (reconnection) 
+OK - sounds attached 
+OK - usb connected kills the app
+OK - sound on home 
+OK - sounds on the website 
+10:00 - check mac address 
+10:30 - set up alcatel 
+11:00 - uninstall apps alcatel
+13:00 - mimic player on the library game 
+16:00 - download version + install 
+18:00 - upload sound to the server 
+- gps off 
+- custom message 
+- control user with keyboard 
+
+
+- server  
+- pure data 
+- launch app from computer 
+
 - website 
 - server 
-- damm native version 
+MM - layout for tablet - map / log / sound 
+
+- sounds web 
 - load sounds using pd 
 -  
 
-
-MM - layout for tablet - map / log / sound 
 - gson 
 - fragment showing who is connected in list 
 

@@ -187,7 +187,40 @@ var Gmap = function() {
 
 
 $(document).ready(function() {
- 
+
+	var sound = {};
+	sound["hal_9000"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/hal_9000.ogg");
+   	sound["entitled_2_answer"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/entitled_2_answer.ogg"),
+  	sound["enough_info"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enough_info.ogg"),
+	sound["feel_much_better"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/feel_much_better.ogg"),
+	sound["mind_is_going"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/mind_is_going.ogg"),
+	sound["enjoyable_game"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enjoyable_game.ogg"),
+	sound["koud_clean1"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/koud_clean1.ogg"),
+	sound["drone"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/drone.ogg"),
+	sound["Doom2"]= new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/Doom2.ogg"),
+	sound["brightonmystery"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/brightonmystery.ogg"),
+	sound["sweepymysterie"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/sweepymysterie.ogg"),
+	sound["evilsidbass"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/evilsidbass.ogg"),
+	sound["party"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/Layeredloops/party.ogg")
+
+
+	$.each (sound, function(index, value) {
+		//index.play();
+		//console.log(index + " " + value);
+		//console.log("hola");
+		sound[index].play();
+		sound[index].setVolume(0);
+	});
+
+ 	var myGroup = new buzz.group([ 
+    	//sound
+	]);
+
+ 	myGroup.play();
+ 	myGroup.loop();
+ 	myGroup.setVolume(0);
+ 	//buzz.all().play();
+
 	/*
 	* socket io stuff to get information from the game controllers  
 	*/
@@ -270,6 +303,40 @@ $(document).ready(function() {
 		movePlayer(player);
 	});
 	
+		
+	game.bind("targetInRange", function(data) {
+		console.log("targetInRange");
+		console.log(data.target);
+		console.log(data.distance);
+
+		var dist = Math.round(data.distance);
+		var volume = 0;
+		if (dist < data.target.range) {
+			volume = (100 - dist * (100 / data.target.range));
+		} 
+
+		var qq = data.target.value;
+		soundName = qq.substring(qq.lastIndexOf("/") + 1, qq.lastIndexOf("."));
+		sound[soundName].setVolume(volume);
+		sound[soundName].loop();
+
+		console.log(volume);
+
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+		//movePlayer(player);
+	});
+	
+	game.bind("playerInRange", function(player, distance) {
+		console.log("targetInRange");
+		console.log(player);
+		console.log(distance);
+
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+		movePlayer(player);
+	});
+	
+	game.registerPlayer("pepe");
+	game.sendLocation({lat:51.908815, lng:4.503193});
 	
 	function addPlayer(player) {
 		var p = Processing.getInstanceById('game');

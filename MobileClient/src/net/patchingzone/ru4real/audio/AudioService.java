@@ -3,6 +3,7 @@ package net.patchingzone.ru4real.audio;
 import java.io.File;
 import java.io.IOException;
 
+import net.patchingzone.ru4real.L;
 import net.patchingzone.ru4real.R;
 
 import org.puredata.android.io.AudioParameters;
@@ -52,8 +53,10 @@ public class AudioService {
 	private static void initPd() throws IOException {
 
 		// configure audio glue
-		int sampleRate = AudioParameters.suggestSampleRate();
-		pdService.initAudio(sampleRate, 1, 2, 8f);
+		int sampleRate = AudioParameters.suggestSampleRate(); 
+		int micChannels = AudioParameters.suggestInputChannels();
+		L.d("MIC", "mic channels" + micChannels);
+		pdService.initAudio(sampleRate, micChannels, 2, 8f);
 		start();
 
 		// create and install the dispatcher
@@ -80,10 +83,12 @@ public class AudioService {
 	}
 
 	protected static void sendMessage(String message, String value) {
-		if (value != null) {
-			PdBase.sendFloat(message, Float.parseFloat(value));
-		} else {
+		if (value.isEmpty()) {
 			PdBase.sendBang(message);
+		} else if(value.matches("[0-9]+")) {
+			PdBase.sendFloat(message, Float.parseFloat(value));
+		} else { 
+			PdBase.sendSymbol(message, value);
 		}
 	}
 

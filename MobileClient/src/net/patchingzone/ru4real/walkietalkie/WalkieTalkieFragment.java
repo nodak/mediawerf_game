@@ -69,7 +69,7 @@ public class WalkieTalkieFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		Network network = new Network();
+		Network network = new Network(getActivity());
 		network.connectWalkieTalkie();
 
 		String PhoneId = android.os.Build.MODEL;

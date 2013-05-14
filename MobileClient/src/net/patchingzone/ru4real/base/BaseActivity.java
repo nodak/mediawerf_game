@@ -1,8 +1,13 @@
 package net.patchingzone.ru4real.base;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
@@ -24,6 +29,8 @@ public class BaseActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
 		if (AppSettings.fullscreen) {
 			// activity in full screen
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -36,6 +43,9 @@ public class BaseActivity extends FragmentActivity {
 			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		}
 
+		View main_layout = this.findViewById(android.R.id.content).getRootView();
+		main_layout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
 		if (AppSettings.screenAlwaysOn) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
@@ -45,8 +55,8 @@ public class BaseActivity extends FragmentActivity {
 		// Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
 		// playSound("http://outside.mediawerf.net/music.ogg");
 
-	} 
-	
+	}
+
 	public void changeFragment(int id, Fragment fragment) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -62,7 +72,13 @@ public class BaseActivity extends FragmentActivity {
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		ft.commit();
 
-	} 
+	}
+
+	public boolean isTablet(Context context) {
+		boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+		boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+		return (xlarge || large);
+	}
 
 	private void setBrightness(float f) {
 		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
@@ -103,7 +119,7 @@ public class BaseActivity extends FragmentActivity {
 
 	// override volume buttons
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
+
 		Log.d(TAG, "" + keyCode);
 
 		if (AppSettings.overrideVolumeButtons

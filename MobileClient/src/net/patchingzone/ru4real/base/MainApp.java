@@ -7,6 +7,8 @@ public class MainApp extends Application {
 
 	public static SharedPreferences app_preferences;
 
-	public MainApp() {
+	public MainApp() { 
+		
+		
 	}
 }

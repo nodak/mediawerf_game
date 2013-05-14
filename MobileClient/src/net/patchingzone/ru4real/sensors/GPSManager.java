@@ -79,6 +79,8 @@ public class GPSManager extends CustomSensorManager {
 					isGPSFix = true;
 
 					break;
+				case GpsStatus.GPS_EVENT_STOPPED: 
+					L.d("GPS", "GPS OFF");
 				}
 			}
 

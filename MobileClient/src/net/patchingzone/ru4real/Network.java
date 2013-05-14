@@ -2,6 +2,8 @@ package net.patchingzone.ru4real;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import net.patchingzone.ru4real.base.AppSettings;
@@ -12,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import com.codebutler.android_websockets.SocketIOClient;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,13 +25,14 @@ public class Network {
 	String TAG = "NETWORK";
 	boolean gameWebSocketConnected = false;
 	boolean libraryWebSocketConnected = false;
+	boolean walkieTalkieWebSocketConnected = false;
 	private SocketIOClient gameWebSocket;
 	private SocketIOClient libraryWebSocket;
 	Vector<NetworkListener> listeners = new Vector<NetworkListener>();
 
-	private String libraryServer = "http://outside.mediawerf.net:8080";
-
-	private String walkieTalkieServer = "http://outside.mediawerf.net:8082";
+	private MainActivityPhone c;
+	private Timer timerLibrary;
+	private Timer timerGame;
 	public static String walkieTalkieFilesAddress = "outside.mediawerf.net/wt";
 	public static SocketIOClient walkieTalkieWebSocket;
 
@@ -39,21 +44,27 @@ public class Network {
 
 	public static String name = "";
 
-	public Network() {
-
+	public Network(Context c) {
+		this.c = (MainActivityPhone) c;
+		
 	}
 
+	
 	public void connectGame() {
-		//L.d(TAG, "not yet");
+		// L.d(TAG, "not yet");
 		gameWebSocket = new SocketIOClient(URI.create(AppSettings.SERVER_ADDRESS), new SocketIOClient.Handler() {
 
 			@Override
 			public void onConnect() {
 				L.d(TAG, "game connected");
-				Long tsLong = System.currentTimeMillis() / 1000;
-				String ts = "AndroidMobileClient" + tsLong.toString();
-				gameWebSocketConnected = true; 
+				// Random user name
+				// Long tsLong = System.currentTimeMillis() / 1000;
+				// String ts = "AndroidMobileClient" + tsLong.toString();
+				String ts = c.localSettings.playerID;
 
+				gameWebSocketConnected = true;
+				timerGame.cancel();
+				
 				JSONObject registerData = new JSONObject();
 				JSONArray arguments = new JSONArray();
 
@@ -72,8 +83,7 @@ public class Network {
 
 			@Override
 			public void on(String event, JSONArray arguments) {
-				// Log.d(TAG, "on message " + event + " " +
-				// arguments.toString());
+				L.d(TAG, "on message " + event + " " + arguments.toString());
 				// L.d("qq", "--> " + event + " " + arguments.toString());
 
 				if (event.equals("playerJoined")) {
@@ -124,9 +134,30 @@ public class Network {
 						double latitude = Double.parseDouble(obLoc.get("lat").toString());
 						double longitude = Double.parseDouble(obLoc.get("lng").toString());
 						String value = ob.get("value").toString();
+						int range = Integer.parseInt(ob.get("range").toString());
 
 						for (NetworkListener listener : listeners) {
-							listener.onTargetInRange(latitude, longitude, value, distance);
+							listener.onTargetInRange(latitude, longitude, value, distance, range);
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} else if (event.equals("playerInRange")) {
+
+					// String arguments =
+					// "targetInRange = {player: {location:{lat: lat, lng:lng}, value:url}, distance:meters}";
+
+					try {
+						JSONObject ob = new JSONObject();
+						ob = arguments.getJSONObject(0);
+						float distance = Float.parseFloat(ob.get("distance").toString());
+						JSONObject player = ob.getJSONObject("player");
+						String sound = (String) player.get("sound").toString();
+						String nickname = (String) player.get("nickname").toString();
+
+						for (NetworkListener listener : listeners) {
+							listener.onPlayerInRange(nickname, sound, distance);
 						}
 
 					} catch (JSONException e) {
@@ -182,6 +213,10 @@ public class Network {
 					for (NetworkListener listener : listeners) {
 						listener.onListTargets(event, arguments);
 					}
+				} else if (event.equals("refresh")) {
+					for (NetworkListener listener : listeners) {
+						listener.onRefresh();
+					}
 				} else if (event.equals("")) {
 					for (NetworkListener listener : listeners) {
 						// listener.onMessageReceived(event, arguments);
@@ -197,6 +232,9 @@ public class Network {
 			@Override
 			public void onDisconnect(int code, String reason) {
 				L.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+				gameWebSocketConnected = false;
+
+				connect();
 			}
 
 			@Override
@@ -221,22 +259,50 @@ public class Network {
 		gameWebSocket.connect();
 	}
 
+	protected void connect() {
+		if (gameWebSocketConnected == false) {
+			L.d("CONNECTION", "NO CONNECTED");
+			timerGame = new Timer();
+			timerGame.scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					connectGame();
+					L.d("CONNECTION", "CONNECTED");
+				}
+			}, 0, 3000);
+		}
+
+		timerLibrary = new Timer();
+		if (libraryWebSocketConnected == false) {
+			timerLibrary.scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					connectLibrary();
+				}
+			}, 0, 1000);
+		}
+
+	}
+
 	public void connectLibrary() {
 
-		libraryWebSocket = new SocketIOClient(URI.create(libraryServer), new SocketIOClient.Handler() {
+		libraryWebSocket = new SocketIOClient(URI.create(AppSettings.LIBRARY_ADDRESS), new SocketIOClient.Handler() {
 			String tag = "Library";
 
 			@Override
 			public void onConnect() {
 				L.d(tag, "Connected!");
 				libraryWebSocketConnected = true; 
+				timerLibrary.cancel();
 			}
 
 			@Override
 			public void on(String event, JSONArray arguments) {
 
 				if (event.equals("userConnect")) {
-					//name = arguments.toString();
+					// name = arguments.toString();
 
 				}
 			}
@@ -244,6 +310,7 @@ public class Network {
 			@Override
 			public void onDisconnect(int code, String reason) {
 				L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+				libraryWebSocketConnected = false;
 			}
 
 			@Override
@@ -265,55 +332,57 @@ public class Network {
 
 	public void connectWalkieTalkie() {
 
-		walkieTalkieWebSocket = new SocketIOClient(URI.create(walkieTalkieServer), new SocketIOClient.Handler() {
-			String tag = "WalkieTalkie";
+		walkieTalkieWebSocket = new SocketIOClient(URI.create(AppSettings.LIBRARY_ADDRESS),
+				new SocketIOClient.Handler() {
+					String tag = "WalkieTalkie";
 
-			@Override
-			public void onConnect() {
-				L.d(tag, "Connected!");
+					@Override
+					public void onConnect() {
+						L.d(tag, "Connected!");
 
-			}
-
-			@Override
-			public void on(String event, JSONArray arguments) {
-
-				if (event.equals("userConnect")) // starts the game
-					name = arguments.toString();
-				if (event.equals("downloadFile")) {
-					try {
-						JSONObject ob = new JSONObject();
-						ob = arguments.getJSONObject(0);
-						L.d("inout", ob.getString("url"));
-						// Log.d("inout", arguments.toString());
-						if (ob.getString("channel").equals(channel)) {
-							PlayerRecorder.play(ob.getString("url"));
-							L.d("inout", ob.getString("url"));
-						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
-				}
-			}
 
-			@Override
-			public void onDisconnect(int code, String reason) {
-				L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
-			}
+					@Override
+					public void on(String event, JSONArray arguments) {
 
-			@Override
-			public void onError(Exception error) {
+						if (event.equals("userConnect")) // starts the game
+							name = arguments.toString();
+						if (event.equals("downloadFile")) {
+							try {
+								JSONObject ob = new JSONObject();
+								ob = arguments.getJSONObject(0);
+								L.d("inout", ob.getString("url"));
+								// Log.d("inout", arguments.toString());
+								if (ob.getString("channel").equals(channel)) {
+									PlayerRecorder.play(ob.getString("url"));
+									L.d("inout", ob.getString("url"));
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
 
-			}
+					@Override
+					public void onDisconnect(int code, String reason) {
+						L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+						walkieTalkieWebSocketConnected = false;
+					}
 
-			@Override
-			public void onJSON(JSONObject json) {
-			}
+					@Override
+					public void onError(Exception error) {
+						L.d("peta", "esto peta");
+					}
 
-			@Override
-			public void onMessage(String message) {
-			}
-		});
+					@Override
+					public void onJSON(JSONObject json) {
+					}
+
+					@Override
+					public void onMessage(String message) {
+					}
+				});
 		walkieTalkieWebSocket.connect();
 
 	}
@@ -337,7 +406,7 @@ public class Network {
 
 	}
 
-	public void sendLocation(double lat, double lon) {
+	public void sendLocation(double lat, double lon, float orientation) {
 		if (gameWebSocketConnected) {
 			// send new location
 			JSONObject location = new JSONObject();
@@ -345,6 +414,7 @@ public class Network {
 			try {
 				location.put("lat", lat);
 				location.put("lng", lon);
+				location.put("or", orientation);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -358,13 +428,53 @@ public class Network {
 		}
 	}
 
+	public void sendBattery(int batteryLevel) {
+		if (gameWebSocketConnected) {
+			// send new location
+			JSONObject location = new JSONObject();
+			JSONArray arguments = new JSONArray();
+			try {
+				location.put("battery", batteryLevel);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			arguments.put(location);
+
+			try {
+				gameWebSocket.emit("updateBattery", arguments);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void sendGPSStatus(boolean status) {
+		if (gameWebSocketConnected) {
+			// send new location
+			JSONObject location = new JSONObject();
+			JSONArray arguments = new JSONArray();
+			try {
+				location.put("status", status);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			arguments.put(location);
+
+			try {
+				gameWebSocket.emit("gpsStatus", arguments);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void sendMessage() {
 
 	}
 
 	public void sendShake(double force) {
 		if (libraryWebSocketConnected) {
-			
+
 			// send new location
 			JSONObject acc = new JSONObject();
 			JSONArray arguments = new JSONArray();
@@ -384,11 +494,10 @@ public class Network {
 
 	}
 
-	
 	public void sendAnswer(boolean b) {
 		L.d(TAG, "the answer is " + b);
 		if (libraryWebSocketConnected) {
-			
+
 			// send new location
 			JSONObject acc = new JSONObject();
 			JSONArray arguments = new JSONArray();
@@ -398,19 +507,19 @@ public class Network {
 				e.printStackTrace();
 			}
 			arguments.put(acc);
-			
+
 			try {
 				libraryWebSocket.emit("updateAnswer", arguments);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		} 
-		
+		}
+
 	}
 
 	public void sendOrientation(float pitch, float roll, float z) {
 		if (libraryWebSocketConnected) {
-			
+
 			// send new location
 			JSONObject or = new JSONObject();
 			JSONArray arguments = new JSONArray();
@@ -422,16 +531,14 @@ public class Network {
 				e.printStackTrace();
 			}
 			arguments.put(or);
-			
+
 			try {
 				libraryWebSocket.emit("updateOrientation", arguments);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		} 
-			
-		
+		}
+
 	}
-	
 
 }

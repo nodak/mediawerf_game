@@ -75,9 +75,6 @@ websocket_server.sockets.on('connection', function (socket) {
     socket.broadcast.emit('orientation', data);
   });
 
-  
-
-
 
   socket.on('disconnect', function () {
     //socket.emit('news', { hello: i });
