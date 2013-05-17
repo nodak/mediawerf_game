@@ -46,13 +46,12 @@ public class Network {
 
 	public Network(Context c) {
 		this.c = (MainActivityPhone) c;
-		
+
 	}
 
-	
 	public void connectGame() {
 		// L.d(TAG, "not yet");
-		gameWebSocket = new SocketIOClient(URI.create(AppSettings.SERVER_ADDRESS), new SocketIOClient.Handler() {
+		gameWebSocket = new SocketIOClient(URI.create(AppSettings.get().serverAddress), new SocketIOClient.Handler() {
 
 			@Override
 			public void onConnect() {
@@ -60,11 +59,11 @@ public class Network {
 				// Random user name
 				// Long tsLong = System.currentTimeMillis() / 1000;
 				// String ts = "AndroidMobileClient" + tsLong.toString();
-				String ts = c.localSettings.playerID;
+				String ts = AppSettings.get().playerID;
 
 				gameWebSocketConnected = true;
 				timerGame.cancel();
-				
+
 				JSONObject registerData = new JSONObject();
 				JSONArray arguments = new JSONArray();
 
@@ -288,51 +287,52 @@ public class Network {
 
 	public void connectLibrary() {
 
-		libraryWebSocket = new SocketIOClient(URI.create(AppSettings.LIBRARY_ADDRESS), new SocketIOClient.Handler() {
-			String tag = "Library";
+		libraryWebSocket = new SocketIOClient(URI.create(AppSettings.get().libraryAddress),
+				new SocketIOClient.Handler() {
+					String tag = "Library";
 
-			@Override
-			public void onConnect() {
-				L.d(tag, "Connected!");
-				libraryWebSocketConnected = true; 
-				timerLibrary.cancel();
-			}
+					@Override
+					public void onConnect() {
+						L.d(tag, "Connected!");
+						libraryWebSocketConnected = true;
+						timerLibrary.cancel();
+					}
 
-			@Override
-			public void on(String event, JSONArray arguments) {
+					@Override
+					public void on(String event, JSONArray arguments) {
 
-				if (event.equals("userConnect")) {
-					// name = arguments.toString();
+						if (event.equals("userConnect")) {
+							// name = arguments.toString();
 
-				}
-			}
+						}
+					}
 
-			@Override
-			public void onDisconnect(int code, String reason) {
-				L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
-				libraryWebSocketConnected = false;
-			}
+					@Override
+					public void onDisconnect(int code, String reason) {
+						L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+						libraryWebSocketConnected = false;
+					}
 
-			@Override
-			public void onError(Exception error) {
+					@Override
+					public void onError(Exception error) {
 
-			}
+					}
 
-			@Override
-			public void onJSON(JSONObject json) {
-			}
+					@Override
+					public void onJSON(JSONObject json) {
+					}
 
-			@Override
-			public void onMessage(String message) {
-			}
-		});
+					@Override
+					public void onMessage(String message) {
+					}
+				});
 		libraryWebSocket.connect();
 
 	}
 
 	public void connectWalkieTalkie() {
 
-		walkieTalkieWebSocket = new SocketIOClient(URI.create(AppSettings.LIBRARY_ADDRESS),
+		walkieTalkieWebSocket = new SocketIOClient(URI.create(AppSettings.get().libraryAddress),
 				new SocketIOClient.Handler() {
 					String tag = "WalkieTalkie";
 

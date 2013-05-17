@@ -1,15 +1,17 @@
 package net.patchingzone.ru4real.base;
 
+import java.util.HashMap;
+
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.media.AudioManager;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -24,12 +26,14 @@ import android.view.WindowManager;
 public class BaseActivity extends FragmentActivity {
 
 	private static final String TAG = "BaseActivity";
+	//BluetoothHelper mBluetoothHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		//mBluetoothHelper = new BluetoothHelper(this);
 
 		if (AppSettings.fullscreen) {
 			// activity in full screen
@@ -55,6 +59,26 @@ public class BaseActivity extends FragmentActivity {
 		// Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
 		// playSound("http://outside.mediawerf.net/music.ogg");
 
+		//MediaButtonIntentReceiver mMediaButtonReceiver = new MediaButtonIntentReceiver();
+		//IntentFilter mediaFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+		//mediaFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY + 1);
+		//registerReceiver(mMediaButtonReceiver, mediaFilter);
+		//mediaFilter.se
+		
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//mBluetoothHelper.start();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		//mBluetoothHelper.stop();
 	}
 
 	public void changeFragment(int id, Fragment fragment) {
@@ -65,10 +89,19 @@ public class BaseActivity extends FragmentActivity {
 		fragmentTransaction.commit();
 	}
 
-	public void addProcessingSketch(Fragment processingSketch, int fragmentPosition) {
+	public void addFragment(Fragment processingSketch, int fragmentPosition) {
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.add(fragmentPosition, processingSketch);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+
+	}
+
+	public void removeFragment(Fragment processingSketch) {
+
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.remove(processingSketch);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		ft.commit();
 
@@ -94,6 +127,30 @@ public class BaseActivity extends FragmentActivity {
 		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 
 	}
+
+	public boolean isVoiceConnected() {
+		boolean retval = true;
+		try {
+			retval = BluetoothAdapter.getDefaultAdapter().getProfileConnectionState(
+					android.bluetooth.BluetoothProfile.HEADSET) != android.bluetooth.BluetoothProfile.STATE_DISCONNECTED;
+
+		} catch (Exception exc) {
+			// nothing to do
+		}
+		return retval;
+	}
+
+	/*
+	protected void speak(String text) {
+
+		HashMap<String, String> myHashRender = new HashMap<String, String>();
+
+		if (mBluetoothHelper.isOnHeadsetSco()) {
+			myHashRender.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_VOICE_CALL));
+		}
+		//mTts.speak(text, TextToSpeech.QUEUE_FLUSH, myHashRender);
+	} 
+	*/
 
 	public void setWakeLock(boolean b) {
 
@@ -134,6 +191,35 @@ public class BaseActivity extends FragmentActivity {
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+
+	// inner class
+	// BluetoothHeadsetUtils is an abstract class that has
+	// 4 abstracts methods that need to be implemented.
+	private class BluetoothHelper extends BluetoothHeadsetUtils {
+		public BluetoothHelper(Context context) {
+			super(context);
+		}
+
+		@Override
+		public void onScoAudioDisconnected() {
+			// Cancel speech recognizer if desired
+		}
+
+		@Override
+		public void onScoAudioConnected() {
+			// Should start speech recognition here if not already started
+		}
+
+		@Override
+		public void onHeadsetDisconnected() {
+
+		}
+
+		@Override
+		public void onHeadsetConnected() {
+
+		}
 	}
 
 }

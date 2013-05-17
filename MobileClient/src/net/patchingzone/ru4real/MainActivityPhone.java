@@ -1,10 +1,6 @@
 package net.patchingzone.ru4real;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -19,6 +15,7 @@ import net.patchingzone.ru4real.fragments.FragmentDistances;
 import net.patchingzone.ru4real.fragments.GameWebViewFragment;
 import net.patchingzone.ru4real.fragments.MainFragment;
 import net.patchingzone.ru4real.fragments.MapCustomFragment;
+import net.patchingzone.ru4real.fragments.SettingsFragment;
 import net.patchingzone.ru4real.fragments.TextFragment;
 import net.patchingzone.ru4real.fragments.Utils;
 import net.patchingzone.ru4real.fragments.VideoPlayerFragment;
@@ -33,8 +30,6 @@ import net.patchingzone.ru4real.sensors.OrientationManager;
 import net.patchingzone.ru4real.walkietalkie.WalkieTalkieFragment;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -48,6 +43,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,7 +65,7 @@ public class MainActivityPhone extends BaseActivity {
 	private static final int MENU_WEBVIEW = 0;
 	private static final int MENU_CAMERA = 1;
 	private static final int MENU_WALKIE_TALKIE = 2;
-	private static final int MENU_MAP = 3;
+	private static final int MENU_SETTINGS = 3;
 	private static final int MENU_PROCESSING = 4;
 	private static final int MENU_MAIN = 5;
 	private static final int MENU_PD = 6;
@@ -95,8 +91,8 @@ public class MainActivityPhone extends BaseActivity {
 
 	private FragmentDistances fragmentDistances;
 	private TextFragment textFragment;
-
-	public LocalSettings localSettings;
+	SettingsFragment settingsFragment;
+	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -107,7 +103,7 @@ public class MainActivityPhone extends BaseActivity {
 		if (isTablet(this) == false) {
 			Log.d("tablet", "no es un tablet");
 			// This is not a tablet - start a new activity
-			setContentView(R.layout.activity_forfragments_phone_2);
+			setContentView(R.layout.activity_forfragments_phone);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		} else {
@@ -117,8 +113,11 @@ public class MainActivityPhone extends BaseActivity {
 
 		}
 		c = this;
+		
+		AppSettings.get().load();
+		
+		L.d("BT", "" + isVoiceConnected());
 
-		localSettings = getSettings();
 		// addProcessingSketch(new ProcessingSketch(), R.id.f1);
 		// addProcessingSketch(cameraFragment, R.id.f1);
 		// addProcessingSketch(new WalkieTalkieFragment(), R.id.f2);
@@ -148,13 +147,16 @@ public class MainActivityPhone extends BaseActivity {
 		//addProcessingSketch(ol, R.id.fragmentLogOverlay);
 
 		fragmentDistances = new FragmentDistances();
-		addProcessingSketch(fragmentDistances, R.id.f2);
+		addFragment(fragmentDistances, R.id.f2);
 
 		textFragment = new TextFragment();
-		addProcessingSketch(textFragment, R.id.f1);
+		addFragment(textFragment, R.id.f1);
+		
+		settingsFragment = new SettingsFragment(); 
+		//removeFragment(settingsFragment); 
 		
 		if (isTablet(this)) {
-			addProcessingSketch(new MapCustomFragment(), R.id.map);
+			addFragment(new MapCustomFragment(), R.id.map);
 		} 
 		
 		network = new Network(this);
@@ -174,7 +176,7 @@ public class MainActivityPhone extends BaseActivity {
 				int volume = 0;
 				if (dist < range) {
 					volume = (int) (100 - dist * (100 / range));
-				}
+				} 
 				// L.d("volume", "" + volume);
 
 				// SoundUtils.playSound(value, volume);
@@ -368,60 +370,6 @@ public class MainActivityPhone extends BaseActivity {
 		registerReceiver(batteryReceiver, filter);
 	}
 
-	private LocalSettings getSettings() {
-		final LocalSettings localSettings = new LocalSettings();
-
-		Thread t = new Thread(new Runnable() {
-			String fileURI = Environment.getExternalStorageDirectory() + File.separator + "areyouforreal"
-					+ File.separator + "settings.txt";
-
-			@Override
-			public void run() {
-
-				File file = new File(fileURI);
-				StringBuffer contents = new StringBuffer();
-				BufferedReader reader = null;
-
-				try {
-					String text = null;
-					reader = new BufferedReader(new FileReader(file));
-
-					// repeat until all lines is read
-					while ((text = reader.readLine()) != null) {
-						contents.append(text).append(System.getProperty("line.separator"));
-						Log.d("FILE", "" + fileURI);
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					try {
-						if (reader != null) {
-							reader.close();
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-
-				JSONObject jsonObject;
-				try {
-					Log.d("FILE", contents.toString());
-					jsonObject = new JSONObject(contents.toString());
-					localSettings.playerID = (String) jsonObject.get("playerNickname");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		t.start();
-
-		return localSettings;
-
-	}
-
 	protected void gpsReady() {
 		if (!ready) {
 			L.d("GPS", "ready");
@@ -493,7 +441,7 @@ public class MainActivityPhone extends BaseActivity {
 		// menu.add(0, MENU_WEBVIEW, 0, "Webview");
 		// menu.add(0, MENU_CAMERA, 0, "Camera");
 		// menu.add(0, MENU_WALKIE_TALKIE, 0, "Walkie Talkie");
-		// menu.add(0, MENU_MAP, 0, "Map");
+		menu.add(0, MENU_SETTINGS, 0, "Settings");
 		// menu.add(0, MENU_PROCESSING, 0, "Processing");
 		// menu.add(0, MENU_TOGGLE_MAP, 0, "Toggle Map");
 		// menu.add(0, MENU_TOGGLE_LOGGER, 0, "Toggle Logger");
@@ -535,10 +483,10 @@ public class MainActivityPhone extends BaseActivity {
 
 			return true;
 
-		case MENU_MAP:
-
-			changeFragment(R.id.f1, new MapCustomFragment());
-
+		case MENU_SETTINGS:
+			addFragment(settingsFragment, R.id.fragmentSettings);
+			//removeFragment(settingsFragment, R.id.fragmentSettings);
+			
 			return true;
 
 		case MENU_PROCESSING:
@@ -638,4 +586,34 @@ public class MainActivityPhone extends BaseActivity {
 		superMegaForceKill();
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		L.d("KeyEvent", "" + keyCode);
+
+		switch (keyCode) { 
+        case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD: 
+                // something for fast forward 
+        	return true; 
+        case KeyEvent.KEYCODE_MEDIA_NEXT: 
+                // something for next 
+                return true; 
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: 
+                // something for play/pause 
+                return true; 
+        case KeyEvent.KEYCODE_MEDIA_PREVIOUS: 
+                // something for previous 
+                return true; 
+        case KeyEvent.KEYCODE_MEDIA_REWIND: 
+                // something for rewind 
+                return true; 
+        case KeyEvent.KEYCODE_MEDIA_STOP: 
+                // something for stop 
+                return true; 
+        } 
+
+		return super.onKeyDown(keyCode, event);
+
+} 
+	
 }

@@ -2,7 +2,7 @@ package net.patchingzone.ru4real.fragments;
 
 import net.patchingzone.ru4real.Credits;
 import net.patchingzone.ru4real.L;
-import net.patchingzone.ru4real.Options;
+import net.patchingzone.ru4real.LocalPreferences;
 import net.patchingzone.ru4real.R;
 import net.patchingzone.ru4real.base.MainApp;
 import net.patchingzone.ru4real.game.Game;
@@ -92,7 +92,7 @@ public class MainFragment extends Fragment {
 			startActivity(cred);
 			return true;
 		case R.id.Options:
-			Intent Pref = new Intent(getActivity(), Options.class);
+			Intent Pref = new Intent(getActivity(), LocalPreferences.class);
 			startActivity(Pref);
 			return true;
 		case R.id.Disconnect:

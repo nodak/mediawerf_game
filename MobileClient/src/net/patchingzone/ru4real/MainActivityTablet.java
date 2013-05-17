@@ -33,15 +33,15 @@ public class MainActivityTablet extends BaseActivity {
 		// addProcessingSketch(cameraFragment, R.id.f1);
 
 		// addProcessingSketch(new MainFragment(), R.id.f1);
-		addProcessingSketch(new MapCustomFragment(), R.id.map);
-		addProcessingSketch(new DebugSoundFragment(), R.id.fragmentSound);
-		addProcessingSketch(new WalkieTalkieFragment(), R.id.f2);
+		addFragment(new MapCustomFragment(), R.id.map);
+		addFragment(new DebugSoundFragment(), R.id.fragmentSound);
+		addFragment(new WalkieTalkieFragment(), R.id.f2);
 		// addProcessingSketch(new ProcessingSketch(), R.id.fragmentProcessing);
 
 		OverlayLogger ol = new OverlayLogger();
 		L.addLoggerWindow(ol);
 		L.filterByTag("NETWORK");
-		addProcessingSketch(ol, R.id.f1);
+		addFragment(ol, R.id.f1);
 
 	}
 
