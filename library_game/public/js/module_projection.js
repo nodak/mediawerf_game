@@ -9,11 +9,41 @@ function showOverlay(viz) {
 }
 
 
+function speak(text) {
+
+	var myText = [];
+	$.each(text.split(" "), function(k, v) {
+		myText.push(capitalise(v));
+
+	});;
+
+	var encodedText = encodeURIComponent(myText.join(" ")+ " ");
+	var audio = new Audio();
+	audio.src ='http://translate.google.com/translate_tts?ie=utf-8&tl=en&q=' + encodedText;
+	console.log(audio.src);
+	audio.play();
+}
+
+function capitalise(str)
+{
+   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
 /* 
 * transformations on the content for the projection mapping 
 *
 */ 
-var Debug = function() {
+var Configuration = function() {
+	this.computerName = 'untitled';
+	this.serverAddress = "http://outside.mediawerf.net:8080";
+	this.localAddress = "";
+	this.layout = "";
+	this.showMap = false;
+	this.debugMessages = true;
+	this.showDistances = true;
+	this.showOverlays = true;
+
 	this.videoX = 0;
 	this.videoY = 0;
 	this.videoDeg = 0;
@@ -26,12 +56,10 @@ var Debug = function() {
 	this.showBG = false;
 	
 	this.toggleMap = function() {
-	    console.log("toggleMap");
 	    $("#map_canvas").fadeToggle(500);
 	}
 	
 	this.toggleProcessing = function() {
-	    console.log("toggleProcessing");
 	    $("#canvascontainer").fadeToggle(500);
 	    
 	}
@@ -60,47 +88,88 @@ var Debug = function() {
 						.css("-webkit-transform-origin", x + "px " + y +"px " + 0 + "px");
 		//$("videoframe").css({top:y+"px", left:x+"px"});
 
-	}; 	
+	};  
+
+	this.updateComputerName = function(name) {
+		localStorage.setItem("computerName", name);
+	};
+
+	this.updateServerAddress = function(name) {
+		localStorage.setItem("serverAddress", name);
+	};
+
+	this.updateLocalAddresss = function(name) {
+		localStorage.setItem("localAddress", name);
+	};
+
+
+	this.getComputerName = function() {
+		var name = localStorage.getItem("computerName");
+
+		if (name != null) {
+			this.computerName = name;
+		}
+		console.log(this.computerName);
+
+		return this.computerName;
+	};
 	
 	
 } 
 
-var debugGUI;
+var configurationGUI;
+var nickname;
+
 function initDebug() {
-	debugGUI = new Debug(); 
+	configurationGUI = new Configuration(); 
 	//c.watch("x", function() { console.log("hola"); });
 	
 	var gui = new dat.GUI();
-	gui.add(debugGUI, 'videoX', 0, 500).onChange(function(value) {
-		debugGUI.updateVideoPosition();
+	configurationGUI.getComputerName();
+
+	gui.add(configurationGUI, 'computerName').onChange(function(value) { 
+		configurationGUI.updateComputerName(value);
+	});
+
+	gui.add(configurationGUI, 'serverAddress').onChange(function(value) { 
+		configurationGUI.updateServerAddress(value);
+	});
+
+	gui.add(configurationGUI, 'localAddress').onChange(function(value) { 
+		configurationGUI.updateLocalAddress(value);
+	});
+
+	
+
+	gui.add(configurationGUI, 'videoX', 0, 500).onChange(function(value) {
+		configurationGUI.updateVideoPosition();
 	});
 	
-	gui.add(debugGUI, 'videoY', 0, 500).onChange(function(value) {
-		debugGUI.updateVideoPosition();
+	gui.add(configurationGUI, 'videoY', 0, 500).onChange(function(value) {
+		configurationGUI.updateVideoPosition();
 	});
 	
-	gui.add(debugGUI, 'videoDeg', 0, 360).onChange(function(value) {
-		debugGUI.updateVideoPosition();
+	gui.add(configurationGUI, 'videoDeg', 0, 360).onChange(function(value) {
+		configurationGUI.updateVideoPosition();
 	}); 
 	
-	gui.add(debugGUI, 'contentX', -200, 500).onChange(function(value) {
-		debugGUI.updateContentPosition();
+	gui.add(configurationGUI, 'contentX', -200, 500).onChange(function(value) {
+		configurationGUI.updateContentPosition();
 	});
 	
-	gui.add(debugGUI, 'contentY', -200, 500).onChange(function(value) {
-		debugGUI.updateContentPosition();
+	gui.add(configurationGUI, 'contentY', -200, 500).onChange(function(value) {
+		configurationGUI.updateContentPosition();
 	});
 	
-	gui.add(debugGUI, 'contentDeg', 0, 360).onChange(function(value) {
-		debugGUI.updateContentPosition();
+	gui.add(configurationGUI, 'contentDeg', 0, 360).onChange(function(value) {
+		configurationGUI.updateContentPosition();
 	}); 
 	
 	
 	
-	gui.add(debugGUI, 'toggleMap');
-	gui.add(debugGUI, 'toggleProcessing');
-	gui.add(debugGUI, 'toggleBGTransparency');
-	
+	gui.add(configurationGUI, 'toggleMap');
+	gui.add(configurationGUI, 'toggleProcessing');
+	gui.add(configurationGUI, 'toggleBGTransparency');
 	
 }
 
@@ -121,7 +190,7 @@ var gmap;
 var Gmap = function() {
 	var map; 
 	var mapType;
-	
+	var distancePerMeter;
 
 
 	//google maps
@@ -133,17 +202,15 @@ var Gmap = function() {
 	  };
 	
 	
-	  this.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+		this.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 		
 		overlay = new google.maps.OverlayView();
-	  overlay.draw = function() {};
-	  overlay.remove = function() {};
-	  overlay.setMap(this.map);
-		console.log("esto es una prueba" + this.mapType);
-		
+	 	overlay.draw = function() {};
+	  	overlay.remove = function() {};
+	  	overlay.setMap(this.map);		
 	 };
 	
-	Gmap.prototype.placeMarker =	function (location) {
+	Gmap.prototype.placeMarker = function (location) {
 		var marker = new google.maps.Marker({
 			position: location, 
 			map: this.map
@@ -156,9 +223,8 @@ var Gmap = function() {
 		this.mapType = this.map.mapTypes[this.map.getMapTypeId()];
     	//var mapPixel       = this.mapType.projection.fromLatLngToPoint(location);
     	//var containerPixel = overlay.getProjection().fromLatLngToContainerPixel(location);
-    	var divPixel       = overlay.getProjection().fromLatLngToDivPixel(location);
+    	var divPixel = overlay.getProjection().fromLatLngToDivPixel(location);
 
-		//console.log(divPixel.x + " " + divPixel.y);
 		return divPixel;
 	};
 
@@ -170,75 +236,82 @@ var Gmap = function() {
 		);
 
 		var latlon = [];
-		latlon.x = q.jb;
-		latlon.y = q.kb;
+		//console.log(q);
+		latlon.lat = q.jb;
+		latlon.lon = q.kb;
+
+		//console.log(q);
 		//console.log(divPixel.x + " " + divPixel.y);
 
 
 		return latlon;
-	};
+	}; 
 
+	Gmap.prototype.getMetersPerPixel = function() {
+		var latLngA = new google.maps.LatLng(this.getLatLngCoordinates(0, 0).lat, this.getLatLngCoordinates(0, 0).lon); 
+		var latLngB = new google.maps.LatLng(this.getLatLngCoordinates(1, 0).lat, this.getLatLngCoordinates(1, 0).lon); 
 
+		//console.log(latLngA);
+		//console.log(latLngB);
+
+		var distance = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
+		console.log("distance is " + distance);
+		this.distancePerMeter = distance;
+
+		return distance;
+	}
 	
+
+} 
+
+function getSounds(f) {
+	jQuery.get('./static/sounds.txt', function(data){
+    
+    	var line = data.split('\n');
+
+    	$.each(line, function(n, value){
+       		//console.log(value); // log each title
+       		var name = value.split('.')[0]; 
+       		var uri = "http://mediawerf.dyndns.org/GameLoops/" + name + ".ogg";
+       		//console.log(name);
+       		//console.log(uri);
+
+       		sound[name] = new buzz.sound(uri);
+ 			sound[name].play();
+ 			sound[name].loop();
+       		sound[name].setVolume(0);
+       		
+    	});
+
+	});
 }
 
-
-
-
+var t;
+var sound = {}; 
+var qq;
 
 $(document).ready(function() {
+    initDebug();
 
-	var sound = {};
-	sound["hal_9000"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/hal_9000.ogg");
-   	sound["entitled_2_answer"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/entitled_2_answer.ogg"),
-  	sound["enough_info"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enough_info.ogg"),
-	sound["feel_much_better"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/feel_much_better.ogg"),
-	sound["mind_is_going"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/mind_is_going.ogg"),
-	sound["enjoyable_game"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enjoyable_game.ogg"),
-	sound["koud_clean1"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/koud_clean1.ogg"),
-	sound["drone"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/drone.ogg"),
-	sound["Doom2"]= new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/Doom2.ogg"),
-	sound["brightonmystery"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/brightonmystery.ogg"),
-	sound["sweepymysterie"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/sweepymysterie.ogg"),
-	sound["evilsidbass"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/SingleLoops/evilsidbass.ogg"),
-	sound["party"] = new buzz.sound("http://mediawerf.dyndns.org/GameLoops/Layeredloops/party.ogg")
+	getSounds();
 
-
-	$.each (sound, function(index, value) {
-		//index.play();
-		//console.log(index + " " + value);
-		//console.log("hola");
-		sound[index].play();
-		sound[index].setVolume(0);
-	});
-
- 	var myGroup = new buzz.group([ 
-    	//sound
-	]);
-
- 	myGroup.play();
- 	myGroup.loop();
- 	myGroup.setVolume(0);
- 	//buzz.all().play();
 
 	/*
 	* socket io stuff to get information from the game controllers  
 	*/
-	var socket = io.connect('http://outside.mediawerf.net:8080');
+	/*
+	var socket = io.connect(configurationGUI.serverAddress);
 
 	//socket.emit('log');
 	socket.on('registerController', function(data){
 		console.log("registrado" + data);
 	});
 	
-	setTimeout(function() {
-		addOfflinePlayer(888, 2);
-	}, 1000);
 
+	//controllers 
 	socket.on('remoteController', function(data){
-		//console.log(data[1] + " " + data[2]); 
-		movePlayerXY("888", data[1], data[2]);
-	});
+		movePlayerXY(nickname, data[1], data[2]);
+	}); 
 
 	socket.on('force', function(data) {
 		console.log("force");
@@ -263,19 +336,72 @@ $(document).ready(function() {
 		var p = Processing.getInstanceById('game');
 		p.setOrientation(1, data.pitch);
 	});
+	*/ 
+
+
+	//keys 
+	var keyControllerX = document.width / 2;
+	var keyControllerY = document.height / 2;
+	var keyControllerIncrX = 15;
+	var keyControllerIncrY = 15;
+
+
+	$(document).bind('keydown', function (evt) { 
+		var moving = false;
+		switch(evt.which) {
+			case 37: //left 
+				keyControllerX -= keyControllerIncrX;
+				moving = true;
+				break;
+			case 39: //right
+				keyControllerX += keyControllerIncrX;
+				moving = true;
+				break;
+			case 38: //up 
+				keyControllerY -= keyControllerIncrY;
+				moving = true;
+				break;
+
+			case 40: //down 
+				keyControllerY += keyControllerIncrY;
+				moving = true;
+				break;
+		} 
+
+		if (moving) {
+			movePlayerXY(nickname, keyControllerX, keyControllerY);
+		}
+	});
+
 
 
 
 	//maps 
 	gmap = new Gmap();
-	gmap.initializeGoogleMap(); 
+		
+	gmap.initializeGoogleMap();
+	google.maps.event.addListenerOnce(gmap.map, 'idle', function(){
+    	// do something only the first time the map is loaded
+		gmap.getMetersPerPixel();
+		nickname = configurationGUI.getComputerName();
 
+		addOfflinePlayer(nickname, 2);
+		game.registerPlayer(nickname);
+		game.listTargets();
+
+
+	});
 
 	google.maps.event.addListener(gmap.map, 'mousemove', function(mEvent) {
           //latLngControl.updatePosition(mEvent.latLng);
     	//console.log(mEvent.latLng);
     });
 	
+
+  	google.maps.event.addListener(gmap.map, 'center_changed', function() {
+    	
+
+  	});
 
 	loc = new google.maps.LatLng(llat, llon);
 	gmap.placeMarker(loc);
@@ -293,21 +419,31 @@ $(document).ready(function() {
 			//playerJoin(player.nickname, numPlayer);
 		
 			var p = Processing.getInstanceById('game');
-			console.log(p);
 			p.removePlayer(player.id);
 	});
 	
 	game.bind("updateLocation", function(player, location) {
-		console.log("updateLocation");
-		console.log(player.nickname + " " + location.lat + " " + location.lng);
+		//console.log("updateLocation");
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
 		movePlayer(player);
+	});
+
+	game.bind("textMessage", function(data) {
+		console.log(data);
+		var q = data.message.split("::");
+
+		if (q[0] == "/say") {
+			speak(q[1]);
+		}
+
 	});
 	
 		
+
 	game.bind("targetInRange", function(data) {
-		console.log("targetInRange");
-		console.log(data.target);
-		console.log(data.distance);
+		//console.log("targetInRange");
+		//console.log(data.target);
+		//console.log(data.distance);
 
 		var dist = Math.round(data.distance);
 		var volume = 0;
@@ -317,13 +453,15 @@ $(document).ready(function() {
 
 		var qq = data.target.value;
 		soundName = qq.substring(qq.lastIndexOf("/") + 1, qq.lastIndexOf("."));
-		sound[soundName].setVolume(volume);
-		sound[soundName].loop();
+		//console.log(" " + volume);
 
-		console.log(volume);
+		if (sound[soundName] != undefined) {
+			sound[soundName].fadeTo(Math.round(volume));
+			sound[soundName].loop();
+			console.log("-->" + soundName + " " + volume);
+		}
 
-		//console.log(player.nickname + " " + location.lat + " " + location.lng);
-		//movePlayer(player);
+
 	});
 	
 	game.bind("playerInRange", function(player, distance) {
@@ -335,8 +473,19 @@ $(document).ready(function() {
 		movePlayer(player);
 	});
 	
-	game.registerPlayer("pepe");
-	game.sendLocation({lat:51.908815, lng:4.503193});
+
+	game.bind("listTargets", function(data) {
+		console.log("listTargets");
+		console.log(data);
+
+		//t = data.targets;
+	
+		addTargets(data.targets);
+
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+	});
+	
+
 	
 	function addPlayer(player) {
 		var p = Processing.getInstanceById('game');
@@ -347,6 +496,25 @@ $(document).ready(function() {
 	function addOfflinePlayer(id, color) {
 		var p = Processing.getInstanceById('game');
 		p.addPlayer(id, color);
+	} 
+
+	function addTargets(targets) {
+		var p = Processing.getInstanceById('game');
+
+		$.each(targets, function(key, value) { 
+
+			var lat = value.location.lat;
+			var lon = value.location.lng;
+			var div = gmap.getXYCoordinates(new google.maps.LatLng(lat, lon)); 
+
+			var x = div.x; 
+			var y = div.y;
+			
+			//console.log("qq -----> " + value._id + " " + x + " " + y + " " + lat + " " + lon + " " + value.range);
+			p.addTarget(value._id, Math.round(x), Math.round(y), lat, lon, value.range);
+
+		}); 
+
 	}
 
 	//move a player so we have to call google api to translate from geo positions to x, y 
@@ -358,44 +526,39 @@ $(document).ready(function() {
 	function movePlayerXY(id, x, y) {
 		var p = Processing.getInstanceById('game');
 		p.setPositionXY(id, x, y);	
+		var latlon = gmap.getLatLngCoordinates(x, y);  
+		//console.log("movement " + latlon.lat + " " + latlon.lon);
+		game.sendLocation({lat:latlon.lat, lng:latlon.lon});
+
 	}
 	
 
-    initDebug();
-
     /* panel */ 
     $("#panel").draggable();
-  	console.log("ready!"); 
     $("#left").click(function() {
-        console.log("left");
         game.sendMessage(game.players[0], "/say::Go Left");
 
     });
     
       $("#right").click(function() {
-        console.log("right");
         game.sendMessage(game.players[0], "/say::Go Right");
     });
     
       $("#straight").click(function() {
-        console.log("straight");
         game.sendMessage(game.players[0], "/say::Go Straight");
     });
     
       $("#turn").click(function() {
-        console.log("turn");
         game.sendMessage(game.players[0], "/say::Turn around");
     });
     
       $("#poke").click(function() {
-        console.log("poke");
         game.sendMessage(game.players[0], "/poke::");
 
     });
     
       $("#send").click(function() {
         var val = $("#msg").val();
-        console.log("send " + val); 
         game.sendMessage(game.players[0], "/say::"+val);
     });
     

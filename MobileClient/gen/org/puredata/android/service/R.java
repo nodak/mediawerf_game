@@ -12,8 +12,8 @@ public final class R {
 		public static final int extra_abs = 0x7f060001;
 	}
 	public static final class id {
-		public static final int paired_devices = 0x7f0a0035;
-		public static final int title_paired_devices = 0x7f0a0034;
+		public static final int paired_devices = 0x7f0a002e;
+		public static final int title_paired_devices = 0x7f0a002d;
 	}
 	public static final class style {
 		public static final int DisableSoundEffects = 0x7f090000;
@@ -43,8 +43,8 @@ public final class R {
 		public static final int title_paired_devices = 0x7f070002;
 	}
 	public static final class layout {
-		public static final int device_list = 0x7f03000b;
-		public static final int device_name = 0x7f03000c;
+		public static final int device_list = 0x7f03000a;
+		public static final int device_name = 0x7f03000b;
 	}
 	public static final class drawable {
 		public static final int din5 = 0x7f020001;

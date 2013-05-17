@@ -1,10 +1,31 @@
 TODO
 ======
-Mail to Martin 
-Unique identifier for each player 
-Launcher 
+OK - Mail to Martin 
+OK - Unique identifier for each player 
+OK - Launcher 
+OK - Service that kill the app and restart 
+
+OK - Move player with keyboard 
+OK - send data to the server 
+OK - sounds playing
+OK - draw objects on the map 
+OK - set unique identifier for library game using settings 
+OK - set unique identifier for the android version -> android settings 
+OK - load sound files from text file 
+OK - save map
+OK - load map from the server 
+
+30 - add plug management for the home interface 
+30m - IMP - different configurations for the computers and the projections 
+
+30m - load initial game settings from the server 
+
+1h - IMP - initial library interface 
+
+1h - create a small interface for the phones that look nice when docked 
+- eat black part of the map to undercover it
+
 PD sound 
-Service that kill the app and restart 
 Library game 
 Laser cut overlays 
 

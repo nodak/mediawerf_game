@@ -28,11 +28,6 @@ OK - load from filesystem
 OK - damm native version 
 OK - fragment distances 
 OK - fragment video 
-
-
-
-HOY
-===== 
 OK - unique IDs 
 OK - battery status 
 OK - gps on 
@@ -42,74 +37,51 @@ OK - sounds attached
 OK - usb connected kills the app
 OK - sound on home 
 OK - sounds on the website 
-10:00 - check mac address 
-10:30 - set up alcatel 
-11:00 - uninstall apps alcatel
-13:00 - mimic player on the library game 
-16:00 - download version + install 
-18:00 - upload sound to the server 
-- gps off 
-- custom message 
-- control user with keyboard 
+OK - check mac address 
+OK - set up alcatel 
+OK - uninstall apps alcatel
+OK - mimic player on the library game 
+OK - website 
+OK - preferences android 
+OK - control user with keyboard 
+OK - custom message library
+OK - layout for tablet - map / log / sound 
+OK - sounds web 
 
 
-- server  
+HOY
+===== 
+OK - remove references local server
+OK - sounds rename
+- change server 
+- integrate library game with server 
+- Homy add processing -> animation 
+- show name of phone
+- upload sound to the server 
+- add plug management for the home interface 
+- IMP - different configurations for the computers and the projections 
+- IMP - initial library interface 
+
+
+FUTURE
+====== 
+- game players map android
+- android show map players 
+- download version + install 
 - pure data 
 - launch app from computer 
-
-- website 
-- server 
-MM - layout for tablet - map / log / sound 
-
-- sounds web 
-- load sounds using pd 
--  
-
-- gson 
 - fragment showing who is connected in list 
-
-
-- theme landscape 
-1 hour - debug fragment for sending messages to the server 
-
-
+- debug fragment for sending messages to the server 
 - filter log by TAG
 - upload picture to the server 
 - Send position to the server from web 
-
-
 - walkie talkie is not working with pd (uses same resources) 
-- 1 hour - servidor online
-- pasar todo a activity 
-
-- show players list in map
-- events 
-
-
-
-
-- override volume and switch off buttons 
-
-- hablar con estudiantes sobre el proyecto 
 - change settings from outside 
 - intro logo 
-
-
 - a–adir canvas con plot para cada usuario 
 
  
 
-
-
-
-
-
-TODO URGENT 
-
-- anyadir drexler 
-- anyadir pared 
-- anyadir resultados reshape your phone 
-- enviar mail a lo de motorola 
 
 HTML5 audio 
 victor@outside:/var/www$ ffmpeg -y -i q.amr -acodec libvorbis -aq 50 q.ogg
