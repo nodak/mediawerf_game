@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="210mm"
+   id="svg5336"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="icons.svg">
+  <defs
+     id="defs5338" />
+  <sodipodi:namedview
+     inkscape:document-units="mm"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.286658"
+     inkscape:cx="179.93535"
+     inkscape:cy="647.95929"
+     inkscape:current-layer="layer1"
+     id="namedview5340"
+     showgrid="false"
+     inkscape:window-width="1328"
+     inkscape:window-height="804"
+     inkscape:window-x="540"
+     inkscape:window-y="503"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5342">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.85657144;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 77.171036,122.22943 c -2.185501,0 -14.596265,11.49508 -13.924501,12.838 0.0012,0.002 -0.0012,0.009 0,0.0111 -0.671764,1.34292 11.739,12.838 13.924501,12.838 2.185501,0 14.587463,-11.49508 13.915699,-12.838 -0.0012,-0.002 0.0012,-0.009 0,-0.0111 0.671764,-1.34292 -11.730198,-12.838 -13.915699,-12.838 z"
+       id="path5365"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g6036"
+       inkscape:export-xdpi="47.525566"
+       inkscape:export-ydpi="47.525566"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint_right.png">
+      <path
+         sodipodi:type="arc"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5896"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(-32.413663,-20.402277)" />
+      <path
+         transform="translate(-33.612904,-22.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5890"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         id="path5379"
+         d="M 26.5625 18.1875 L 26.5625 24.1875 L 39.75 31.8125 L 26.5625 39.4375 L 26.5625 45.4375 L 50.1875 31.8125 L 26.5625 18.1875 z "
+         style="fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:BrownPro;-inkscape-font-specification:BrownPro"
+       x="325.90894"
+       y="29.817381"
+       id="text5963"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5965"></tspan></text>
+    <g
+       id="g6062"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint_question.png"
+       inkscape:export-xdpi="47.525566"
+       inkscape:export-ydpi="47.525566">
+      <path
+         transform="translate(267.58634,-20.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5922"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5924"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(266.3871,-22.402277)" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5967"
+         y="45.031803"
+         x="324.3074"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#d45500;fill-opacity:1;stroke:none;font-family:BrownPro;-inkscape-font-specification:BrownPro"
+         xml:space="preserve"><tspan
+           style="fill:#d45500"
+           y="45.031803"
+           x="324.3074"
+           id="tspan5969"
+           sodipodi:role="line">?</tspan></text>
+    </g>
+    <g
+       id="g6041"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint.png"
+       inkscape:export-xdpi="47.517754"
+       inkscape:export-ydpi="47.517754">
+      <path
+         transform="translate(27.586337,-20.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5898"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5900"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(26.387096,-22.402277)" />
+      <path
+         inkscape:connector-curvature="0"
+         style="fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="m 104.1875,18.1875 0,6 -13.1875,7.625 13.1875,7.625 0,6 -23.625,-13.625 23.625,-13.625 z"
+         id="path5996" />
+    </g>
+    <g
+       id="g6046"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint_up.png"
+       inkscape:export-xdpi="47.525566"
+       inkscape:export-ydpi="47.525566">
+      <path
+         sodipodi:type="arc"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5904"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(87.586337,-20.402277)" />
+      <path
+         transform="translate(86.387096,-22.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5906"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         id="path5998"
+         d="m 141.68622,41.625 6,0 7.625,-13.1875 7.625,13.1875 6,0 -13.625,-23.625 -13.625,23.625 z"
+         style="fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g6051"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint_down.png"
+       inkscape:export-xdpi="47.525566"
+       inkscape:export-ydpi="47.525566">
+      <path
+         transform="translate(147.58634,-20.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5910"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5912"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(146.3871,-22.402277)" />
+      <path
+         inkscape:connector-curvature="0"
+         style="fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="m 201.8126,20.354522 6,0 7.625,13.1875 7.625,-13.1875 6,0 -13.625,23.625 -13.625,-23.625 z"
+         id="path6000" />
+    </g>
+    <g
+       id="g6056"
+       inkscape:export-filename="/Users/victormanueldiazbarrales/Documents/thepatchingzone/Mediawerf/library_game/public/game/data/hint_no.png"
+       inkscape:export-xdpi="47.525566"
+       inkscape:export-ydpi="47.525566">
+      <path
+         sodipodi:type="arc"
+         style="opacity:0.37850467;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5916"
+         sodipodi:cx="68.464905"
+         sodipodi:cy="53.439774"
+         sodipodi:rx="23.622393"
+         sodipodi:ry="23.622393"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         transform="translate(207.58634,-20.402277)" />
+      <path
+         transform="translate(206.3871,-22.402277)"
+         d="m 92.087297,53.439774 a 23.622393,23.622393 0 1 1 -47.244785,0 23.622393,23.622393 0 1 1 47.244785,0 z"
+         sodipodi:ry="23.622393"
+         sodipodi:rx="23.622393"
+         sodipodi:cy="53.439774"
+         sodipodi:cx="68.464905"
+         id="path5918"
+         style="fill:#f9f9f9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="arc" />
+      <rect
+         transform="matrix(0.697355,0.71672589,-0.71672589,0.697355,0,0)"
+         ry="0"
+         y="-176.78152"
+         x="198.22566"
+         height="4.3039708"
+         width="32.301338"
+         id="rect5945"
+         style="fill:#c83737;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      <rect
+         style="fill:#c83737;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="rect6006"
+         width="32.301338"
+         height="4.3039708"
+         x="-184.84248"
+         y="216.92735"
+         ry="0"
+         transform="matrix(-0.697355,0.71672589,0.71672589,0.697355,0,0)" />
+    </g>
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 77.090581,121.45982 c -2.185501,0 -14.606341,11.49472 -13.934577,12.83765 0.0012,0.002 -0.0012,0.01 0,0.012 -0.04314,0.0862 -0.02241,0.20946 0.03614,0.37368 0.878065,-2.40948 11.855823,-12.45192 13.898414,-12.45192 2.042503,0 12.996383,10.04186 13.874306,12.45192 0.05851,-0.16423 0.0793,-0.28744 0.03614,-0.37368 -0.0012,-0.002 0.0012,-0.01 0,-0.012 0.671764,-1.34293 -11.724967,-12.83765 -13.910468,-12.83765 z"
+       id="path6031"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
