@@ -7,10 +7,12 @@ class CityScape {
   float count2 = -width;
 	boolean bgShow = false;
   public CityObjects co;
+  int action = 1;
 
   CityScape() { 
     b = new ArrayList<Building>();
     co = new CityObjects();
+    //qq2 = co;
   } 
 
   public void drawBG() {
@@ -40,6 +42,7 @@ class CityScape {
 	}
 	
 	public void drawBuildings() {
+    noStroke();
     for (int i = 0; i < b.size(); i++) {
       b.get(i).draw();
     }
@@ -48,7 +51,30 @@ class CityScape {
   } 
 
   public void drawCityObjects() {
-    co.draw();
+    co.draw(); 
+  }
+
+  //check if we are close to the hints and remove them
+  public void checkHints (Player p) {
+    CityObjects returnVal;
+
+    for (int i = 0; i < co.l.size(); i++) {
+      q = co.l.get(i);
+      x1 = q.pos.x;
+      y1 = q.pos.y;
+      distance = dist(p.x, p.y, x1, y1);
+
+      if (q.type == "hint" && distance < 15 ) {
+        //console.log("lalalallalala");
+        q.displayMsg(true);
+        returnVal = q; 
+      } else if (q.type == "hint" && distance > 15) {
+        q.displayMsg(false);
+      }
+    } 
+
+    return returnVal; 
+
   }
 
   public void drawConnections(float x, float y) {
@@ -61,10 +87,12 @@ class CityScape {
       y1 = q.pos.y;
       distance = dist(x, y, x1, y1);
 
+      fill(225)
+      stroke(225);
       text(distance, (x + x1) * 0.5, (y + y1) * 0.5);
-      line(x, y, x1, y1);
-    }
+      line(x, y, x1, y1); 
 
+    }
 
   }
 
@@ -99,7 +127,7 @@ class CityScape {
     $.each(m, function(k, v) { 
 
       var txtLine = v.split(":");
-      console.log("---> " + txtLine);
+      //console.log("---> " + txtLine);
 
      
       var m1 = txtLine[0]
@@ -112,12 +140,12 @@ class CityScape {
       b.add(cb);
       $.each(qq, function(k, v) {
          if(v == "") {
-        console.log("buuuuuu");
+        //console.log("buuuuuu");
         return; 
       }
         var pos = v.split(" ");
         cb.addPoint(pos[0], pos[1]);
-        console.log(m1 + " " + pos[0] + " " + pos[1])
+        //console.log(m1 + " " + pos[0] + " " + pos[1])
       });
     //mm.split(" ");
 
@@ -180,14 +208,15 @@ class Building {
 			//println("hola");
     } 
 
-    fill(bg); 
+    colorMode(RGB, 255);
+    fill(bg, 225); 
 		//strokeWeight(10);	 
     //stroke(border, borderAlpha);	
 
 		//fill(255);
     beginShape();   
     for (int i = 0; i < p.size(); i++) {
-      vertex(p.get(i).x, p.get(i).y);
+      vertex(p.get(i).x , p.get(i).y);
       //println(i);
     }
     endShape(CLOSE);

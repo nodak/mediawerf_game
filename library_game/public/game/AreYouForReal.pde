@@ -21,9 +21,15 @@ int ballSize = 100;    // assumes a circle - elliptical collision is VERY compli
 
 ArrayList<Player> players;
 ArrayList<Message> messages;
+PImage hintLeft;
+PImage hintRight;
+PImage hintUp;
+PImage hintDown;
+PImage hintQuestion;
+PImage hintNo;
 
  
-CityScape city; 
+public CityScape city; 
 
 
 void setup() {  
@@ -32,26 +38,44 @@ void setup() {
   smooth();
   noStroke();
 
+  hintLeft = loadImage("./game/data/hint_left.png");
+  hintRight = loadImage("./game/data/hint_right.png");
+  hintUp = loadImage("./game/data/hint_up.png");
+  hintDown = loadImage("./game/data/hint_down.png");
+  hintQuestion = loadImage("./game/data/hint_question.png");
+  hintNo = loadImage("./game/data/hint_no.png");
+
   players = new ArrayList();
   messages = new ArrayList();
 
   city = new CityScape(); 
-  city.load();
+  city.load(); 
+
 
 }
 
-void draw() {
+void draw() { 
+ // stats.begin(); 
+
   background(0, 0, 0, 0); //transparent 
   city.drawBG(); 
 
+  /*
+  stroke(85);
+  for (int i = 0; i < 1000; i++) {
+    point(random(width), random(height));
+  }
+  */
+
 
  if (players.size() > 0) {
-    city.drawConnections(players.get(0).toX, players.get(0).toY);
+   // city.drawConnections(players.get(0).toX, players.get(0).toY);
   }
 
   //players 
   for (int i = 0; i < players.size(); i++) {
     Player p = players.get(i);
+    //p.drawSpeechBubble("lalalal");
     //p.setPosition(mouseX, mouseY);
     p.draw();
   }
@@ -65,6 +89,8 @@ void draw() {
     Message m = messages.get(i);
     m.draw();
   }
+
+ // stats.end(); 
 
 }
 
@@ -117,7 +143,7 @@ public void addPlayer(String id, int c) {
 }
 
 public void removePlayer(id) {
-	debug("Remove");
+	debug("Remove player");
 	
 	for(int i = 0; i < players.size(); i++) {
 		if(players.get(i).id == id) { 
@@ -125,15 +151,20 @@ public void removePlayer(id) {
 		}
 	}
 
+} 
+
+public void targetRemoved(id) {
+  debug("Remove target");
+  city.co.targetRemoved(id);
 }
 
 
-public void addTarget(id, x, y, lat, lon, range) {
-  city.co.add(new CityObject(1, id, x, y, lat, lon, range));
-
+public void addTarget(id, value, type, x, y, lat, lon, range) {
+  city.co.add(new CityObject(id, value, type, x, y, lat, lon, range));
 }
 
-public void setPosition(String id, double lat, double lon) {
+
+public void setPosition(String id, double lat, double lon, float orientation) {
 	
 	//google maps library will do the job to translate to XY coordinates 
   div =	gmap.getXYCoordinates(new google.maps.LatLng(lat, lon)); 
@@ -147,19 +178,23 @@ public void setPosition(String id, double lat, double lon) {
 		if(p.id == id) {
 			debug(p.id); 
 	  	p.setPosition(x, y);
+      p.setOrientation(orientation);
+
 		}
   }
 } 
 
 
-public void setPositionXY(String id, int x, int y) {
-	
+public void setPositionXY(String id, int x, int y, float orientation, latlon, int action) {
+
 	for (int i = 0; i < players.size(); i++) {
     Player p = players.get(i);
 		
 		if(p.id == id) {
 			debug(p.id); 
-	  	p.setPosition(x, y);
+	  	p.setPosition(x, y);   
+      p.setOrientation(orientation);
+      p.manageAction(city, city.checkHints(p), latlon, action);
 		}
 		
   }
@@ -169,16 +204,24 @@ public void setPositionXY(String id, int x, int y) {
 public void setOrientation(String id, float orientation) {
 
     for (int i = 0; i < players.size(); i++) {
-    Player p = players.get(i);
+      Player p = players.get(i);
     
-    //if(p.id == id) {
-    //  debug(p.id); 
-      p.setOrientation(orientation);
-    //}
-    
+     if(p.id == id) {
+        debug(p.id); 
+        p.setOrientation(orientation);
+      }
+     
   }
+} 
+
+public void updateSounds(id, vol) { 
+  city.co.updateSound(id, vol);
 }
 
+public void placeObject() {
+
+
+}
 
 //just a little helper function
 //aparently processing.js shows a console that we might not want

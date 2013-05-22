@@ -90,9 +90,8 @@ public class MainActivityPhone extends BaseActivity {
 	private boolean ready = false;
 
 	private FragmentDistances fragmentDistances;
-	private TextFragment textFragment;
+	//private TextFragment textFragment;
 	SettingsFragment settingsFragment;
-	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -113,9 +112,9 @@ public class MainActivityPhone extends BaseActivity {
 
 		}
 		c = this;
-		
+
 		AppSettings.get().load();
-		
+
 		L.d("BT", "" + isVoiceConnected());
 
 		// addProcessingSketch(new ProcessingSketch(), R.id.f1);
@@ -135,30 +134,34 @@ public class MainActivityPhone extends BaseActivity {
 		 * @Override public void onFinish(boolean finished) { } });
 		 */
 
-		// processingSketch = new ProcessingSketch();
-		// addProcessingSketch(processingSketch, R.id.fragmentProcessing);
+		processingSketch = new ProcessingSketch();
+		addFragment(processingSketch, R.id.fragmentProcessing);
 		// addProcessingSketch(new YesNoFragment(), R.id.f1);
 		// addProcessingSketch(new DebugSoundFragment(), R.id.fragmentSound);
 		// addProcessingSketch(new DebugSoundFragment(), R.id.f2);
 
-		OverlayLogger ol = new OverlayLogger();
-		L.addLoggerWindow(ol);
-		// L.filterByTag("NETWORK");
-		//addProcessingSketch(ol, R.id.fragmentLogOverlay);
+		if (AppSettings.debug == true) {
+			OverlayLogger ol = new OverlayLogger();
+			L.addLoggerWindow(ol);
 
-		fragmentDistances = new FragmentDistances();
-		addFragment(fragmentDistances, R.id.f2);
+			// L.filterByTag("QQ");
+			// addFragment(ol, R.id.fragmentLogOverlay);
 
-		textFragment = new TextFragment();
-		addFragment(textFragment, R.id.f1);
-		
-		settingsFragment = new SettingsFragment(); 
-		//removeFragment(settingsFragment); 
-		
+			fragmentDistances = new FragmentDistances();
+			addFragment(fragmentDistances, R.id.f2);
+		}
+		// textFragment = new TextFragment();
+		// addFragment(textFragment, R.id.f1);
+
+		settingsFragment = new SettingsFragment();
+		// removeFragment(settingsFragment);
+
+		SoundUtils.speak(c, "Waiting to establish the connection", Locale.ENGLISH);
+
 		if (isTablet(this)) {
 			addFragment(new MapCustomFragment(), R.id.map);
-		} 
-		
+		}
+
 		network = new Network(this);
 		network.connect();
 		network.addGameListener(new NetworkListener() {
@@ -176,13 +179,15 @@ public class MainActivityPhone extends BaseActivity {
 				int volume = 0;
 				if (dist < range) {
 					volume = (int) (100 - dist * (100 / range));
-				} 
+				}
 				// L.d("volume", "" + volume);
 
 				// SoundUtils.playSound(value, volume);
 				updateSound(value, volume);
-				fragmentDistances.addItem(value, "" + distance, "" + volume);
 
+				if (AppSettings.debug == true) {
+					fragmentDistances.addItem(value, "" + distance, "" + volume);
+				}
 			}
 
 			@Override
@@ -255,16 +260,24 @@ public class MainActivityPhone extends BaseActivity {
 						volume = (int) (100 - dist * (100 / range));
 					}
 					// L.d("volume", "" + volume);
-					L.d("PLAYERINRANGE", sound + " " + distance); 
+					L.d("PLAYERINRANGE", sound + " " + distance);
 
 					updateSound(sound, volume);
-					fragmentDistances.addItem(nickname, "" + distance, "" + volume);
+
+					if (AppSettings.debug == true) {
+						fragmentDistances.addItem(nickname, "" + distance, "" + volume);
+					}
 				}
 			}
 
 			@Override
 			public void onRefresh() {
 				superMegaForceKill();
+			}
+
+			@Override
+			public void onPlayerScored(Player player) {
+
 			}
 
 		});
@@ -279,6 +292,7 @@ public class MainActivityPhone extends BaseActivity {
 			@Override
 			public void onLocationChanged(final double lat, final double lon, double alt, float speed, float accuracy) {
 				if (gpsOn) {
+					L.d("QQ", "" + orientationPitch);
 					network.sendLocation(lat, lon, orientationPitch);
 					// L.d("GPS", "gps");
 				}
@@ -319,7 +333,7 @@ public class MainActivityPhone extends BaseActivity {
 			@Override
 			public void onShake(double force) {
 				L.d(TAG, "acc " + force);
-				network.sendShake(force);
+				// network.sendShake(force);
 			}
 
 			@Override
@@ -327,7 +341,7 @@ public class MainActivityPhone extends BaseActivity {
 				// L.d(TAG, "acc " + x + " " + y + " " + z);
 			}
 		});
-		accelerationManager.start();
+		// accelerationManager.start();
 
 		BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
 			int scale = -1;
@@ -373,9 +387,9 @@ public class MainActivityPhone extends BaseActivity {
 	protected void gpsReady() {
 		if (!ready) {
 			L.d("GPS", "ready");
-			// processingSketch.gpsLock(true);
-			textFragment.changeColor();
-			SoundUtils.speak(c, "GPS Ready", Locale.ENGLISH);
+			processingSketch.gpsLock(true);
+			//textFragment.changeColor();
+			SoundUtils.speak(c, "Connection established", Locale.ENGLISH);
 			ready = true;
 			network.sendGPSStatus(true);
 
@@ -391,7 +405,7 @@ public class MainActivityPhone extends BaseActivity {
 	}
 
 	protected void connectToTheWorld() {
-		SoundUtils.speak(c, "Connecting to the world", Locale.ENGLISH);
+		SoundUtils.speak(c, "You are ready to explore the world", Locale.ENGLISH);
 
 	}
 
@@ -401,11 +415,15 @@ public class MainActivityPhone extends BaseActivity {
 
 	public void updateSound(String url, int volume) {
 		// getResources().get
-
+		// TODO fix this mess with SD assets, etc
 		if (sounds.containsKey(url) == false) {
 			// check if file is stored
 			String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
+
+			// Reading from sdcard
+
 			String fileURL = Environment.getExternalStorageDirectory() + "/mediawerf/mp3/" + fileName;
+
 			File f = new File(fileURL);
 
 			Log.d("mm", " " + fileURL + " " + f.exists());
@@ -421,7 +439,11 @@ public class MainActivityPhone extends BaseActivity {
 				Log.d("mm", " URL ");
 			}
 
-			sounds.put(url, SoundUtils.playSound(cURL, volume));
+			if (AppSettings.readFromAssets) {
+				cURL = fileName;
+			}
+
+			sounds.put(url, SoundUtils.playSound(c, cURL, volume));
 			// sounds.put(url, null);
 
 			Log.d("qq2", "play " + url + " " + volume);
@@ -485,8 +507,8 @@ public class MainActivityPhone extends BaseActivity {
 
 		case MENU_SETTINGS:
 			addFragment(settingsFragment, R.id.fragmentSettings);
-			//removeFragment(settingsFragment, R.id.fragmentSettings);
-			
+			// removeFragment(settingsFragment, R.id.fragmentSettings);
+
 			return true;
 
 		case MENU_PROCESSING:
@@ -591,29 +613,29 @@ public class MainActivityPhone extends BaseActivity {
 
 		L.d("KeyEvent", "" + keyCode);
 
-		switch (keyCode) { 
-        case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD: 
-                // something for fast forward 
-        	return true; 
-        case KeyEvent.KEYCODE_MEDIA_NEXT: 
-                // something for next 
-                return true; 
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: 
-                // something for play/pause 
-                return true; 
-        case KeyEvent.KEYCODE_MEDIA_PREVIOUS: 
-                // something for previous 
-                return true; 
-        case KeyEvent.KEYCODE_MEDIA_REWIND: 
-                // something for rewind 
-                return true; 
-        case KeyEvent.KEYCODE_MEDIA_STOP: 
-                // something for stop 
-                return true; 
-        } 
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+			// something for fast forward
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_NEXT:
+			// something for next
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+			// something for play/pause
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+			// something for previous
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_REWIND:
+			// something for rewind
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_STOP:
+			// something for stop
+			return true;
+		}
 
 		return super.onKeyDown(keyCode, event);
 
-} 
-	
+	}
+
 }

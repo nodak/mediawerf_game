@@ -47,20 +47,53 @@ OK - control user with keyboard
 OK - custom message library
 OK - layout for tablet - map / log / sound 
 OK - sounds web 
+OK - remove references local server
+OK - sounds rename
+OK - change server 
+OK - remove player 
+OK - update sounds volumes 
+OK - remove targets 
+OK - check sound volumes in html5 interface 
+OK - add new target 
+OK - remove target 
 
 
 HOY
 ===== 
-OK - remove references local server
-OK - sounds rename
-- change server 
-- integrate library game with server 
+OK - change list targets 
+OK - add player status html5 
+OK - add stats 
+OK - check why there is more sounds than they should be 
+OK - put the sounds inside the assets 
+OK - get unique color from server 
+MM - login 
+MM - display messages 
+- place/remove a target bindings 
+- gamepad 	
+- interface
+
+- implement type of target in phones 
+
+
+
+- combo box listing 
+
+
+
+
+TOMORROW 
+========
+- show name of phone in home screen
 - Homy add processing -> animation 
-- show name of phone
-- upload sound to the server 
 - add plug management for the home interface 
+
+- integrate library game with server 
 - IMP - different configurations for the computers and the projections 
 - IMP - initial library interface 
+
+
+- upload sound to the server 
+
 
 
 FUTURE

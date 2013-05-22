@@ -20,7 +20,7 @@ function speak(text) {
 	var encodedText = encodeURIComponent(myText.join(" ")+ " ");
 	var audio = new Audio();
 	audio.src ='http://translate.google.com/translate_tts?ie=utf-8&tl=en&q=' + encodedText;
-	console.log(audio.src);
+	//console.log(audio.src);
 	audio.play();
 }
 
@@ -54,7 +54,7 @@ var Configuration = function() {
 	this.contentSkew = 0;
 	
 	this.showBG = false;
-	
+
 	this.toggleMap = function() {
 	    $("#map_canvas").fadeToggle(500);
 	}
@@ -109,7 +109,7 @@ var Configuration = function() {
 		if (name != null) {
 			this.computerName = name;
 		}
-		console.log(this.computerName);
+		//console.log(this.computerName);
 
 		return this.computerName;
 	};
@@ -122,9 +122,19 @@ var nickname;
 
 function initDebug() {
 	configurationGUI = new Configuration(); 
+
+	//stats = new Stats();
+	//stats.setMode(1);
+	//document.body.appendChild( stats.domElement );
+
+
 	//c.watch("x", function() { console.log("hola"); });
 	
 	var gui = new dat.GUI();
+	dat.GUI.toggleHide();
+
+	//gui.toggleHide();
+
 	configurationGUI.getComputerName();
 
 	gui.add(configurationGUI, 'computerName').onChange(function(value) { 
@@ -137,9 +147,7 @@ function initDebug() {
 
 	gui.add(configurationGUI, 'localAddress').onChange(function(value) { 
 		configurationGUI.updateLocalAddress(value);
-	});
-
-	
+	}); 
 
 	gui.add(configurationGUI, 'videoX', 0, 500).onChange(function(value) {
 		configurationGUI.updateVideoPosition();
@@ -172,6 +180,7 @@ function initDebug() {
 	gui.add(configurationGUI, 'toggleBGTransparency');
 	
 }
+
 
 
 
@@ -265,35 +274,161 @@ var Gmap = function() {
 } 
 
 function getSounds(f) {
-	jQuery.get('./static/sounds.txt', function(data){
+	//jQuery.get('./static/sounds.txt', function(data){
     
-    	var line = data.split('\n');
+    //	var line = data.split('\n');
 
-    	$.each(line, function(n, value){
-       		//console.log(value); // log each title
-       		var name = value.split('.')[0]; 
-       		var uri = "http://mediawerf.dyndns.org/GameLoops/" + name + ".ogg";
-       		//console.log(name);
-       		//console.log(uri);
+    $.each(game.targets, function(n, target){
+      	//console.log(value); // log each title
+      	var splitted = target.value.split('/'); 
+       	var name = splitted[splitted.length - 1]; 
+       	name = name.split(".")[0];
+       	console.log(name);
+       	//var uri = "http://outside.mediawerf.net/GameLoops/" + name + ".ogg";
+       	//console.log(name);
+       	//console.log(uri);
 
-       		sound[name] = new buzz.sound(uri);
- 			sound[name].play();
- 			sound[name].loop();
-       		sound[name].setVolume(0);
+       	sound[name] = new buzz.sound(target.value);
+ 		sound[name].play();
+ 		sound[name].loop();
+       	sound[name].setVolume(0);
        		
-    	});
+    });
+
+	//});
+} 
+
+function updateSoundVolume(target, volume) {
+	var qq = target.value;
+	var soundName = qq.substring(qq.lastIndexOf("/") + 1, qq.lastIndexOf("."));
+	//console.log(" " + volume);
+
+	if (sound[soundName] != undefined) {
+		sound[soundName].setVolume(Math.round(volume));
+		sound[soundName].loop();
+		//console.log("-->" + soundName + " " + volume);
+
+		var p = Processing.getInstanceById('game');
+		p.updateSounds(target._id, volume);
+	}
+
+}
+
+function printSoundVolumes() {
+	$.each(sound, function(k, v) {
+		console.log(k + " " + v.getVolume());
+	}); 
+
+}
+
+
+$.fn.enterKey = function (fnc) {
+    return this.each(function () {
+        $(this).keypress(function (ev) {
+            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+            if (keycode == '13') {
+                fnc.call(this, ev);
+            }
+        })
+    })
+}
+
+
+function bindUI() { 
+	
+	//$("#start").hide();
+	$("#start #btn").click(function() {
+		//$("#start").fadeOut(500);
+		startGame();
+	}); 
+
+	$("#start #name").enterKey(function () {
+		startGame();
+	});
+
+	$("#logout").click(function() {
+		stopGame();
+	});
+
+} 
+
+
+var soundClick = new buzz.sound("./sounds/start.wav");
+var soundError = new buzz.sound("./sounds/error.wav");
+var soundLogout = new buzz.sound("./sounds/start.wav");
+
+
+function startGame() {
+
+	nickname = $("#start #name").val();
+	if (nickname != "") {
+		setTimeout(function() { 
+			$("#start").animate({top:'-100%'}, 500, "easeOutCubic");
+			$("#start #name").css({'background-color':'rgba(0, 0, 0, 0)'}); 
+			soundClick.play();
+		}, 200); 
+
+		game.registerPlayer(nickname, true);
+		//addTargets(game.targets);
+		game.listTargets();
+
+	} else {
+		//alert("hola");
+		$("#start #name").animate({'background-color':'rgba(255, 0, 0, 1)'}, 0, "easeOutCubic"); 
+		soundError.play();
+
+	}
+	
+} 
+
+function stopGame() { 
+
+	$.each(game.players, function(k, v) {
+		if (v.nickname == nickname) { 
+			game.killPlayer(v);
+		}
+	});
+
+
+	$("#start #btn").css({"background-color":"rgba(155, 255, 76, 0.75)"});
+	$("#start #name").val("thanks for playing");
+	soundLogout.play();
+
+	$("#start").animate({top:'0%'}, 500, "easeOutCubic", function() {
+		
+		setTimeout(function() {
+			window.location.reload()
+		}, 2000);
 
 	});
+
+
+} 
+
+function displayMsg(msg) {
+
+	$("#remoteMsg").fadeIn(500);
+	$("#remoteMsg #text").text(msg); 
+
+	$("#remoteMsg").click(function() {
+		$("#remoteMsg").fadeOut(500);
+	});
+
+	setTimeout(function() {
+		$("#remoteMsg").fadeOut(500);
+
+	}, 4000); 
+
 }
 
 var t;
 var sound = {}; 
 var qq;
+//var stats; 
 
 $(document).ready(function() {
-    initDebug();
-
-	getSounds();
+    initDebug(); 
+	bindUI(); 
 
 
 	/*
@@ -339,15 +474,17 @@ $(document).ready(function() {
 	*/ 
 
 
-	//keys 
+	//keyboard 
 	var keyControllerX = document.width / 2;
 	var keyControllerY = document.height / 2;
-	var keyControllerIncrX = 15;
-	var keyControllerIncrY = 15;
+	var keyControllerIncrX = 5;
+	var keyControllerIncrY = 5;
 
 
 	$(document).bind('keydown', function (evt) { 
 		var moving = false;
+		var action = 0; 
+
 		switch(evt.which) {
 			case 37: //left 
 				keyControllerX -= keyControllerIncrX;
@@ -366,13 +503,27 @@ $(document).ready(function() {
 				keyControllerY += keyControllerIncrY;
 				moving = true;
 				break;
+
+			case 32: 
+				action = 1;
+				moving = true;
+				break; 
+			default: 
+				//alert(evt.which);
+
+				break;
 		} 
 
 		if (moving) {
-			movePlayerXY(nickname, keyControllerX, keyControllerY);
+			//console.log("-->" + action);
+			movePlayerXY(nickname, keyControllerX, keyControllerY, action);
+			action = 0;
 		}
 	});
 
+
+	var gamepadSupportAvailable = !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
+	var gamepad = navigator.webkitGetGamepads && navigator.webkitGetGamepads()[0];
 
 
 
@@ -383,11 +534,12 @@ $(document).ready(function() {
 	google.maps.event.addListenerOnce(gmap.map, 'idle', function(){
     	// do something only the first time the map is loaded
 		gmap.getMetersPerPixel();
-		nickname = configurationGUI.getComputerName();
+		//nickname = configurationGUI.getComputerName();
 
-		addOfflinePlayer(nickname, 2);
-		game.registerPlayer(nickname);
-		game.listTargets();
+	
+		if (configurationGUI.showMap == false) {
+			configurationGUI.toggleMap();
+		}
 
 
 	});
@@ -406,34 +558,62 @@ $(document).ready(function() {
 	loc = new google.maps.LatLng(llat, llon);
 	gmap.placeMarker(loc);
 
+	game.bind("onDataAvailable", function() {
+		getSounds();
+	});
+
 	//when player join we added to our list of connected players
 	game.bind("playerJoined", function(player) {
-		console.log("playerJoined");
+		//console.log("playerJoined");
 		//playerJoin(player.nickname, numPlayer);
-		addPlayer(player);
+		//var nickname = configurationGUI.getComputerName();
+		if (player.nickname == nickname) {
+			addOfflinePlayer(nickname, player.color);
+		} else {
+			addPlayer(player);
+		}
 	});
 	
 	//remove the player from the list
 	game.bind("playerDisconnected", function(player) {
-			console.log("playerDisconnected");
-			//playerJoin(player.nickname, numPlayer);
+		//console.log("playerDisconnected");
+		//playerJoin(player.nickname, numPlayer);
 		
-			var p = Processing.getInstanceById('game');
-			p.removePlayer(player.id);
+		var p = Processing.getInstanceById('game');
+		p.removePlayer(player.id);   
 	});
 	
 	game.bind("updateLocation", function(player, location) {
 		//console.log("updateLocation");
-		//console.log(player.nickname + " " + location.lat + " " + location.lng);
-		movePlayer(player);
+		movePlayer(player, location);
 	});
+
+	game.bind("playerUpdated", function(player, location) {
+		//console.log("playerUpdated");
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+		//movePlayer(player);
+	});
+
+	game.bind("playerScored", function(player) {
+		console.log("playerScored -->"); 
+		console.log(player); 
+		console.log("<-- playerScored"); 
+		
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+		//movePlayer(player);
+	});
+
+	
+
+
 
 	game.bind("textMessage", function(data) {
 		console.log(data);
 		var q = data.message.split("::");
 
 		if (q[0] == "/say") {
-			speak(q[1]);
+			//speak(q[1]);
+			displayMsg(q[1]);
 		}
 
 	});
@@ -442,7 +622,7 @@ $(document).ready(function() {
 
 	game.bind("targetInRange", function(data) {
 		//console.log("targetInRange");
-		//console.log(data.target);
+		//console.log(data.target._id);
 		//console.log(data.distance);
 
 		var dist = Math.round(data.distance);
@@ -451,40 +631,54 @@ $(document).ready(function() {
 			volume = (100 - dist * (100 / data.target.range));
 		} 
 
-		var qq = data.target.value;
-		soundName = qq.substring(qq.lastIndexOf("/") + 1, qq.lastIndexOf("."));
-		//console.log(" " + volume);
-
-		if (sound[soundName] != undefined) {
-			sound[soundName].fadeTo(Math.round(volume));
-			sound[soundName].loop();
-			console.log("-->" + soundName + " " + volume);
-		}
-
+		updateSoundVolume(data.target, volume);
 
 	});
+
+
 	
 	game.bind("playerInRange", function(player, distance) {
-		console.log("targetInRange");
-		console.log(player);
-		console.log(distance);
+		//console.log("targetInRange");
+		//console.log(player);
+		//console.log(distance);
 
 		//console.log(player.nickname + " " + location.lat + " " + location.lng);
-		movePlayer(player);
+		//movePlayer(player);
 	});
+
 	
 
+	game.bind("targetRemoved", function(target) {
+		//console.log("targetRemoved");
+		//playerJoin(player.nickname, numPlayer);
+		
+		var p = Processing.getInstanceById('game');
+		p.targetRemoved(target._id);   
+		//QQ
+		updateSoundVolume(target, 0);
+	}); 	
+
+
+	game.bind("targetAdded", function(data) {
+		//console.log("listTargets");
+		//console.log(data);
+
+		//t = data.targets;
+		addTarget(data);
+		//console.log(player.nickname + " " + location.lat + " " + location.lng);
+	}); 
+
+	/* 
 	game.bind("listTargets", function(data) {
-		console.log("listTargets");
-		console.log(data);
+		//console.log("listTargets");
+		//console.log(data);
 
 		//t = data.targets;
 	
-		addTargets(data.targets);
-
+		//addTargets(data.targets);
 		//console.log(player.nickname + " " + location.lat + " " + location.lng);
 	});
-	
+	*/
 
 	
 	function addPlayer(player) {
@@ -502,7 +696,6 @@ $(document).ready(function() {
 		var p = Processing.getInstanceById('game');
 
 		$.each(targets, function(key, value) { 
-
 			var lat = value.location.lat;
 			var lon = value.location.lng;
 			var div = gmap.getXYCoordinates(new google.maps.LatLng(lat, lon)); 
@@ -511,24 +704,56 @@ $(document).ready(function() {
 			var y = div.y;
 			
 			//console.log("qq -----> " + value._id + " " + x + " " + y + " " + lat + " " + lon + " " + value.range);
-			p.addTarget(value._id, Math.round(x), Math.round(y), lat, lon, value.range);
+			p.addTarget(value._id, value.value, value.type, Math.round(x), Math.round(y), lat, lon, value.range);
 
 		}); 
 
 	}
 
-	//move a player so we have to call google api to translate from geo positions to x, y 
-	function movePlayer(player) {
+	function addTarget(target) {
 		var p = Processing.getInstanceById('game');
-		p.setPosition(player.id, player.location.lat, player.location.lng);	
+		
+		var lat = target.location.lat;
+		var lon = target.location.lng;
+		var div = gmap.getXYCoordinates(new google.maps.LatLng(lat, lon)); 
+
+		var x = div.x; 
+		var y = div.y;
+			
+		//console.log("qq -----> " + value._id + " " + x + " " + y + " " + lat + " " + lon + " " + value.range);
+		p.addTarget(target._id, target.value, target.type, Math.round(x), Math.round(y), lat, lon, target.range);
+
+	}
+
+	//move a player so we have to call google api to translate from geo positions to x, y 
+	function movePlayer(player, location) {
+		var p = Processing.getInstanceById('game');
+		//console.log(player);
+		p.setPosition(player.id, player.location.lat, player.location.lng, player.location.or);	
+		//console.log(location);
+		console.log(player.nickname + " " + location.lat + " " + location.lng + " " + player.location.or);
+
 	}
 	
-	function movePlayerXY(id, x, y) {
+	function movePlayerXY(id, x, y, maction) {
 		var p = Processing.getInstanceById('game');
-		p.setPositionXY(id, x, y);	
+
+		var w = $("#canvascontainer").width(); 
+		var h = $("#canvascontainer").height();
+
+		if (x > w) x = w;
+		if (y > h) y = h; 
+		if (y < 0) y = 0;
+		if (x < 0) x = 0;
+
 		var latlon = gmap.getLatLngCoordinates(x, y);  
+		var orientation = 360 * (x / w);
+		console.log(y + " " + w + " " + orientation);
+
+		p.setPositionXY(id, x, y, orientation, latlon, maction);	
+		//p.setOrientation(id, orientation); 		
 		//console.log("movement " + latlon.lat + " " + latlon.lon);
-		game.sendLocation({lat:latlon.lat, lng:latlon.lon});
+		game.sendLocation({lat:latlon.lat, lng:latlon.lon, or:orientation});
 
 	}
 	

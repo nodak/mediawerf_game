@@ -175,6 +175,10 @@ public class MapCustomFragment extends SupportMapFragment {
 			@Override
 			public void onRefresh() {
 			}
+
+			@Override
+			public void onPlayerScored(Player player) {
+			}
 		});
 
 		// map = getMap();

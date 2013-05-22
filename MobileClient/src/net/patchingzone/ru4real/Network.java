@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codebutler.android_websockets.SocketIOClient;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,17 +25,16 @@ public class Network {
 	// String TAG = "socketClientConnection";
 	String TAG = "NETWORK";
 	boolean gameWebSocketConnected = false;
-	boolean libraryWebSocketConnected = false;
+	//boolean libraryWebSocketConnected = false;
 	boolean walkieTalkieWebSocketConnected = false;
 	private SocketIOClient gameWebSocket;
 	private SocketIOClient libraryWebSocket;
+	public static SocketIOClient walkieTalkieWebSocket;
 	Vector<NetworkListener> listeners = new Vector<NetworkListener>();
 
 	private MainActivityPhone c;
-	private Timer timerLibrary;
+	//private Timer timerLibrary;
 	private Timer timerGame;
-	public static String walkieTalkieFilesAddress = "outside.mediawerf.net/wt";
-	public static SocketIOClient walkieTalkieWebSocket;
 
 	// socket io server
 	public static Thread connection;
@@ -187,6 +187,27 @@ public class Network {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+				} else if (event.equals("playerScored")) {
+					L.d("cc", "--------> ");
+					
+					try {
+						Player player = new Player();
+						JSONObject ob = new JSONObject();
+						ob = arguments.getJSONObject(0);
+						ob = (JSONObject) ob.get("player");
+						player.nickname = (String) ob.get("nickname").toString();
+						player.score = Integer.parseInt(ob.get("score").toString());
+						//ob = ob.getJSONObject("location");
+						//ob = ob.getJSONObject("location");
+						L.d("cc", "--------> " + player.nickname + " " + player.score);
+						
+						for (NetworkListener listener : listeners) {
+							listener.onPlayerScored(player);
+						}
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 
 				} else if (event.equals("listTrips")) {
 					for (NetworkListener listener : listeners) {
@@ -272,6 +293,7 @@ public class Network {
 			}, 0, 3000);
 		}
 
+		/*
 		timerLibrary = new Timer();
 		if (libraryWebSocketConnected == false) {
 			timerLibrary.scheduleAtFixedRate(new TimerTask() {
@@ -283,8 +305,10 @@ public class Network {
 			}, 0, 1000);
 		}
 
+		 */
 	}
 
+	/*
 	public void connectLibrary() {
 
 		libraryWebSocket = new SocketIOClient(URI.create(AppSettings.get().libraryAddress),
@@ -329,6 +353,8 @@ public class Network {
 		libraryWebSocket.connect();
 
 	}
+	*/
+	
 
 	public void connectWalkieTalkie() {
 
@@ -387,6 +413,7 @@ public class Network {
 
 	}
 
+	
 	public void addGameListener(NetworkListener networkListener) {
 		listeners.add(networkListener);
 
@@ -398,8 +425,9 @@ public class Network {
 
 	public void disconnect() {
 		try {
+			Log.d("qq", "" + gameWebSocket);
 			gameWebSocket.disconnect();
-			walkieTalkieWebSocket.disconnect();
+			//walkieTalkieWebSocket.disconnect();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -470,8 +498,9 @@ public class Network {
 
 	public void sendMessage() {
 
-	}
-
+	} 
+	
+	/*
 	public void sendShake(double force) {
 		if (libraryWebSocketConnected) {
 
@@ -494,6 +523,7 @@ public class Network {
 
 	}
 
+	
 	public void sendAnswer(boolean b) {
 		L.d(TAG, "the answer is " + b);
 		if (libraryWebSocketConnected) {
@@ -516,7 +546,9 @@ public class Network {
 		}
 
 	}
+	*/
 
+	/*
 	public void sendOrientation(float pitch, float roll, float z) {
 		if (libraryWebSocketConnected) {
 
@@ -540,5 +572,6 @@ public class Network {
 		}
 
 	}
+	*/
 
 }

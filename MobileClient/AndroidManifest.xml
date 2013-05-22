@@ -64,7 +64,7 @@
             android:screenOrientation="unspecified" >
         </activity>
         <activity
-            android:name="net.patchingzone.ru4real.LauncherActivity"
+            android:name="net.patchingzone.ru4real.MainActivityPhone"
             android:label="@string/app_name"
             android:screenOrientation="unspecified" >
             <intent-filter>
@@ -73,8 +73,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="net.patchingzone.ru4real.MainActivityPhone" >
-        </activity>
+        <!-- 
+        <activity
+            android:name="net.patchingzone.ru4real.MainActivityPhone" >
+        </activity> 
+         -->
         <activity android:name="net.patchingzone.ru4real.MainActivityTablet" >
         </activity>
         <activity android:name="net.patchingzone.ru4real.BaseWebview" >

@@ -14,20 +14,45 @@ OK - set unique identifier for the android version -> android settings
 OK - load sound files from text file 
 OK - save map
 OK - load map from the server 
+OK - rotation of players 
+OK - load icons 
 
-30 - add plug management for the home interface 
-30m - IMP - different configurations for the computers and the projections 
+OK - add processing to homy 
+OK - breath different frequency 
+OK - battery show 
+OK - name show 
+OK - collecting points aesthetics 
+OK - movement with keyboard for the library
+OK - pick drop sounds 
+OK - fonts web 
 
-30m - load initial game settings from the server 
+OK - try on macs 
+- remake map 
+- show GPS and connection feedback 
 
-1h - IMP - initial library interface 
+
+OK - phone dock aesthetics 
+MM - phone app aesthetics 
+
+Q - David - retrieve points from the server 
+- relaunch app on crash (pass parameter to intent for not doing the tts again)
+- make the phone app estable 
+?? - sound seekable problem 
+?? - rotation of phones 
+
+
+- Laser cut overlays 
+
+
+
+
+
 
 1h - create a small interface for the phones that look nice when docked 
 - eat black part of the map to undercover it
 
 PD sound 
 Library game 
-Laser cut overlays 
 
 
 ffmpeg -y -i q.amr -acodec vorbis -aq 50 output.ogg
@@ -41,7 +66,7 @@ http://mediawerf.dyndns.org/GameLoops/enjoyablegame/feel_much_better.ogg
 http://mediawerf.dyndns.org/GameLoops/enjoyablegame/mind_is_going.ogg
 http://mediawerf.dyndns.org/GameLoops/enjoyablegame/enjoyable_game.ogg
 http://mediawerf.dyndns.org/GameLoops/SingleLoops/koud_clean1.ogg
-http://mediawerf.dyndns.org/GameLoops/SingleLoops/drone.ogg
+http://outside.mediawerf.net/GameLoops/drone.ogg
 http://mediawerf.dyndns.org/GameLoops/SingleLoops/Doom2.ogg
 http://mediawerf.dyndns.org/GameLoops/SingleLoops/brightonmystery.ogg
 http://mediawerf.dyndns.org/GameLoops/SingleLoops/sweepymysterie.ogg

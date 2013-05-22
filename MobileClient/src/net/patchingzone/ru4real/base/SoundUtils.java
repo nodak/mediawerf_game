@@ -3,7 +3,9 @@ package net.patchingzone.ru4real.base;
 import java.io.IOException;
 import java.util.Locale;
 
+import net.patchingzone.ru4real.L;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -17,8 +19,9 @@ public class SoundUtils {
 
 	private static final String TAG = "AudioPlayer";
 
-	public static MediaPlayer playSound(String url, int volume) {
+	public static MediaPlayer playSound(Context c, String url, int volume) {
 		final MediaPlayer mMediaPlayer = new MediaPlayer();
+
 		mMediaPlayer.setLooping(true);
 		mMediaPlayer.setOnPreparedListener(new OnPreparedListener() {
 
@@ -45,12 +48,30 @@ public class SoundUtils {
 				Log.d(TAG, "completed");
 			}
 		});
-		
-
 
 		// mMediaPlayer.reset();
 		try {
-			mMediaPlayer.setDataSource(url);
+
+			if (AppSettings.readFromAssets == false) {
+				mMediaPlayer.setDataSource(url);
+			} else {
+				//L.d("qq", "file:///android_asset/"+url);
+				//mMediaPlayer.setDataSource("file:///android_asset/"+url);
+				
+				
+				// Reading from assets
+				AssetFileDescriptor afd;
+				try {
+					L.d("SOUND", url);
+					afd = c.getAssets().openFd("sounds/" + url);
+					mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+				
+			}
+
 			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 			mMediaPlayer.prepareAsync();
@@ -75,49 +96,57 @@ public class SoundUtils {
 		Log.d(TAG, "" + volume);
 		mMediaPlayer.setVolume(volume, volume);
 
-	} 
-	
-	
-	static TextToSpeech mTts; 
-	
-	public static void speak(Context c, final String textMsg, final Locale locale) { 
-		// Initialize text-to-speech. This is an asynchronous operation.
-        // The OnInitListener (second argument) is called after initialization completes.
-		mTts = new TextToSpeech(c, new OnInitListener() {
-			
-        	
-        	    // Implements TextToSpeech.OnInitListener.
-        	    public void onInit(int status) {
-        	        // status can be either TextToSpeech.SUCCESS or TextToSpeech.ERROR.
-        	        if (status == TextToSpeech.SUCCESS) {
-        	            // Set preferred language to US english.
-        	            // Note that a language may not be available, and the result will indicate this.
-        	           // int result = mTts.setLanguage(Locale.getAvailableLocales()[0]); 
-        	            // Try this someday for some interesting results.
-        	            int result = mTts.setLanguage(locale); 
-        	            if (result == TextToSpeech.LANG_MISSING_DATA ||
-        	                result == TextToSpeech.LANG_NOT_SUPPORTED) {
-        	               // Lanuage data is missing or the language is not supported.
-        	               Log.e(TAG, "Language is not available.");
-        	            } else {
-        	                // Check the documentation for other possible result codes.
-        	                // For example, the language may be available for the locale,
-        	                // but not for the specified country and variant.
-        	            	
-        	                // Greet the user.
-        	            	  mTts.speak(textMsg,
-        	            	            TextToSpeech.QUEUE_FLUSH,  // Drop all pending entries in the playback queue.
-        	            	            null); 
-        	            	        
-        	            }
-        	        } else {
-        	            // Initialization failed.
-        	            Log.e(TAG, "Could not initialize TextToSpeech.");
-        	        } 
-        	    } 
-        });  // TextToSpeech.OnInitListener 
 	}
 
+	static TextToSpeech mTts;
 
+	public static void speak(Context c, final String textMsg, final Locale locale) {
+		// Initialize text-to-speech. This is an asynchronous operation.
+		// The OnInitListener (second argument) is called after initialization
+		// completes.
+		mTts = new TextToSpeech(c, new OnInitListener() {
+
+			// Implements TextToSpeech.OnInitListener.
+			public void onInit(int status) {
+				// status can be either TextToSpeech.SUCCESS or
+				// TextToSpeech.ERROR.
+				if (status == TextToSpeech.SUCCESS) {
+					// Set preferred language to US english.
+					// Note that a language may not be available, and the result
+					// will indicate this.
+					// int result =
+					// mTts.setLanguage(Locale.getAvailableLocales()[0]);
+					// Try this someday for some interesting results.
+					int result = mTts.setLanguage(locale);
+					if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+						// Lanuage data is missing or the language is not
+						// supported.
+						Log.e(TAG, "Language is not available.");
+					} else {
+						// Check the documentation for other possible result
+						// codes.
+						// For example, the language may be available for the
+						// locale,
+						// but not for the specified country and variant.
+
+						// Greet the user.
+						mTts.speak(textMsg, TextToSpeech.QUEUE_FLUSH, // Drop
+																		// all
+																		// pending
+																		// entries
+																		// in
+																		// the
+																		// playback
+																		// queue.
+								null);
+
+					}
+				} else {
+					// Initialization failed.
+					Log.e(TAG, "Could not initialize TextToSpeech.");
+				}
+			}
+		}); // TextToSpeech.OnInitListener
+	}
 
 }

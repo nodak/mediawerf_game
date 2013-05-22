@@ -50,7 +50,7 @@ public class FragmentDistances extends Fragment {
 
 		adapter = new CustomAdapter(getActivity(), list);
 		listview.setAdapter(adapter);
-		listview.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+		listview.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
 		listview.setStackFromBottom(true);
 		
 		/*
@@ -83,22 +83,23 @@ public class FragmentDistances extends Fragment {
 */
 	}
 
-	int position;
 
 	public void addItem(final String soundName, final String distance, final String soundVolume) {
-
-		position = -1;
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).name.contains(soundName)) {
-				position = i;
-			}
-		}
 
 		if (getActivity() != null) {
 			getActivity().runOnUiThread(new Runnable() {
 
+
+			
 				@Override
 				public void run() {
+
+					int position = -1;
+					for (int i = 0; i < list.size(); i++) {
+						if (list.get(i).name.contains(soundName)) {
+							position = i;
+						}
+					}
 
 					if (position == -1) {
 						list.add(new Sound(soundName, distance, soundVolume));

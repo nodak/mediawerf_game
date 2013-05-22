@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.patchingzone.ru4real.Network;
+import net.patchingzone.ru4real.base.AppSettings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import android.util.Log;
 
 public class FileManager {
 
-	public String ip = Network.walkieTalkieFilesAddress;
+	public String ip = AppSettings.SETTINGS_WALKIE_TALKIE_ADDRESS;
 
 	public FileManager() {
 

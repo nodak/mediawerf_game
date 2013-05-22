@@ -133,7 +133,7 @@ public class BaseWebview extends Fragment {
 				}
 				
 				
-				sounds.put(url, SoundUtils.playSound(cURL, volume));
+				sounds.put(url, SoundUtils.playSound(getActivity(), cURL, volume));
 				// sounds.put(url, null);
 
 				Log.d("qq2", "play " + url + " " + volume);

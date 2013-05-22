@@ -28,7 +28,7 @@ public class YesNoFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				net.patchingzone.ru4real.fragments.Utils.vibrate(getActivity(), 200);
-				activityPhone.network.sendAnswer(true);
+				//activityPhone.network.sendAnswer(true);
 			}
 		});
 
@@ -38,7 +38,7 @@ public class YesNoFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				net.patchingzone.ru4real.fragments.Utils.vibrate(getActivity(), 200);
-				activityPhone.network.sendAnswer(false);
+				//activityPhone.network.sendAnswer(false);
 			}
 		});
 

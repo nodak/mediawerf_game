@@ -44,7 +44,7 @@ public class MainFragment extends Fragment {
 		this.body = (RelativeLayout) v.findViewById(R.id.body);
 		this.BT_home = (ImageButton) v.findViewById(R.id.button1);
 
-		MainApp.app_preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		//MainApp.app_preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 	
 		//net.patchingzone.ru4real.base.Utils.speak(getActivity(), "hola", Locale.ENGLISH);
 
@@ -64,9 +64,9 @@ public class MainFragment extends Fragment {
 									String value = input.getText().toString();
 									L.d("hans", value);
 
-									SharedPreferences.Editor editor = MainApp.app_preferences.edit();
-									editor.putString("ID", input.getText().toString().trim());
-									editor.commit();
+									//SharedPreferences.Editor editor = MainApp.app_preferences.edit();
+									//editor.putString("ID", input.getText().toString().trim());
+									//editor.commit();
 
 								}
 							}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

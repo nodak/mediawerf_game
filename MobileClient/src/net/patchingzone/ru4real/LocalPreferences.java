@@ -30,13 +30,13 @@ public class LocalPreferences extends Activity {
 		
 		
 		
-		fillSettings();
+		//fillSettings();
 		
 		Set.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = MainApp.app_preferences.edit();
+				SharedPreferences.Editor editor = null; // = MainApp.app_preferences.edit();
 				
 				editor.putString("IP", Server_IP.getText().toString().trim());
 				//Log.d("ServerIP" , Server_IP.getText().toString().trim());
@@ -57,6 +57,7 @@ public class LocalPreferences extends Activity {
 		});	
 	}
 	
+	/*
 	public void fillSettings(){
 		String ServerIP = MainApp.app_preferences.getString("IP", "");
 		Server_IP.setText(ServerIP);
@@ -68,7 +69,9 @@ public class LocalPreferences extends Activity {
 		
 		String PhoneID = MainApp.app_preferences.getString("ID", "");
 		Phone_ID.setText(PhoneID);
-		//Log.d("PhoneID", PhoneID);
+		//Log.d("PhoneID", PhoneID); 
 		
-	}
+	} 
+	*/
+	
 }

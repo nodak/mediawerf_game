@@ -2,8 +2,7 @@ package net.patchingzone.ru4real.walkietalkie;
 
 import java.io.IOException;
 
-import net.patchingzone.ru4real.Network;
-
+import net.patchingzone.ru4real.base.AppSettings;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -55,7 +54,7 @@ public class PlayerRecorder {
 	public static void play(String name) {
 		Log.d("receverd", name);
 		try {
-			String url = "http://" + Network.walkieTalkieFilesAddress + "/talk/" + name; // your
+			String url = "http://" + AppSettings.SETTINGS_WALKIE_TALKIE_ADDRESS + "/talk/" + name; // your
 																							// URL
 																							// here
 			final MediaPlayer mediaPlayer = new MediaPlayer();

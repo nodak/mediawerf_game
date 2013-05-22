@@ -32,12 +32,16 @@ public class AppSettings {
 	public static boolean screenAlwaysOn = true;
 	public static boolean closeWithBack = true;
 
+	public static boolean readFromAssets = true;
+
+	protected static String fileSettings =  "settings_0.1.txt";
+
 	// == GAME SETTINGS ==========
 
 	public String playerID = "unknown";
 	public String libraryAddress = "http://outside.mediawerf.net:8080";
 	public String walkieTalkieAddress = "http://outside.mediawerf.net:8082";
-	public String serverAddress = "http://mediawerf.dyndns.org:7080";
+	public String serverAddress = "http://outside.mediawerf.net:7080";
 
 	public static final String SETTINGS_PLAYERID = "playerID";
 	public static final String SETTINGS_LIBRARY_ADDRESS = "libraryAddress";
@@ -61,7 +65,7 @@ public class AppSettings {
 
 		Thread t = new Thread(new Runnable() {
 			String fileURI = Environment.getExternalStorageDirectory() + File.separator + "areyouforreal"
-					+ File.separator + "settings.txt";
+					+ File.separator + AppSettings.fileSettings ;
 
 
 			@Override
@@ -129,14 +133,21 @@ public class AppSettings {
 		L.d("JSON", "save()");
 
 		Thread t = new Thread(new Runnable() {
-			String fileURI = Environment.getExternalStorageDirectory() + File.separator + "areyouforreal"
-					+ File.separator + "settings.txt";
+			String fileDIR = Environment.getExternalStorageDirectory() + File.separator + "areyouforreal"
+					+ File.separator;
+			String fileURI = fileDIR + AppSettings.fileSettings ;
 
 			@Override
 			public void run() {
 				L.d("JSON", "save() run");
 
+				File dir = new File(fileDIR); 
+				if (dir.exists() == false) {
+					dir.mkdirs(); 
+				}
+				
 				File file = new File(fileURI);
+				
 				String content = null;
 
 				JSONObject jsonObject;
