@@ -177,8 +177,10 @@ public class MapCustomFragment extends SupportMapFragment {
 			}
 
 			@Override
-			public void onPlayerScored(Player player) {
+			public void onPlayerScored(Player player, int targetIndex, int totalTargets) {
 			}
+
+		
 		});
 
 		// map = getMap();

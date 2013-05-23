@@ -1,5 +1,6 @@
 class CityObjects {
 	ArrayList<CityObject> l; 
+	float count = 0f;
 
 	CityObjects() {
 		l = new ArrayList<CityObject>();
@@ -8,8 +9,16 @@ class CityObjects {
 	public void draw() {
  		for (int i = 0; i < l.size(); i++) {
   		    l.get(i).draw();
-  		    l.get(i).drawVolumes(8 * i, 50, 5, l.get(i).volume);
- 	  	} 
+
+  		    pushMatrix();
+  		    translate(900, 900);
+  		    rotate(radians(-35)); 
+  		    noStroke();
+  		    l.get(i).drawVolumes(18 * i, 0, 15, l.get(i).volume); 	  
+			popMatrix();
+
+  		} 
+  		count = count + 0.01;
 	}
 
 	public void add(CityObject co) {
@@ -29,7 +38,7 @@ class CityObjects {
 
 		$.each(game.targets, function(k, v) { 
 			if (v._id == id) {
-				console.log("removing!");
+				//console.log("removing!");
 				game.removeTarget(v); 
 			}
 		});
@@ -41,7 +50,7 @@ class CityObjects {
 		//console.log("removed " + " "+ id);
 		for (int i = 0; i < l.size(); i++) {
   		    if (l.get(i).id == id) {
-  		    	console.log("OK!");
+  		    	//console.log("OK!");
   		    	l.remove(i);
   		    	break;
   		    }
@@ -85,14 +94,31 @@ class CityObject {
 		thint = random();
 
 		if (type == TYPE_HINT) {
-			switch("up") {
+			console.log("lallala-> " + value);
+			switch(value) {
 				case "up":
 					hintImg = hintUp;
 					break;
-
+				case "down":
+					hintImg = hintDown;
+					break;
+				case "left":
+					hintImg = hintLeft;
+					break;
+				case "right":
+					hintImg = hintRight;
+					break;
+				case "question":
+					hintImg = hintQuestion;
+					break;
+				case "http://outside.mediawerf.net/GameLoops/text.ogg":
+					hintImg = hintText;
+					break;
+						
+						
 				default :
-					
-				break;	
+					hintImg = hintUp;
+					break;	
 			}
 		}
 
@@ -147,7 +173,7 @@ class CityObject {
 		showMsg = b;
 	}
 
-	public void drawVolumes(x, y, w, h) {
+	public void drawVolumesDebug(x, y, w, h) {
 		int posx = width - x - 50; 
 		int posy = height - 100 - y;
 		rectMode(CORNER);
@@ -162,5 +188,22 @@ class CityObject {
 
 	}
 
+	public void drawVolumes(x, y, w, h) {
+		int posx = x; 
+		int posy = y;
+		rectMode(CORNER); 
 
+		fill(255, 35); 
+		rect(posx, posy, w, 300);
+		h = 2* h + 20 * abs(sin(frameCount * 0.05 + x));
+		rect(posx, posy, w, h);
+		pushMatrix();
+		translate(posx, posy);
+		rotate(PI / 2);
+		//textSize(10);
+		//qq2 = value;
+		//text(value, 5, 0);
+		popMatrix();
+
+	}
 }

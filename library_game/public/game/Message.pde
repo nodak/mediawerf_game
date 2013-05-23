@@ -21,7 +21,6 @@ class Message {
 
   void draw() {
 
-
     //start timer
     //if (millis() > lastTime + TIMER) {
     //  shake = true;

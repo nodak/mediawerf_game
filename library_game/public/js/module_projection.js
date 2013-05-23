@@ -54,6 +54,13 @@ var Configuration = function() {
 	this.contentSkew = 0;
 	
 	this.showBG = false;
+	this.library = localStorage.getItem("library", "false") == "true";
+
+	/*
+	this.library = function() {
+		//var name = localStorage.getItem("computerName");
+	}
+	*/
 
 	this.toggleMap = function() {
 	    $("#map_canvas").fadeToggle(500);
@@ -173,8 +180,18 @@ function initDebug() {
 		configurationGUI.updateContentPosition();
 	}); 
 	
-	
-	
+
+	var cc = gui.add(configurationGUI, 'library').listen();
+
+	cc.onChange(function(value) {
+		if (value) { 
+			value == "true" 
+		} else {
+			value == "false" 
+		}
+
+		localStorage.setItem("library", value);
+	});
 	gui.add(configurationGUI, 'toggleMap');
 	gui.add(configurationGUI, 'toggleProcessing');
 	gui.add(configurationGUI, 'toggleBGTransparency');
@@ -335,7 +352,8 @@ $.fn.enterKey = function (fnc) {
 
 
 function bindUI() { 
-	
+	$("#start #name").focus();
+
 	//$("#start").hide();
 	$("#start #btn").click(function() {
 		//$("#start").fadeOut(500);
@@ -349,6 +367,17 @@ function bindUI() {
 	$("#logout").click(function() {
 		stopGame();
 	});
+
+	$("#text_input #send").click(function() {
+		sendMsg();
+	}); 
+
+	$("#text_input #msg").enterKey(function() {
+		sendMsg();
+	});
+
+	$("#text_input").css("left", "500px");
+
 
 } 
 
@@ -414,11 +443,28 @@ function displayMsg(msg) {
 		$("#remoteMsg").fadeOut(500);
 	});
 
+	
 	setTimeout(function() {
 		$("#remoteMsg").fadeOut(500);
 
 	}, 4000); 
+	
+}
 
+function showInputBox() {
+	$("#text_input #msg").val("");
+
+	$("#text_input").css("left", "500px");
+	$("#text_input").fadeIn(500);
+	$("#text_input #msg").focus();
+}
+
+   
+function sendMsg() {
+	//$("#start").fadeOut(500);
+	var val = $("#text_input #msg").val();
+	game.broadcastMessage("/say::" + val);
+	$("#text_input").fadeOut(500);
 }
 
 var t;
@@ -608,7 +654,7 @@ $(document).ready(function() {
 
 
 	game.bind("textMessage", function(data) {
-		console.log(data);
+		//console.log(data);
 		var q = data.message.split("::");
 
 		if (q[0] == "/say") {
@@ -731,7 +777,7 @@ $(document).ready(function() {
 		//console.log(player);
 		p.setPosition(player.id, player.location.lat, player.location.lng, player.location.or);	
 		//console.log(location);
-		console.log(player.nickname + " " + location.lat + " " + location.lng + " " + player.location.or);
+		//console.log(player.nickname + " " + location.lat + " " + location.lng + " " + player.location.or);
 
 	}
 	
@@ -748,7 +794,7 @@ $(document).ready(function() {
 
 		var latlon = gmap.getLatLngCoordinates(x, y);  
 		var orientation = 360 * (x / w);
-		console.log(y + " " + w + " " + orientation);
+		//console.log(y + " " + w + " " + orientation);
 
 		p.setPositionXY(id, x, y, orientation, latlon, maction);	
 		//p.setOrientation(id, orientation); 		
@@ -781,11 +827,7 @@ $(document).ready(function() {
         game.sendMessage(game.players[0], "/poke::");
 
     });
-    
-      $("#send").click(function() {
-        var val = $("#msg").val();
-        game.sendMessage(game.players[0], "/say::"+val);
-    });
+ 
     
     function trigger(id) {
        $(id).css("background-color", "red"); 

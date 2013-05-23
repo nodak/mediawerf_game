@@ -38,7 +38,7 @@ public class AppSettings {
 
 	// == GAME SETTINGS ==========
 
-	public String playerID = "unknown";
+	public static String playerID = "unknown";
 	public String libraryAddress = "http://outside.mediawerf.net:8080";
 	public String walkieTalkieAddress = "http://outside.mediawerf.net:8082";
 	public String serverAddress = "http://outside.mediawerf.net:7080";

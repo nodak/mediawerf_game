@@ -25,7 +25,7 @@ public class Network {
 	// String TAG = "socketClientConnection";
 	String TAG = "NETWORK";
 	boolean gameWebSocketConnected = false;
-	//boolean libraryWebSocketConnected = false;
+	// boolean libraryWebSocketConnected = false;
 	boolean walkieTalkieWebSocketConnected = false;
 	private SocketIOClient gameWebSocket;
 	private SocketIOClient libraryWebSocket;
@@ -33,7 +33,7 @@ public class Network {
 	Vector<NetworkListener> listeners = new Vector<NetworkListener>();
 
 	private MainActivityPhone c;
-	//private Timer timerLibrary;
+	// private Timer timerLibrary;
 	private Timer timerGame;
 
 	// socket io server
@@ -69,6 +69,7 @@ public class Network {
 
 				try {
 					registerData.put("nickname", ts);
+					registerData.put("drone", false);
 					arguments.put(registerData);
 					// L.d(TAG, "" + arguments.toString() + " " +
 					// gameWebSocket);
@@ -84,6 +85,7 @@ public class Network {
 			public void on(String event, JSONArray arguments) {
 				L.d(TAG, "on message " + event + " " + arguments.toString());
 				// L.d("qq", "--> " + event + " " + arguments.toString());
+				// L.d("jj", "" + event);
 
 				if (event.equals("playerJoined")) {
 
@@ -188,23 +190,28 @@ public class Network {
 						e.printStackTrace();
 					}
 				} else if (event.equals("playerScored")) {
-					L.d("cc", "--------> ");
-					
+
 					try {
 						Player player = new Player();
 						JSONObject ob = new JSONObject();
 						ob = arguments.getJSONObject(0);
 						ob = (JSONObject) ob.get("player");
 						player.nickname = (String) ob.get("nickname").toString();
-						player.score = Integer.parseInt(ob.get("score").toString());
-						//ob = ob.getJSONObject("location");
-						//ob = ob.getJSONObject("location");
-						L.d("cc", "--------> " + player.nickname + " " + player.score);
-						
-						for (NetworkListener listener : listeners) {
-							listener.onPlayerScored(player);
+
+						L.d("zz", player.nickname + " " + AppSettings.playerID);
+						if (player.nickname == AppSettings.playerID) {
+							player.score = Integer.parseInt(ob.get("score").toString());
+							ob = arguments.getJSONObject(0);
+							int targetIndex = Integer.parseInt(ob.get("targetIndex").toString());
+							int totalTargets = Integer.parseInt(ob.get("totalObjectives").toString());
+							// int totalTargets =
+							// Integer.parseInt("nickname").toString();
+
+							for (NetworkListener listener : listeners) {
+								listener.onPlayerScored(player, targetIndex, totalTargets);
+							}
 						}
-						
+
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -294,67 +301,44 @@ public class Network {
 		}
 
 		/*
-		timerLibrary = new Timer();
-		if (libraryWebSocketConnected == false) {
-			timerLibrary.scheduleAtFixedRate(new TimerTask() {
-
-				@Override
-				public void run() {
-					connectLibrary();
-				}
-			}, 0, 1000);
-		}
-
+		 * timerLibrary = new Timer(); if (libraryWebSocketConnected == false) {
+		 * timerLibrary.scheduleAtFixedRate(new TimerTask() {
+		 * 
+		 * @Override public void run() { connectLibrary(); } }, 0, 1000); }
 		 */
 	}
 
 	/*
-	public void connectLibrary() {
-
-		libraryWebSocket = new SocketIOClient(URI.create(AppSettings.get().libraryAddress),
-				new SocketIOClient.Handler() {
-					String tag = "Library";
-
-					@Override
-					public void onConnect() {
-						L.d(tag, "Connected!");
-						libraryWebSocketConnected = true;
-						timerLibrary.cancel();
-					}
-
-					@Override
-					public void on(String event, JSONArray arguments) {
-
-						if (event.equals("userConnect")) {
-							// name = arguments.toString();
-
-						}
-					}
-
-					@Override
-					public void onDisconnect(int code, String reason) {
-						L.d(tag, String.format("Disconnected! Code: %d Reason: %s", code, reason));
-						libraryWebSocketConnected = false;
-					}
-
-					@Override
-					public void onError(Exception error) {
-
-					}
-
-					@Override
-					public void onJSON(JSONObject json) {
-					}
-
-					@Override
-					public void onMessage(String message) {
-					}
-				});
-		libraryWebSocket.connect();
-
-	}
-	*/
-	
+	 * public void connectLibrary() {
+	 * 
+	 * libraryWebSocket = new
+	 * SocketIOClient(URI.create(AppSettings.get().libraryAddress), new
+	 * SocketIOClient.Handler() { String tag = "Library";
+	 * 
+	 * @Override public void onConnect() { L.d(tag, "Connected!");
+	 * libraryWebSocketConnected = true; timerLibrary.cancel(); }
+	 * 
+	 * @Override public void on(String event, JSONArray arguments) {
+	 * 
+	 * if (event.equals("userConnect")) { // name = arguments.toString();
+	 * 
+	 * } }
+	 * 
+	 * @Override public void onDisconnect(int code, String reason) { L.d(tag,
+	 * String.format("Disconnected! Code: %d Reason: %s", code, reason));
+	 * libraryWebSocketConnected = false; }
+	 * 
+	 * @Override public void onError(Exception error) {
+	 * 
+	 * }
+	 * 
+	 * @Override public void onJSON(JSONObject json) { }
+	 * 
+	 * @Override public void onMessage(String message) { } });
+	 * libraryWebSocket.connect();
+	 * 
+	 * }
+	 */
 
 	public void connectWalkieTalkie() {
 
@@ -413,7 +397,6 @@ public class Network {
 
 	}
 
-	
 	public void addGameListener(NetworkListener networkListener) {
 		listeners.add(networkListener);
 
@@ -427,7 +410,7 @@ public class Network {
 		try {
 			Log.d("qq", "" + gameWebSocket);
 			gameWebSocket.disconnect();
-			//walkieTalkieWebSocket.disconnect();
+			// walkieTalkieWebSocket.disconnect();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -498,80 +481,47 @@ public class Network {
 
 	public void sendMessage() {
 
-	} 
-	
-	/*
-	public void sendShake(double force) {
-		if (libraryWebSocketConnected) {
-
-			// send new location
-			JSONObject acc = new JSONObject();
-			JSONArray arguments = new JSONArray();
-			try {
-				acc.put("force", force);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			arguments.put(acc);
-
-			try {
-				libraryWebSocket.emit("updateForce", arguments);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
 	}
-
-	
-	public void sendAnswer(boolean b) {
-		L.d(TAG, "the answer is " + b);
-		if (libraryWebSocketConnected) {
-
-			// send new location
-			JSONObject acc = new JSONObject();
-			JSONArray arguments = new JSONArray();
-			try {
-				acc.put("answer", b);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			arguments.put(acc);
-
-			try {
-				libraryWebSocket.emit("updateAnswer", arguments);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-	*/
 
 	/*
-	public void sendOrientation(float pitch, float roll, float z) {
-		if (libraryWebSocketConnected) {
+	 * public void sendShake(double force) { if (libraryWebSocketConnected) {
+	 * 
+	 * // send new location JSONObject acc = new JSONObject(); JSONArray
+	 * arguments = new JSONArray(); try { acc.put("force", force); } catch
+	 * (JSONException e) { e.printStackTrace(); } arguments.put(acc);
+	 * 
+	 * try { libraryWebSocket.emit("updateForce", arguments); } catch
+	 * (JSONException e) { e.printStackTrace(); } }
+	 * 
+	 * }
+	 * 
+	 * 
+	 * public void sendAnswer(boolean b) { L.d(TAG, "the answer is " + b); if
+	 * (libraryWebSocketConnected) {
+	 * 
+	 * // send new location JSONObject acc = new JSONObject(); JSONArray
+	 * arguments = new JSONArray(); try { acc.put("answer", b); } catch
+	 * (JSONException e) { e.printStackTrace(); } arguments.put(acc);
+	 * 
+	 * try { libraryWebSocket.emit("updateAnswer", arguments); } catch
+	 * (JSONException e) { e.printStackTrace(); } }
+	 * 
+	 * }
+	 */
 
-			// send new location
-			JSONObject or = new JSONObject();
-			JSONArray arguments = new JSONArray();
-			try {
-				or.put("pitch", pitch);
-				or.put("roll", roll);
-				or.put("z", z);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			arguments.put(or);
-
-			try {
-				libraryWebSocket.emit("updateOrientation", arguments);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-	*/
+	/*
+	 * public void sendOrientation(float pitch, float roll, float z) { if
+	 * (libraryWebSocketConnected) {
+	 * 
+	 * // send new location JSONObject or = new JSONObject(); JSONArray
+	 * arguments = new JSONArray(); try { or.put("pitch", pitch); or.put("roll",
+	 * roll); or.put("z", z); } catch (JSONException e) { e.printStackTrace(); }
+	 * arguments.put(or);
+	 * 
+	 * try { libraryWebSocket.emit("updateOrientation", arguments); } catch
+	 * (JSONException e) { e.printStackTrace(); } }
+	 * 
+	 * }
+	 */
 
 }

@@ -27,6 +27,7 @@ PImage hintUp;
 PImage hintDown;
 PImage hintQuestion;
 PImage hintNo;
+PImage hintText;
 
  
 public CityScape city; 
@@ -44,15 +45,16 @@ void setup() {
   hintDown = loadImage("./game/data/hint_down.png");
   hintQuestion = loadImage("./game/data/hint_question.png");
   hintNo = loadImage("./game/data/hint_no.png");
+  hintText = loadImage("./game/data/hint_text.png")
 
   players = new ArrayList();
   messages = new ArrayList();
 
   city = new CityScape(); 
-  city.load(); 
+  city.load(configurationGUI.library); 
 
 
-}
+} 
 
 void draw() { 
  // stats.begin(); 
@@ -122,7 +124,6 @@ void keyPressed() {
   } 
 
   if (key == 'p') {
-    console.log("p pressed");
     city.save(); 
   }
  
@@ -136,8 +137,8 @@ public void addPlayer(String id, int c) {
   //Player p = new Player(random(width), random(height), 20, 100, color(204, 153, 0, 125), color(255, 0, 0, 125));
 
 	colorMode(HSB, 360);
-	Player p = new Player(id, random(width), random(height), 20, 50, color(c, 255, 255, 125));
-	colorMode(RGB);
+	Player p = new Player(id, random(width), random(height), 20, 50, color(c, 255, 255, 185));
+	//colorMode(RGB);
 	players.add(p);
 
 }

@@ -27,20 +27,31 @@ OK - pick drop sounds
 OK - fonts web 
 
 OK - try on macs 
-- remake map 
-- show GPS and connection feedback 
+OK - retrieve points from the server 
+OK - font text message 
+OK - sound seekable problem 
+OK - fix noise 
+- update sound files 
+- show text input 
+
+1h - remake maps
+
+-> show GPS and connection feedback 
+- fix color join 
+- replace colors 
+- timer 
 
 
 OK - phone dock aesthetics 
 MM - phone app aesthetics 
-
-Q - David - retrieve points from the server 
 - relaunch app on crash (pass parameter to intent for not doing the tts again)
 - make the phone app estable 
-?? - sound seekable problem 
 ?? - rotation of phones 
 
 
+
+Future 
+========
 - Laser cut overlays 
 
 

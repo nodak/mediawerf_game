@@ -144,8 +144,8 @@ public class MainActivityPhone extends BaseActivity {
 			OverlayLogger ol = new OverlayLogger();
 			L.addLoggerWindow(ol);
 
-			// L.filterByTag("QQ");
-			// addFragment(ol, R.id.fragmentLogOverlay);
+			L.filterByTag("zz");
+			addFragment(ol, R.id.fragmentLogOverlay);
 
 			fragmentDistances = new FragmentDistances();
 			addFragment(fragmentDistances, R.id.f2);
@@ -255,7 +255,7 @@ public class MainActivityPhone extends BaseActivity {
 
 					int dist = Math.round(distance);
 					int volume = 0;
-					int range = 30;
+					int range = 15;
 					if (dist < range) {
 						volume = (int) (100 - dist * (100 / range));
 					}
@@ -276,8 +276,9 @@ public class MainActivityPhone extends BaseActivity {
 			}
 
 			@Override
-			public void onPlayerScored(Player player) {
-
+			public void onPlayerScored(Player player, int targetIndex, int totalTargets) {
+				Log.d("zz", player.nickname + " " + player.score + " " + targetIndex);
+				processingSketch.setScore(player.score, targetIndex, totalTargets);
 			}
 
 		});

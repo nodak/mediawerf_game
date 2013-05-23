@@ -30,7 +30,7 @@
 
 body {
 	background-color: black;
-
+	overflow: hidden;
 } 
 
 #start {
@@ -119,12 +119,15 @@ body {
 	#title {
 		font-size: 1em;
 		color: gray;
+		float: left;
+		margin-right: 40px;
 	} 
 
 	#text {
 		font-size: 1em;
 		color: white;
-		font-size: 5em;
+		font-size: 4em;
+		font-family: 'Source Sans Pro', sans-serif;
 	}
 
 }
@@ -208,4 +211,59 @@ body {
     	color: gray;
 	}
 } 
+
+#text_input {
+	display: none;
+    width: 500px;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 10px rgb(0, 0, 0);
+    padding:5px;
+    border-radius: 2px;
+	position: absolute;
+	left: 0px; 
+	top: 100px;
+	border-radius: 2px;
+	border: 2px solid white;
+
+	p {
+		color: #bbb;
+		font-size: 1em;
+		font-family: 'Advent Pro', sans-serif;
+		padding:12px;
+	}
+	
+	#msg { 
+		width: 100%;  
+		height: auto;
+		display: block;
+		font-size: 2em;
+		background-color: rgba(0, 0, 0, 0);
+		border: 2px solid;
+		color: #bbb;
+		text-align: center;
+		margin-top: 20px;
+		margin-bottom: 5%;
+		outline: none;
+		padding:12px;
+		font-family: 'Advent Pro', sans-serif;
+	}
+
+	#send { 
+		font-family: 'Source Sans Pro', sans-serif;
+		color: rgba(0, 0, 0, 0.9);
+		width: 100%;
+		height: 50px;
+		background-color: rgba(255, 219, 76, 0.93);;
+		border: 0px;
+		border: 0px;
+		border-radius: 2px;
+		box-shadow: 0px 0px 122px #888;
+		margin: 0 auto;
+		display: block;
+		font-size: 1.5em;
+		-webkit-transition: all 0.3s ease;                  
+	} 
+
+}
 

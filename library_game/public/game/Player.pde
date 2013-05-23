@@ -141,7 +141,7 @@ class Player {
   } 
 
   void grabSound(CityScape city, CityObject o) {
-    console.log(o);
+    //console.log(o);
     hintImg = o.hintImg; 
     o.displayMsg(true); 
     o.deleteSent = true;
@@ -152,11 +152,18 @@ class Player {
 
   void placeSound(lat, lon) { 
     if (carryingSound != "") {
-      console.log("placing sound");
-      game.addTarget(lat, lon, carryingSound, 20, "hint"); 
+      //console.log("placing sound");
+
+      int rndX = (int) random(50, width - 50);
+      int rndY = (int) random(50, height - 50);
+
+      latLng = gmap.getLatLngCoordinates(rndX, rndY);
+
+      game.addTarget(latLng.lat, latLng.lon, "http://outside.mediawerf.net/GameLoops/" + carryingSound, 20, "hint"); 
       carryingSound = ""; 
       hintImg = null;
       playerSize -= 10;
+      showInputBox();
     }
   }
 
@@ -169,10 +176,10 @@ class Player {
   void manageAction(CityScape city, CityObject o, latlon, int action) {
 
       if (action == 1 && carryingSound != "") {
-        console.log("place sound");
+        //console.log("place sound");
         placeSound(latlon.lat, latlon.lon); 
       } else if (action == 1 && carryingSound == "") {
-        console.log("carry sound");
+        //console.log("carry sound");
         grabSound(city, o);
         //city.checkaction = 2;
       }

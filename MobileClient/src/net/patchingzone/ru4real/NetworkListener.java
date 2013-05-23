@@ -18,6 +18,6 @@ public interface NetworkListener {
 	public void onListTargets(String event, JSONArray arguments);
 	public void onPlayerInRange(String nickname, String sound, float distance);
 	public void onRefresh();
-	public void onPlayerScored(Player player);
+	public void onPlayerScored(Player player, int targetIndex, int totalTargets);
 	
 }

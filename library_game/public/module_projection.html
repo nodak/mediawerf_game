@@ -67,9 +67,10 @@ Module projection
 		</div>
 		-->
 		
-
+		<!-- 
 		<div id = "panel"> 
-			<!-- 
+			<input id = "msg"></input>
+		    <button id = "send">Send</button>    
   		  <select name="selCombo" size=1 onChange="javascript:alert('prueba');"> 
 	    	<option value="link pagina 1">player 1</option>
 		    <option value="link pagina 2">player 2</option>
@@ -89,23 +90,31 @@ Module projection
 		    <p id ="acc">Accelerometer Shake</p>
 		    <p id ="yes">Yes</p>
 		    <p id ="no">No</p>
-			-->	
 		    <p id = "logout"> Logout </p>
 		</div>
+		-->	
+
+
+	<div id = "text_input">
+			<p> You are able to send a message to ALL the players </p> 
+			<input id = "msg" autocomplete = "off"></input>
+		    <button id = "send">Send</button>    
+		</div>
+
 
 	</div>
 
 	<div id = "start"> 
 	
 		<img src ="./img/logo_big.png"> </img>
-		<input id = "name" type ="text" placeHolder = "Write here your name"> </input>
+		<input id = "name" type ="text" placeHolder = "Write here your name" autocomplete = "off"> </input>
 		<button id="btn" value = "qq" name="qq"> JOIN </button>
 
 	</div>
 
 	<div id = "remoteMsg"> 
 	
-		<p id = "title"> Message </p>
+		<img src ="./img/bubble.png" width="148px" height="109px" id = "title">  </img>
 		<p id = "text"> </p>
 
 	</div>
