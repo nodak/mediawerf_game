@@ -56,6 +56,13 @@ var Configuration = function() {
 	this.showBG = false;
 	this.library = localStorage.getItem("library", "false") == "true";
 
+	if (this.library) {
+		llat = "51.88638759021809"; 
+		llon = "4.495892474868799";
+	} else {
+
+	}
+
 	/*
 	this.library = function() {
 		//var name = localStorage.getItem("computerName");
@@ -209,8 +216,8 @@ function initDebug() {
 */
 
 //center of our map
-var llat = 51.885583;
-var llon = 4.495753;
+var llat;
+var llon;
 var gmap;
 
 var Gmap = function() {
