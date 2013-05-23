@@ -61,8 +61,8 @@ var Configuration = function() {
 		llon = "4.495892474868799";
 	} else {
 		//projection
-		llat = "51.88638759021809"; 
-		llon = "4.495892474868799";
+		llat = "51.88669882701709"; 
+		llon = "4.495897839286829";
 	}
 
 	/*
@@ -403,7 +403,7 @@ function startGame() {
 		setTimeout(function() { 
 			$("#start").animate({top:'-100%'}, 500, "easeOutCubic");
 			$("#start #name").css({'background-color':'rgba(0, 0, 0, 0)'}); 
-			soundClick.play();
+			//soundClick.play();
 		}, 200); 
 
 		game.registerPlayer(nickname, true);
@@ -413,7 +413,7 @@ function startGame() {
 	} else {
 		//alert("hola");
 		$("#start #name").animate({'background-color':'rgba(255, 0, 0, 1)'}, 0, "easeOutCubic"); 
-		soundError.play();
+		//soundError.play();
 
 	}
 	
