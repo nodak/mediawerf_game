@@ -60,7 +60,9 @@ var Configuration = function() {
 		llat = "51.88638759021809"; 
 		llon = "4.495892474868799";
 	} else {
-
+		//projection
+		llat = "51.88638759021809"; 
+		llon = "4.495892474868799";
 	}
 
 	/*

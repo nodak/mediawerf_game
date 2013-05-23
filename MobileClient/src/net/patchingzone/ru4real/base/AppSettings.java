@@ -22,7 +22,7 @@ public class AppSettings {
 	static AppSettings appSettings = new AppSettings();
 
 	// == APP SETTINGS ==========
-	public static boolean debug = true;
+	public static boolean debug = false;
 	public static boolean fullscreen = true;
 	public static boolean portrait = true;
 	public static boolean stayAwake = true;
