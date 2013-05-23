@@ -57,7 +57,7 @@ class Player {
     noStroke();
     colorMode(HSB, 360);
     fill(colorEnergy);
-    triangle(0, 0, 0, 300, 400, 0);
+    triangle(width, height, width, height - 300, width - 400, height);
 
     //when one player is created 
     if (energySize < finalEnergySize) {

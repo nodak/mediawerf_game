@@ -11,8 +11,11 @@ class CityObjects {
   		    l.get(i).draw();
 
   		    pushMatrix();
-  		    translate(900, 900);
-  		    rotate(radians(-35)); 
+  		    translate(450, 0);
+  		    if (keyPressed) {
+  		    	console.log("->> " + map(mouseX, 0, width, -360, 360));
+  		   	}
+  		    rotate(radians(-222)); 
   		    noStroke();
   		    l.get(i).drawVolumes(18 * i, 0, 15, l.get(i).volume); 	  
 			popMatrix();
