@@ -144,7 +144,7 @@ public class MainActivityPhone extends BaseActivity {
 			OverlayLogger ol = new OverlayLogger();
 			L.addLoggerWindow(ol);
 
-			L.filterByTag("zz");
+			//L.filterByTag("zz");
 			addFragment(ol, R.id.fragmentLogOverlay);
 
 			fragmentDistances = new FragmentDistances();
@@ -612,7 +612,7 @@ public class MainActivityPhone extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-		L.d("KeyEvent", "" + keyCode);
+		Log.d("KeyEvent", "" + keyCode);
 
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:

@@ -198,8 +198,8 @@ public class Network {
 						ob = (JSONObject) ob.get("player");
 						player.nickname = (String) ob.get("nickname").toString();
 
-						L.d("zz", player.nickname + " " + AppSettings.playerID);
-						if (player.nickname == AppSettings.playerID) {
+						//L.d("zz", player.nickname + " " + AppSettings.playerID);
+						if (player.nickname.equals(AppSettings.playerID)) {
 							player.score = Integer.parseInt(ob.get("score").toString());
 							ob = arguments.getJSONObject(0);
 							int targetIndex = Integer.parseInt(ob.get("targetIndex").toString());

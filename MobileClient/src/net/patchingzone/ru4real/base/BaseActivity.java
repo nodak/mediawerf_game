@@ -59,10 +59,10 @@ public class BaseActivity extends FragmentActivity {
 		// Utils.playSound("http://outside.mediawerf.net/8-Light_2.mp3");
 		// playSound("http://outside.mediawerf.net/music.ogg");
 
-		//MediaButtonIntentReceiver mMediaButtonReceiver = new MediaButtonIntentReceiver();
-		//IntentFilter mediaFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-		//mediaFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY + 1);
-		//registerReceiver(mMediaButtonReceiver, mediaFilter);
+		MediaButtonIntentReceiver mMediaButtonReceiver = new MediaButtonIntentReceiver();
+		IntentFilter mediaFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+		mediaFilter.setPriority(10000000);
+		registerReceiver(mMediaButtonReceiver, mediaFilter);
 		//mediaFilter.se
 		
 	}
