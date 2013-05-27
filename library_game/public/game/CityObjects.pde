@@ -76,7 +76,8 @@ class CityObject {
 	int h; 
 	int deleteSent = false;
 	String value;
-	float t = 0;
+	float t = 0; 
+	float to = 0.0;
 	float thint = 0; 
 	PImage hintImg; 
 	boolean showMsg = false;
@@ -157,7 +158,7 @@ class CityObject {
 			fill(0); 
 
 			if (showMsg == true) {
-				text("hola", pos.x, pos.y);
+				//text("hola", pos.x, pos.y);
 			}
 
 			//rectMode(CENTER);
@@ -165,8 +166,25 @@ class CityObject {
 			//rect(pos.x, pos.y, rangePixels * sin(frameCount * 0.1 + pos.x), rangePixels * sin(frameCount * 0.1 + pos.x));
 		} else if (type == TYPE_OBJECTIVE) {
 			rectMode(CENTER);
-			fill(h, 225, 225); 
-			rect(pos.x, pos.y, rangePixels * sin(frameCount * 0.1 + pos.x) + 20, rangePixels * sin(frameCount * 0.1 + pos.x));
+			//fill(h, 225, 225); 
+			//rect(pos.x, pos.y, rangePixels * sin(frameCount * 0.1 + pos.x) + 20, rangePixels * sin(frameCount * 0.1 + pos.x));
+		
+
+			fill(245, 220, 25, 185);
+			noStroke();
+			  
+			float m1 =  5 * sin(to + pos.x);
+			float m2 =  5 * cos(to + pos.x);
+
+			rectMode(CENTER);
+			pushMatrix();
+			translate(pos.x, pos.y);
+			rect(0, 0 + m1, 5, 18);
+			rect(8, 0 + m2, 5, 18);
+			rect(16, 0 + m1, 5, 18);
+			popMatrix();
+			to = to + 0.1;
+
 		} 
 		t = t + 0.005; 
 		if (t > 1) t = 0;
